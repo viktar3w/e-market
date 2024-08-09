@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Reddit_Mono } from "next/font/google";
+import { cn } from "@/lib/utils";
 import "./globals.css";
+import { ReactNode } from "react";
 
-const inter = Inter({ subsets: ["latin"] });
+const fontSans = Reddit_Mono({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  weight: ["400", "500", "600", "700", "800"],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -12,11 +18,18 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable,
+        )}
+      >
+        <main className="min-h-screen">{children}</main>
+      </body>
     </html>
   );
 }
