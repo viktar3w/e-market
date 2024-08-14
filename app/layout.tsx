@@ -3,6 +3,8 @@ import { Reddit_Mono } from "next/font/google";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 import { ReactNode } from "react";
+import DefaultHeader from "@/components/shared/header/DefaultHeader";
+import { Providers } from "@/lib/providers";
 
 const fontSans = Reddit_Mono({
   subsets: ["latin"],
@@ -28,7 +30,12 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-        <main className="min-h-screen">{children}</main>
+        <Providers>
+          <>
+            <DefaultHeader />
+            <main className="min-h-screen">{children}</main>
+          </>
+        </Providers>
       </body>
     </html>
   );
