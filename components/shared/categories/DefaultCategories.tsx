@@ -16,6 +16,7 @@ const DefaultCategories = ({ className }: DefaultCategories) => {
       {DEFAULT_TYPES_CHECKBOXES.map((category) => (
         <a
           key={category.value}
+          href={`#group-${category.value}`}
           className={cn(
             "flex items-center font-bold h-11 rounded-2xl px-5",
             scrolledActiveCategory === Number(category.value) &&

@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import "./globals.css";
 import { ReactNode } from "react";
 import DefaultHeader from "@/components/shared/header/DefaultHeader";
+import { Toaster } from "@/components/ui/toaster";
 import { Providers } from "@/lib/providers";
 
 const fontSans = Reddit_Mono({
@@ -23,20 +24,19 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
-        )}
-      >
-        <Providers>
-          <>
-            <DefaultHeader />
-            <main className="min-h-screen">{children}</main>
-          </>
-        </Providers>
-      </body>
-    </html>
+    <Providers>
+      <html lang="en">
+        <body
+          className={cn(
+            "min-h-screen bg-background font-sans antialiased",
+            fontSans.variable,
+          )}
+        >
+          <DefaultHeader />
+          <main className="min-h-screen">{children}</main>
+          <Toaster />
+        </body>
+      </html>
+    </Providers>
   );
 }

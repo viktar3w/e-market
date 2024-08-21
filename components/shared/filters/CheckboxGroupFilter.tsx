@@ -56,6 +56,7 @@ const CheckboxGroupFilter = ({
         {types.map((item) => (
           <CheckboxFilter
             key={item.value}
+            name="type"
             {...item}
             checked={false}
             onCheckedChange={(ids) => console.log(ids)}

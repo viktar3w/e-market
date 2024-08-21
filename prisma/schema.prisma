@@ -1,0 +1,196 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @default(cuid())
+  fullname String
+  email    String  @unique
+  cart     Cart?
+  orders   Order[]
+  image    String?
+
+  verified         DateTime?
+  verificationCode VerificationCode?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  image        String?
+  categories   Category[]
+  components   Component[]
+  variants     Variant[]
+  productItems ProductItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Component {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  price    Float
+  image    String?
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Variant {
+  id        String   @id @default(cuid())
+  price     Float
+  type      Int
+  data      Json
+  image     String?
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Cart {
+  id          String     @id @default(cuid())
+  userId      String?    @unique
+  user        User?      @relation(fields: [userId], references: [id])
+  token       String
+  totalAmount Float      @default(0)
+  cartItems   CartItem[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model CartItem {
+  id            String      @id @default(cuid())
+  cartId        String
+  cart          Cart        @relation(fields: [cartId], references: [id])
+  productItemId String
+  productItem   ProductItem @relation(fields: [productItemId], references: [id])
+
+  qty Int @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductItem {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  cartItems CartItem[]
+
+  data Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id          String       @id @default(cuid())
+  userId      String?
+  user        User?        @relation(fields: [userId], references: [id])
+  token       String
+  totalAmount Float
+  status      OrderStatus
+  paymentType PaymentType?
+  paymentId   String?
+  items       Json
+
+  shippingAddressId String
+  shippingAddress   ShippingAddress @relation(fields: [shippingAddressId], references: [id])
+  billingAddressId  String
+  billingAddress    BillingAddress  @relation(fields: [billingAddressId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ShippingAddress {
+  id          String  @id @default(cuid())
+  name        String
+  street      String
+  city        String
+  postalCode  String
+  country     String
+  state       String?
+  phoneNumber String?
+  orders      Order[]
+}
+
+model BillingAddress {
+  id          String  @id @default(cuid())
+  name        String
+  street      String
+  city        String
+  postalCode  String
+  country     String
+  state       String?
+  phoneNumber String?
+  orders      Order[]
+}
+
+model VerificationCode {
+  id String @id @default(cuid())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  code String
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, code])
+}
+
+model Story {
+  id              String @id @default(cuid())
+  previewImageUrl String
+
+  items StoryItem[]
+
+  createdAt DateTime @default(now())
+}
+
+model StoryItem {
+  id String @id @default(cuid())
+
+  storyId String
+  story   Story  @relation(fields: [storyId], references: [id])
+
+  sourceUrl String
+
+  createdAt DateTime @default(now())
+}
+
+enum OrderStatus {
+  PENDING
+  SUCCEEDED
+  CANCELLED
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+enum PaymentType {
+  STRIPE
+}

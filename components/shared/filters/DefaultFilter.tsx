@@ -14,8 +14,8 @@ const DefaultFilter = ({ className }: DefaultFilterProps) => {
     <div className={cn("", className)}>
       <Title text="Filters" size="sm" className="mb-5 font-bold" />
       <div className="flex flex-col gap-4">
-        <CheckboxFilter text="Item Available" value="1" />
-        <CheckboxFilter text="New" value="2" />
+        <CheckboxFilter text="Item Available" value="1" name="available-now" />
+        <CheckboxFilter text="New" value="2" name="new" />
       </div>
       <PriceFilter title="Price from and to:" />
       <CheckboxGroupFilter

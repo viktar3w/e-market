@@ -3,7 +3,8 @@ import { cn } from "@/lib/utils";
 import BoxWrapper from "@/components/shared/common/BoxWrapper";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ShoppingCart, User } from "lucide-react";
+import { ArrowRight, ShoppingCart } from "lucide-react";
+import Auth from "@/components/auth/Clerk";
 
 type DefaultHeaderProps = {
   className?: string;
@@ -24,11 +25,7 @@ const DefaultHeader = ({ className }: DefaultHeaderProps) => {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" className="flex items-center gap-1">
-            <User size={16} />
-            Sign In
-          </Button>
-
+          <Auth />
           <div className="flex items-center gap-3">
             <Button variant="outline" className="group relative">
               {isCart ? (
