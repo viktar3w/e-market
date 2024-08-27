@@ -18,6 +18,7 @@ const CheckboxFilter = ({
         checked={checked}
         value={value}
         className="rounded-[8px] w-6 h-6"
+        name={name}
         id={`checkbox-${name || "one"}-${value}`}
       />
       <label

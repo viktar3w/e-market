@@ -9,6 +9,7 @@ import { Providers } from "@/lib/providers";
 
 const fontSans = Reddit_Mono({
   subsets: ["latin"],
+  display: "swap",
   variable: "--font-sans",
   weight: ["400", "500", "600", "700", "800"],
 });
