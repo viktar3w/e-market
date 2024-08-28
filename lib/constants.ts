@@ -162,4 +162,4 @@ export const PRODUCTS = [
 
 export const DEFAULT_TYPES_LIMIT = 6;
 
-export const DEFAULT_CATEGORY_SCROLLED = 1;
+export const DEFAULT_CATEGORY_SCROLLED = "1";

@@ -10,17 +10,15 @@ import qs from "qs";
 export const useHomeFilters = () => {
   const searchParams = useSearchParams();
   const { push } = useRouter();
-  const [isAvailable, setIsAvailable] = useState<boolean>(
-    !!(
-      searchParams.get("available") &&
-      searchParams.get("available")?.toLowerCase() === "true"
-    ),
+  const [isAvailable, setIsAvailable] = useState<boolean | undefined>(
+    !searchParams.get("available")
+      ? undefined
+      : searchParams.get("available")?.toLowerCase() === "true",
   );
-  const [isNew, setIsNew] = useState<boolean>(
-    !!(
-      searchParams.get("new") &&
-      searchParams.get("new")?.toLowerCase() === "true"
-    ),
+  const [isNew, setIsNew] = useState<boolean | undefined>(
+    !searchParams.get("new")
+      ? undefined
+      : searchParams.get("new")?.toLowerCase() === "true",
   );
   const { components, loading, addId, selectedIds } = useComponents(
     searchParams.get("components")
@@ -40,22 +38,42 @@ export const useHomeFilters = () => {
     }));
   };
   const filters = useMemo(() => {
-    return {
-      available: isAvailable,
-      new: isNew,
-      components: Array.from(selectedIds),
-      minPrice,
-      maxPrice,
-    };
+    const filters: {
+      available?: boolean;
+      new?: boolean;
+      components?: string[];
+      minPrice?: number;
+      maxPrice?: number;
+    } = {};
+    if (isAvailable !== undefined) {
+      filters.available = isAvailable;
+    }
+    if (isNew !== undefined) {
+      filters.new = isNew;
+    }
+    if (Array.from(selectedIds).length > 0) {
+      filters.components = Array.from(selectedIds);
+    }
+    if (minPrice !== MIN_PRICE) {
+      filters.minPrice = minPrice;
+    }
+    if (maxPrice !== MAX_PRICE) {
+      filters.maxPrice = maxPrice;
+    }
+    return filters;
   }, [isAvailable, isNew, selectedIds, maxPrice, minPrice]);
   useEffect(() => {
     const query = qs.stringify(filters, {
       arrayFormat: "comma",
+      charset: "utf-8",
+      allowEmptyArrays: false,
     });
-    push &&
-      push(`?${query}`, {
-        scroll: false,
-      });
+    if (!!query) {
+      push &&
+        push(`?${query}`, {
+          scroll: false,
+        });
+    }
   }, [filters, push]);
 
   return {

@@ -2,15 +2,15 @@
 import ProductCart from "@/components/shared/products/ProductCart";
 import { cn } from "@/lib/utils";
 import Title from "@/components/shared/common/Title";
-import { ProductItemType } from "@/lib/types/product";
 import { useEffect, useRef } from "react";
 import { useIntersection } from "react-use";
 import { useAppDispatch } from "@/hooks/redux";
 import { actions } from "@/lib/redux/slices/categorySlicer";
+import { CategoryProductParent } from "@/lib/types/product";
 
 type ProductGroupListProps = {
-  categoryId: number;
-  products: ProductItemType[];
+  categoryId: string;
+  products: CategoryProductParent[];
   title?: string;
   className?: string;
   listClassName?: string;
@@ -32,10 +32,10 @@ const ProductGroupList = ({
     if (intersection?.isIntersecting) {
       const categoryId = intersection.target.getAttribute("data-category");
       if (categoryId) {
-        dispatch(actions.scrollCategory(Number(categoryId)));
+        dispatch(actions.scrollCategory(categoryId));
       }
     }
-  }, [intersection?.isIntersecting]);
+  }, [dispatch, intersection?.isIntersecting, intersection?.target]);
   return (
     <div
       className={cn("", className)}

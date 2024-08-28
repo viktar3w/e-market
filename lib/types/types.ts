@@ -8,3 +8,8 @@ export type CheckboxFilterType = {
   checked?: boolean;
   name?: string;
 }
+
+export type ItemVariation<T> = {
+  text: string
+  value: T
+}

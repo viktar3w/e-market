@@ -26,6 +26,7 @@ const ProductCart = ({
             width={53}
             height={53}
             className="h-[215px] w-[215px]"
+            quality={90}
           />
         </div>
         <Title text={name} className="mb-1 mt-3 font-bold" size="sm" />
