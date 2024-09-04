@@ -282,7 +282,6 @@ async function up() {
     await db.variant.create({
       data: {
         price: randomDecimalNumber(190, 600),
-        type: 1,
         data: { color: "black", storage: "128GB" },
         image:
           "https://cdn.dodostatic.net/static/Img/Ingredients/370dac9ed21e4bffaf9bc2618d258734.png",
@@ -295,7 +294,6 @@ async function up() {
     await db.variant.create({
       data: {
         price: randomDecimalNumber(190, 600),
-        type: 1,
         data: { color: "white", storage: "400GB" },
         image:
           "https://cdn.dodostatic.net/static/Img/Ingredients/000D3A22FA54A81411E9AFA63F774C1B",
@@ -309,7 +307,6 @@ async function up() {
       await db.variant.create({
         data: {
           price: randomDecimalNumber(190, 600),
-          type: 1,
           data: { color: "yellow", storage: "64GB" },
           image:
             "https://cdn.dodostatic.net/static/Img/Ingredients/000D3A39D824A82E11E9AFA6B0FFC349",

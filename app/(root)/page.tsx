@@ -6,9 +6,8 @@ import TopBar from "@/components/shared/common/TopBar";
 import DefaultFilter from "@/components/shared/filters/DefaultFilter";
 import ProductGroupList from "@/components/shared/products/ProductGroupList";
 import { useCategories } from "@/hooks/useCategories";
-
 export default function Home() {
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
   const { categories } = useCategories(searchParams.toString());
   return (
     <>

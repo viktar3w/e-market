@@ -1,15 +1,17 @@
 export const CATEGORIES = ["Phones", "Toys", "Cars", "Food", "Soaps"];
 export const DEFAULT_ACTIVE_CATEGORY = "Phones";
 
-export const DEFAULT_COMPONENT_SIZE = 10
-export const DEFAULT_PRODUCT_SIZE = 10
-export const DEFAULT_PRODUCT_NUMBER_PAGE = 1
+export const DEFAULT_COMPONENT_SIZE = 10;
+export const DEFAULT_PRODUCT_SIZE = 10;
+export const DEFAULT_PRODUCT_NUMBER_PAGE = 1;
 
 export const MIN_PRICE = 0;
-export const MAX_PRICE = 30000;
+export const MAX_PRICE = 3000;
 export const PRICE_STEP = 10;
 
 export const CHECKBOX_ITEMS_LIMIT = 5;
+
+export const GET_ID_KEY = "variant";
 
 export const DEFAULT_TYPES_CHECKBOXES = [
   { text: "Food", value: "1" },

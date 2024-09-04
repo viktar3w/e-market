@@ -1,4 +1,4 @@
-import { Category, Component, Product, Variant } from "@prisma/client";
+import { Category, Component, Prisma, Product, Variant } from "@prisma/client";
 
 export type ProductItemType = {
   id: string;
@@ -17,6 +17,21 @@ export type CategoryParent = {
 } & Category;
 
 export type CategoryProductParent = {
-  variants: Variant[];
+  variants: VariantItem[];
   components: Component[];
 } & Product;
+
+export type VariantItem = Variant & {
+  data: Prisma.JsonObject;
+};
+
+export type GroupVariant = {
+  name: string;
+  value: string;
+  disabled?: boolean;
+};
+
+export type NestedItem<T> = {
+  key: string;
+  values: Record<string, NestedItem<T> | T>;
+};

@@ -34,6 +34,7 @@ model Category {
 model Product {
   id           String        @id @default(cuid())
   name         String        @unique
+  type         ProductType   @default(value: SIMPLE)
   image        String?
   new          Boolean       @default(false)
   available    Boolean       @default(true)
@@ -60,7 +61,6 @@ model Component {
 model Variant {
   id        String   @id @default(cuid())
   price     Float
-  type      Int
   data      Json
   image     String?
   product   Product  @relation(fields: [productId], references: [id])
@@ -196,4 +196,9 @@ enum UserRole {
 
 enum PaymentType {
   STRIPE
+}
+
+enum ProductType {
+  SIMPLE
+  PIZA
 }
