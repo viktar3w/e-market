@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { db } from "@/db";
 import ProductForm from "@/components/shared/products/ProductForm";
+import { CategoryProductParent } from "@/lib/types/product";
 
 type PageProps = {
   params: {
@@ -12,16 +13,23 @@ const Page = async ({ params }: PageProps) => {
   if (!productId) {
     return notFound();
   }
-  const product = await db.product.findUnique({
-    where: {
-      id: productId,
-    },
-    include: {
-      variants: true,
-      components: true,
-      categories: true,
-    },
-  });
+  let product: CategoryProductParent
+  try {
+    // @ts-ignore
+    product = await db.product.findUnique({
+      where: {
+        id: productId,
+      },
+      include: {
+        variants: true,
+        components: true,
+        categories: true,
+      },
+    });
+  } catch (e) {
+    console.log("[ERROR]: ", e)
+  }
+  // @ts-ignore
   if (!product) {
     return notFound();
   }

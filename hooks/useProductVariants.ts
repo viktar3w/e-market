@@ -1,14 +1,15 @@
 "use client";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { GET_ID_KEY } from "@/lib/constants";
+import { useCallback, useEffect, useState } from "react";
+import { DEFAULT_EMPTY_PRODUCT_IMAGE, GET_ID_KEY } from "@/lib/constants";
 import { CategoryProductParent, VariantItem } from "@/lib/types/product";
+import { reduceProductVariants } from "@/lib/utils";
 
 export const useProductVariants = (product: CategoryProductParent) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [mainImage, setMainImage] = useState<string>(
-    product?.image || "/products/default_product_img.png",
+    product?.image || DEFAULT_EMPTY_PRODUCT_IMAGE,
   );
   const [selectedOptions, setSelectedOptions] = useState<Record<string, any>>(
     {},
@@ -17,9 +18,10 @@ export const useProductVariants = (product: CategoryProductParent) => {
     Record<string, Record<string, VariantItem[]>>
   >({});
   const [activeVariant, setActiveVariant] = useState<VariantItem | null>(null);
+
   useEffect(() => {
     if (!activeVariant) {
-      setMainImage(product?.image || "/products/default_product_img.png");
+      setMainImage(product?.image || DEFAULT_EMPTY_PRODUCT_IMAGE);
       return;
     }
     const id = searchParams.get(GET_ID_KEY);
@@ -30,8 +32,11 @@ export const useProductVariants = (product: CategoryProductParent) => {
       window.history.pushState({}, "", newPath);
     }
 
-    setMainImage(activeVariant?.image || product?.image || "/products/default_product_img.png");
+    setMainImage(
+      activeVariant?.image || product?.image || DEFAULT_EMPTY_PRODUCT_IMAGE,
+    );
   }, [activeVariant, pathname, product?.image, searchParams]);
+
   useEffect(() => {
     if (product.variants.length === 0) {
       return;
@@ -41,19 +46,7 @@ export const useProductVariants = (product: CategoryProductParent) => {
       return;
     }
     const variants = product.variants.reduce(
-      (acc, item) => {
-        Object.keys(item.data).map((key) => {
-          if (!!!acc[key]) {
-            acc[key] = {};
-          }
-          const value = String(item.data[key]);
-          if (!!!acc[key][value]) {
-            acc[key][value] = [];
-          }
-          acc[key][value].push(item);
-        });
-        return acc;
-      },
+      reduceProductVariants,
       {} as Record<string, Record<string, any>>,
     );
     const id = searchParams.get(GET_ID_KEY);
@@ -83,9 +76,7 @@ export const useProductVariants = (product: CategoryProductParent) => {
                 abject[key] = options.reduce(
                   (acc: Record<string, VariantItem[]>, item: VariantItem) => {
                     const value = String(item.data[key]);
-                    if (!!!acc[value]) {
-                      acc[value] = [];
-                    }
+                    !acc[value] && (acc[value] = []);
                     acc[value].push(item);
                     return acc;
                   },
@@ -130,9 +121,9 @@ export const useProductVariants = (product: CategoryProductParent) => {
       {} as Record<string, Record<string, any>> | VariantItem[],
     );
     if (
-      !!!Array.isArray(variants) ||
+      !Array.isArray(variants) ||
       variants.length !== 1 ||
-      !!!variants?.[0]?.data
+      !variants?.[0]?.data
     ) {
       setActiveVariant(null);
       return;
@@ -156,29 +147,18 @@ export const useProductVariants = (product: CategoryProductParent) => {
       ),
     );
   }, [selectedOptions, groupedVariants]);
-  const handleSizeClick = useMemo(() => {
-    return (key: string, value: any) => {
+
+  const handleSizeClick = useCallback(
+    (key: string, value: any) => {
       if (!!selectedOptions[key] && selectedOptions[key] === value) {
         return;
       }
       const newVariants = groupedVariants[key][value].reduce(
-        (acc, item) => {
-          Object.keys(item.data).map((key) => {
-            if (!!!acc[key]) {
-              acc[key] = {};
-            }
-            const value = String(item.data[key]);
-            if (!!!acc[key][value]) {
-              acc[key][value] = [];
-            }
-            acc[key][value].push(item);
-          });
-          return acc;
-        },
+        reduceProductVariants,
         {} as Record<string, Record<string, any>>,
       );
       setSelectedOptions((prev) => {
-        if (!!!prev?.[key]) {
+        if (!prev?.[key]) {
           return {
             ...prev,
             [key]: value,
@@ -210,7 +190,7 @@ export const useProductVariants = (product: CategoryProductParent) => {
         return;
       }
       setGroupedVariants((prev) => {
-        if (!!!variants[activeKey + 1]) {
+        if (!variants?.[activeKey + 1]) {
           return prev;
         }
         return {
@@ -218,8 +198,9 @@ export const useProductVariants = (product: CategoryProductParent) => {
           [variants[activeKey + 1]]: newVariants[variants[activeKey + 1]],
         };
       });
-    };
-  }, [groupedVariants, selectedOptions]);
+    },
+    [groupedVariants, selectedOptions],
+  );
   return {
     mainImage,
     activeVariant,

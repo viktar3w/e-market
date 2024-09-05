@@ -12,6 +12,7 @@ export const PRICE_STEP = 10;
 export const CHECKBOX_ITEMS_LIMIT = 5;
 
 export const GET_ID_KEY = "variant";
+export const DEFAULT_EMPTY_PRODUCT_IMAGE = "/products/default_product_img.png";
 
 export const DEFAULT_TYPES_CHECKBOXES = [
   { text: "Food", value: "1" },

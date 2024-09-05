@@ -1,12 +1,13 @@
 "use client";
 import ProductCart from "@/components/shared/products/ProductCart";
-import { cn } from "@/lib/utils";
+import { cn, getMinimumPrice } from "@/lib/utils";
 import Title from "@/components/shared/common/Title";
 import { useEffect, useRef } from "react";
 import { useIntersection } from "react-use";
 import { useAppDispatch } from "@/hooks/redux";
 import { actions } from "@/lib/redux/slices/categorySlicer";
 import { CategoryProductParent } from "@/lib/types/product";
+import { DEFAULT_EMPTY_PRODUCT_IMAGE } from "@/lib/constants";
 
 type ProductGroupListProps = {
   categoryId: string;
@@ -52,8 +53,8 @@ const ProductGroupList = ({
             key={product.id}
             id={product.id}
             name={product.name}
-            price={product?.variants?.[0]?.price || 0}
-            image={product.image || "/default_product_img.png"}
+            price={getMinimumPrice(product.variants)}
+            image={product.image || DEFAULT_EMPTY_PRODUCT_IMAGE}
           />
         ))}
       </div>
