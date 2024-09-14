@@ -13,3 +13,11 @@ export type ItemVariation<T> = {
   text: string
   value: T
 }
+
+export type CountButtonType = {
+  className?: string;
+  value?: number;
+  size?: "sm" | "lg";
+  onClick?: (type: "plus" | "minus") => void;
+  disabled?: boolean
+};

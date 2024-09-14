@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { VariantItem } from "@/lib/types/product";
+import { Component } from "@prisma/client";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -29,4 +30,36 @@ export const reduceProductVariants = (
 
 export const getMinimumPrice = (variants: VariantItem[]) => {
   return variants?.sort((a, b) => a.price - b.price)?.[0]?.price || 0;
+};
+
+export const getProductDetails = (
+  variant: VariantItem | null,
+  componentIds: Set<string>,
+  components: Component[],
+): string => {
+  let description: string = "";
+  if (!!variant?.data) {
+    description = Object.keys(variant.data)
+      .reduce((text, key) => {
+        text.push(`${key}: ${variant.data[key]}`);
+        return text;
+      }, [] as string[])
+      .join(",\n");
+  }
+  if (componentIds.size > 0) {
+    description += description === "" ? "" : ". ";
+    description +=
+      "Components: \n" +
+      Array.from(componentIds)
+        .reduce((text, id) => {
+          const component = components.find((c) => c.id === id);
+          if (!component) {
+            return text;
+          }
+          text.push(component.name);
+          return text;
+        }, [] as string[])
+        .join(", ");
+  }
+  return description;
 };

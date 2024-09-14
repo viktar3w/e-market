@@ -1,10 +1,9 @@
 import { cn } from "@/lib/utils";
-import { ReactNode } from "react";
+import { PropsWithChildren } from "react";
 
 type MaxWidthWrapperProps = {
   className?: string;
-  children: ReactNode;
-};
+} & PropsWithChildren;
 
 const BoxWrapper = ({ className, children }: MaxWidthWrapperProps) => {
   return (

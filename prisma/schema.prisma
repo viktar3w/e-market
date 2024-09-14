@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -32,16 +33,15 @@ model Category {
 }
 
 model Product {
-  id           String        @id @default(cuid())
-  name         String        @unique
-  type         ProductType   @default(value: SIMPLE)
-  image        String?
-  new          Boolean       @default(false)
-  available    Boolean       @default(true)
-  categories   Category[]
-  components   Component[]
-  variants     Variant[]
-  productItems ProductItem[]
+  id         String      @id @default(cuid())
+  name       String      @unique
+  type       ProductType @default(value: SIMPLE)
+  image      String?
+  new        Boolean     @default(false)
+  available  Boolean     @default(true)
+  categories Category[]
+  components Component[]
+  variants   Variant[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -54,25 +54,29 @@ model Component {
   image    String?
   products Product[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  ProductItem   ProductItem? @relation(fields: [productItemId], references: [id])
+  productItemId String?
 }
 
 model Variant {
-  id        String   @id @default(cuid())
-  price     Float
-  data      Json
-  image     String?
-  product   Product  @relation(fields: [productId], references: [id])
-  productId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String        @id @default(cuid())
+  price       Float
+  data        Json
+  image       String?
+  product     Product       @relation(fields: [productId], references: [id])
+  productId   String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  ProductItem ProductItem[]
 }
 
 model ProductItem {
-  id        String  @id @default(cuid())
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
+  id         String      @id @default(cuid())
+  variantId  String
+  variant    Variant     @relation(fields: [variantId], references: [id])
+  components Component[]
 
   cartItems CartItem[]
 
@@ -86,21 +90,24 @@ model Cart {
   id          String     @id @default(cuid())
   userId      String?    @unique
   user        User?      @relation(fields: [userId], references: [id])
-  token       String
   totalAmount Float      @default(0)
+  qty         Int        @default(0)
   cartItems   CartItem[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  Order       Order[]
 }
 
 model CartItem {
   id            String      @id @default(cuid())
   cartId        String
   cart          Cart        @relation(fields: [cartId], references: [id])
+  name          String
   productItemId String
   productItem   ProductItem @relation(fields: [productItemId], references: [id])
 
-  qty Int @default(1)
+  qty         Int   @default(1)
+  totalAmount Float @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -112,10 +119,14 @@ model Order {
   user        User?        @relation(fields: [userId], references: [id])
   token       String
   totalAmount Float
+  qty         Int          @default(1)
   status      OrderStatus
   paymentType PaymentType?
   paymentId   String?
   items       Json
+
+  cartId String
+  cart   Cart   @relation(fields: [cartId], references: [id])
 
   shippingAddressId String
   shippingAddress   ShippingAddress @relation(fields: [shippingAddressId], references: [id])

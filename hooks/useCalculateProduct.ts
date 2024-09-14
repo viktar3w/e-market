@@ -2,6 +2,7 @@
 import { VariantItem } from "@/lib/types/product";
 import { Component } from "@prisma/client";
 import { useMemo } from "react";
+import { getProductDetails } from "@/lib/utils";
 
 const useCalculateProduct = (
   activeVariant: VariantItem | null,
@@ -21,32 +22,8 @@ const useCalculateProduct = (
     );
   }, [activeVariant, componentIds, components]);
   const description = useMemo(() => {
-    let description: string = "";
-    if (!!activeVariant?.data) {
-      description = Object.keys(activeVariant.data)
-        .reduce((text, key) => {
-          text.push(`${key}: ${activeVariant.data[key]}`);
-          return text;
-        }, [] as string[])
-        .join(",\n");
-    }
-    if (componentIds.size > 0) {
-      description += description === "" ? "" : ". ";
-      description +=
-        "Components: \n" +
-        Array.from(componentIds)
-          .reduce((text, id) => {
-            const component = components.find((c) => c.id === id);
-            if (!component) {
-              return text;
-            }
-            text.push(component.name);
-            return text;
-          }, [] as string[])
-          .join(", ");
-    }
-    return description;
-  }, [activeVariant?.data, componentIds, components]);
+    return getProductDetails(activeVariant, componentIds, components);
+  }, [activeVariant, componentIds, components]);
   const addProduct = () => {
     console.log(1111, componentIds);
     console.log(2222, activeVariant);

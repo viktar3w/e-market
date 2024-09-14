@@ -1,10 +1,11 @@
 "use client";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import ProductForm from "@/components/shared/products/ProductForm";
 import { CategoryProductParent } from "@/lib/types/product";
 import { DialogBody } from "next/dist/client/components/react-dev-overlay/internal/components/Dialog";
+import { useEffect, useState } from "react";
 
 type ChooseProductModalProps = {
   className?: string;
@@ -16,9 +17,18 @@ const ChooseProductModal = ({
   product,
   open,
 }: ChooseProductModalProps) => {
+  const [isOpen, setIsOpen] = useState<boolean>(!!open);
+  const [currentPath] = useState<string>('/')
   const router = useRouter();
   return (
-    <Dialog open={open} onOpenChange={() => router.back()}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={() => {
+        setIsOpen(false);
+        router.push(currentPath);
+      }}
+      modal
+    >
       <DialogContent
         className={cn(
           "p-0 w-[1060px] max-w-[1060px] min-h-[500px] bg-white overflow-auto",
@@ -31,7 +41,7 @@ const ChooseProductModal = ({
           <ProductForm
             className="my-2 md:px-10"
             product={product}
-            onSubmit={() => router.back()}
+            onSubmit={() => {}}
           />
         </DialogBody>
       </DialogContent>

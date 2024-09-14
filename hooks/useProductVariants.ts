@@ -1,11 +1,12 @@
 "use client";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { DEFAULT_EMPTY_PRODUCT_IMAGE, GET_ID_KEY } from "@/lib/constants";
 import { CategoryProductParent, VariantItem } from "@/lib/types/product";
 import { reduceProductVariants } from "@/lib/utils";
 
 export const useProductVariants = (product: CategoryProductParent) => {
+  const {push} = useRouter()
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [mainImage, setMainImage] = useState<string>(
@@ -28,14 +29,13 @@ export const useProductVariants = (product: CategoryProductParent) => {
     if (!id || id !== activeVariant.id) {
       const newSearchParams = new URLSearchParams(window.location.search);
       newSearchParams.set(GET_ID_KEY, activeVariant.id);
-      const newPath = `${process.env.NEXT_PUBLIC_SERVER_URL}${pathname}?${newSearchParams.toString()}`;
-      window.history.pushState({}, "", newPath);
+      push(`?${newSearchParams.toString()}`)
     }
 
     setMainImage(
       activeVariant?.image || product?.image || DEFAULT_EMPTY_PRODUCT_IMAGE,
     );
-  }, [activeVariant, pathname, product?.image, searchParams]);
+  }, [activeVariant, pathname, product?.image, push, searchParams]);
 
   useEffect(() => {
     if (product.variants.length === 0) {
