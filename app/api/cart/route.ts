@@ -3,7 +3,7 @@ import { CART_COOKIE_KEY } from "@/lib/constants";
 import { db } from "@/db";
 import { CartState } from "@/lib/types/cart";
 import { cartAction } from "@/actions/cartAction";
-import { auth } from "@clerk/nextjs/server";
+import { CartRequest, CartRequestSchema } from "@/lib/validations/cart";
 
 export const initialState = {
   totalAmount: 0,
@@ -51,27 +51,13 @@ const GET = async (req: NextRequest) => {
 };
 
 const POST = async (req: NextRequest) => {
-  try {
-    const id = req.cookies.get(CART_COOKIE_KEY)?.value;
-    if (!id) {
-      const { userId } = auth();
-      if (userId) {
-        const user = await db.user.findUnique({
-          where: {
-            id: userId
-          }
-        })
-        if (user) {
-          const cart = null
-        }
-      }
-    }
-    const cartItem = await req.json();
-    // await cartAction(cart)
-    console.log(1111, cartItem);
-  } catch (e: any) {
-    console.log("[ERROR] ", e);
+  const id = req.cookies.get(CART_COOKIE_KEY)?.value;
+  if (!id) {
+    throw new Error("Something was wrong! Please try again");
   }
+  const cartRequest: CartRequest = CartRequestSchema.parse(await req.json());
+  console.log(1111, cartRequest);
+
   return NextResponse.json({ success: false });
 };
 

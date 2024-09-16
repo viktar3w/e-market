@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { VariantItem } from "@/lib/types/product";
 import { CartState } from "@/lib/types/cart";
+import { CartRequest } from "@/lib/validations/cart";
 
 export const cartApi = createApi({
   reducerPath: "cartApi",
@@ -20,12 +20,7 @@ export const cartApi = createApi({
       {
         success: boolean;
       },
-      {
-        amount: number;
-        variant: VariantItem;
-        componentIds: Set<string>;
-        qty: number;
-      }
+      CartRequest
     >({
       query: (body) => ({
         url: "cart",

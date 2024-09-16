@@ -28,7 +28,7 @@ const ChooseProductForm = ({
     activeVariant,
   } = useProductVariants(product);
   const { componentIds, addComponent } = useProductComponents(product);
-  const { price, description, addProduct } = useCalculateProduct(
+  const { price, description, addProduct, isLoading } = useCalculateProduct(
     activeVariant,
     componentIds,
     product.components,
@@ -97,8 +97,8 @@ const ChooseProductForm = ({
             </div>
           )}
           <Button
-            disabled={!activeVariant}
-            loading={false}
+            disabled={!activeVariant || isLoading}
+            loading={isLoading}
             onClick={handleAddProduct}
             className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10"
           >

@@ -41,7 +41,7 @@ const CartDrawerItem = ({ className, item }: CartDrawerItemProps) => {
     if (isSuccess) {
       toast?.({
         description: "Qty was added",
-        className: "bg-green",
+        variant: "success",
       });
     }
   }, [toast, isSuccess]);
@@ -57,7 +57,7 @@ const CartDrawerItem = ({ className, item }: CartDrawerItemProps) => {
     if (isSuccessDeleting) {
       toast?.({
         description: "Item was deleted",
-        className: "bg-green",
+        variant: "success",
       });
     }
   }, [toast, isSuccessDeleting]);
