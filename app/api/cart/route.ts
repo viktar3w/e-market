@@ -55,10 +55,84 @@ const POST = async (req: NextRequest) => {
   if (!id) {
     throw new Error("Something was wrong! Please try again");
   }
+  const cart = await db.cart.findUnique({
+    where: {
+      id,
+    },
+  });
+  if (!cart) {
+    throw new Error("Something was wrong! Please try again later");
+  }
   const cartRequest: CartRequest = CartRequestSchema.parse(await req.json());
-  console.log(1111, cartRequest);
-
-  return NextResponse.json({ success: false });
+  let productItem = await db.productItem.findFirst({
+    where: {
+      variantId: cartRequest.variantId,
+      components: {
+        every: {
+          id: {
+            in: cartRequest.componentIds || [],
+          },
+        },
+      },
+    },
+    include: {
+      cartItems: true,
+      variant: {
+        include: {
+          product: true,
+        },
+      },
+    },
+  });
+  if (!productItem) {
+    productItem = await db.productItem.create({
+      data: {
+        variantId: cartRequest.variantId,
+        components: {
+          connect: (cartRequest.componentIds || []).map(
+            (componentId: string) => ({
+              id: componentId,
+            }),
+          ),
+        },
+        data: {},
+      },
+      include: {
+        cartItems: true,
+        variant: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+  }
+  const cartItem = productItem.cartItems.find(
+    (item) => item.cartId === cart.id,
+  );
+  if (!cartItem) {
+    await db.cartItem.create({
+      data: {
+        cartId: cart.id,
+        name: productItem.variant.product.name,
+        productItemId: productItem.id,
+        qty: cartRequest.qty,
+        totalAmount: cartRequest.amount,
+      },
+    });
+  } else {
+    await db.cartItem.update({
+      where: {
+        id: cartItem.id,
+      },
+      data: {
+        totalAmount: cartItem.totalAmount + cartRequest.amount,
+        qty: cartItem.qty + cartRequest.qty,
+      },
+    });
+  }
+  await cartAction(cart);
+  return NextResponse.json({ success: true });
 };
 
 const PUT = async (req: NextRequest) => {
