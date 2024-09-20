@@ -11,3 +11,7 @@ export type ProductItemState = {
   variant: VariantItem;
   components: Component[];
 } & ProductItem;
+
+export type ResultResponse = {
+  success: boolean;
+};

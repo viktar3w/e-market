@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/lib/redux/store";
 import { cartApi } from "@/lib/redux/api/cart.api";
 import { CartItemState } from "@/lib/types/cart";
+import { CART_LOCALSTORAGE } from "@/lib/constants";
 
 type CartSlicerType = {
   cart: {
@@ -29,12 +30,13 @@ const cartSlicer = createSlice({
         console.log("cart matchPending: action", action);
       })
       .addMatcher(cartApi.endpoints.getCart.matchRejected, (state) => {
-        state = initialState;
+        console.log("cart matchRejected: state", state);
       })
       .addMatcher(cartApi.endpoints.getCart.matchFulfilled, (state, action) => {
         state.cart.cartItems = action.payload.cartItems;
         state.cart.totalAmount = action.payload.totalAmount;
         state.cart.qty = action.payload.qty;
+        localStorage.setItem(CART_LOCALSTORAGE, JSON.stringify(action.payload));
       });
   },
 });

@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import "./globals.css";
 import { ReactNode } from "react";
 import { Providers } from "@/lib/providers";
+import SyncWithLocalStorage from "@/components/storage/SyncWithLocalStorage";
 
 const fontSans = Reddit_Mono({
   subsets: ["latin"],
@@ -28,7 +29,10 @@ export default function HomeLayout({
             fontSans.variable,
           )}
         >
-          {children}
+          <>
+            <SyncWithLocalStorage />
+            {children}
+          </>
         </body>
       </html>
     </Providers>

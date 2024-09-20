@@ -1,6 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CartState } from "@/lib/types/cart";
-import { CartRequest } from "@/lib/validations/cart";
+import { CartState, ResultResponse } from "@/lib/types/cart";
+import {
+  CartIdRequest,
+  CartRequest,
+  CartUpdateRequest,
+} from "@/lib/validations/cart";
 
 export const cartApi = createApi({
   reducerPath: "cartApi",
@@ -29,15 +33,7 @@ export const cartApi = createApi({
       }),
       invalidatesTags: [{ type: "Cart", id: "LIST" }],
     }),
-    updateCartItem: builder.mutation<
-      {
-        success: boolean;
-      },
-      {
-        id: string;
-        qty: number;
-      }
-    >({
+    updateCartItem: builder.mutation<ResultResponse, CartUpdateRequest>({
       query: (body) => ({
         url: "cart",
         method: "PUT",
@@ -45,7 +41,7 @@ export const cartApi = createApi({
       }),
       invalidatesTags: [{ type: "Cart", id: "LIST" }],
     }),
-    deleteCartItem: builder.mutation<{ success: boolean }, { id: string }>({
+    deleteCartItem: builder.mutation<ResultResponse, CartIdRequest>({
       query(body) {
         return {
           url: "cart",

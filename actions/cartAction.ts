@@ -9,7 +9,7 @@ export const cartAction = async (cart: Cart) => {
   });
   const data: { totalAmount: number; qty: number } = items.reduce(
     (result, item) => {
-      result.qty = item.qty;
+      result.qty += item.qty;
       result.totalAmount += item.qty * item.totalAmount;
       return result;
     },
@@ -32,8 +32,7 @@ export const getCartToken = async (): Promise<string> => {
     })
     return cart.id
   } catch (e: any) {
-    console.log(2222, e.message)
-    console.log("[ERROR] can't create cart")
+    console.log("[ERROR] can't create cart: ", e.message)
   }
   return ""
 }
