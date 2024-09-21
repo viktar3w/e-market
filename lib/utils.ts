@@ -1,7 +1,12 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { VariantItem } from "@/lib/types/product";
-import { Component } from "@prisma/client";
+import { CategoryParent, VariantItem } from "@/lib/types/product";
+import { Component, Prisma } from "@prisma/client";
+import ProductWhereInput = Prisma.ProductWhereInput;
+import CategoryWhereInput = Prisma.CategoryWhereInput;
+import VariantWhereInput = Prisma.VariantWhereInput;
+import qs from "qs";
+import { DEFAULT_PRODUCT_NUMBER_PAGE, DEFAULT_PRODUCT_SIZE } from "@/lib/constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -63,3 +68,100 @@ export const getProductDetails = (
   }
   return description;
 };
+
+export const preparedCategoryProductVariantsByPrice = (
+  categories: CategoryParent[],
+  minPrice?: number,
+  maxPrice?: number,
+) => {
+  for (let i = 0; i < categories.length; i++) {
+    for (let j = 0; j < categories[i].products.length; j++) {
+      const filteredVariants = categories[i].products[j].variants.filter(
+        (variant) => {
+          return (
+            (!minPrice || variant.price >= Number(minPrice)) &&
+            (!maxPrice || variant.price <= Number(maxPrice))
+          );
+        },
+      );
+      const minVariant =
+        filteredVariants.length > 0
+          ? filteredVariants.reduce((minVar, currentVar) =>
+              currentVar.price < minVar.price ? currentVar : minVar,
+            )
+          : null;
+      categories[i].products[j].variants = minVariant ? [minVariant] : [];
+    }
+  }
+  return categories;
+};
+
+export const preparePrismaCategoryFilter = (components: qs.ParsedQs) => {
+  const limit = Number(components?.limit || DEFAULT_PRODUCT_SIZE);
+  const numberPage = Number(
+    components?.number_page || DEFAULT_PRODUCT_NUMBER_PAGE,
+  );
+  let options = {
+    skip: (numberPage - 1) * limit, // Пропустить записи для предыдущих страниц
+    take: limit,
+    include: {
+      products: {
+        include: {
+          components: true,
+          variants: {
+            where: {} as VariantWhereInput,
+            orderBy: {
+              price: Prisma.SortOrder.asc,
+            },
+          },
+        },
+        where: {} as ProductWhereInput,
+      },
+    },
+    where: {} as CategoryWhereInput,
+  };
+  if (!!components?.query) {
+    options.where = {
+      name: {
+        contains: String(components?.query),
+        mode: "insensitive",
+      },
+    };
+  }
+  const minPrice = !!components?.minPrice
+    ? Number(components?.minPrice)
+    : undefined;
+  const maxPrice = !!components?.maxPrice
+    ? Number(components?.maxPrice)
+    : undefined;
+  if (Object.keys(components).length > 0) {
+    if (!!components?.available) {
+      options.include.products.where.available =
+        String(components?.available).toLowerCase() === "true";
+    }
+    if (!!components?.new) {
+      options.include.products.where.new =
+        String(components?.new).toLowerCase() === "true";
+    }
+    if (!!components?.components) {
+      if (typeof components?.components === "string") {
+        options.include.products.where.components = {
+          some: {
+            id: { in: String(components?.components).split(",") },
+          },
+        };
+      }
+    }
+    if (!!minPrice || !!maxPrice) {
+      options.include.products.where.variants = {
+        some: {
+          AND: [
+            minPrice ? { price: { gte: minPrice } } : undefined,
+            maxPrice ? { price: { lte: maxPrice } } : undefined,
+          ].filter(Boolean) as VariantWhereInput[],
+        },
+      };
+    }
+  }
+  return options
+}
