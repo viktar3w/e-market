@@ -11,7 +11,7 @@ type CartButtonProps = {
   className?: string;
 };
 const CartButton = ({ className }: CartButtonProps) => {
-  const { data } = useGetCartQuery();
+  const { data, isLoading } = useGetCartQuery();
   const [items, setItems] = useState<CartItemState[]>([]);
   useEffect(() => {
     setItems(data?.cartItems || []);
@@ -19,7 +19,13 @@ const CartButton = ({ className }: CartButtonProps) => {
   return (
     <div className={cn("flex items-center gap-3", className)}>
       <CartDrawer>
-        <Button variant="outline" className="group relative">
+        <Button
+          loading={isLoading}
+          variant="outline"
+          className={cn("group relative", {
+            "w-[105px]": isLoading,
+          })}
+        >
           {items.length > 0 ? (
             <>
               <strong>{data?.totalAmount}</strong>

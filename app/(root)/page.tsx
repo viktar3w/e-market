@@ -6,6 +6,7 @@ import TopBar from "@/components/shared/common/TopBar";
 import DefaultFilter from "@/components/shared/filters/DefaultFilter";
 import ProductGroupList from "@/components/shared/products/ProductGroupList";
 import { useCategories } from "@/hooks/useCategories";
+import { Suspense } from "react";
 export default function Home() {
   const searchParams = useSearchParams();
   const { categories } = useCategories(searchParams.toString());
@@ -22,7 +23,9 @@ export default function Home() {
       <BoxWrapper className="mt-10 pb-14">
         <div className="flex gap-[80px]">
           <div className="w-[250px]">
-            <DefaultFilter />
+            <Suspense>
+              <DefaultFilter />
+            </Suspense>
           </div>
           <div className="flex-1">
             <div className="flex flex-col gap-16">

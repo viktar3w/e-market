@@ -12,7 +12,7 @@ type CartSlicerType = {
   };
 };
 
-const initialState: CartSlicerType = {
+export const initialState: CartSlicerType = {
   cart: {
     totalAmount: 0,
     cartItems: [],

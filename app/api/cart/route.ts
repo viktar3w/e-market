@@ -8,12 +8,8 @@ import {
   CartRequestSchema,
   CartUpdateRequestSchema,
 } from "@/lib/validations/cart";
+import { initialState } from "@/lib/redux/slices/cartSlicer";
 
-export const initialState = {
-  totalAmount: 0,
-  cartItems: [],
-  qty: 0,
-};
 const GET = async (req: NextRequest) => {
   try {
     const id = req.cookies.get(CART_COOKIE_KEY)?.value;
@@ -86,9 +82,11 @@ const POST = async (req: NextRequest) => {
           product: true,
         },
       },
+      components: true,
     },
   });
   if (!productItem) {
+    // throw new Error("Something was wrong! Please try again later");
     productItem = await db.productItem.create({
       data: {
         variantId: cartRequest.variantId,
@@ -108,6 +106,7 @@ const POST = async (req: NextRequest) => {
             product: true,
           },
         },
+        components: true,
       },
     });
   }
@@ -201,6 +200,11 @@ const DELETE = async (req: NextRequest) => {
   }
   await db.cartItem.delete({
     where: { id: cartItemDetails.id },
+  });
+  await db.productItem.delete({
+    where: {
+      id: cartItem.productItemId,
+    },
   });
   await cartAction(cart);
   return NextResponse.json({

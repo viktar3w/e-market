@@ -5,6 +5,7 @@ import {
   preparedCategoryProductVariantsByPrice,
   preparePrismaCategoryFilter,
 } from "@/lib/utils";
+import { CategoryParent } from "@/lib/types/product";
 
 export const GET = async (reg: NextRequest) => {
   const components = qs.parse(reg.nextUrl.search.replaceAll("?", ""), {
@@ -12,7 +13,7 @@ export const GET = async (reg: NextRequest) => {
     parseArrays: true,
   });
   let options = preparePrismaCategoryFilter(components);
-  let categories = await db.category.findMany(options);
+  let categories: CategoryParent[] = await db.category.findMany(options);
   const minPrice = !!components?.minPrice
     ? Number(components?.minPrice)
     : undefined;

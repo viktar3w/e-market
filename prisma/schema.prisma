@@ -48,16 +48,15 @@ model Product {
 }
 
 model Component {
-  id       String    @id @default(cuid())
-  name     String    @unique
-  price    Float
-  image    String?
-  products Product[]
+  id           String        @id @default(cuid())
+  name         String        @unique
+  price        Float
+  image        String?
+  products     Product[]
+  productItems ProductItem[]
 
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  ProductItem   ProductItem? @relation(fields: [productItemId], references: [id])
-  productItemId String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Variant {
