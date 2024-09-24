@@ -5,7 +5,7 @@ import { CHECKBOX_ITEMS_LIMIT } from "@/lib/constants";
 import { Input } from "@/components/ui/input";
 import CheckboxFilter from "@/components/shared/filters/CheckboxFilter";
 import { useEffect, useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import CheckboxSkeleton from "@/components/shared/filters/CheckboxSkeleton";
 
 type CheckboxGroupFilterProps = {
   title: string;
@@ -26,7 +26,6 @@ const CheckboxGroupFilter = ({
   searchInputPlaceholder = "Search...",
   onChange,
   name = "type",
-  loading = false,
   selectedIds,
 }: CheckboxGroupFilterProps) => {
   const [types, setTypes] = useState<CheckboxFilterType[]>([]);
@@ -44,18 +43,8 @@ const CheckboxGroupFilter = ({
   useEffect(() => {
     setTypes(showAll ? items : items.slice(0, limit));
   }, [items, showAll, limit]);
-  if (loading) {
-    return (
-      <div className={className}>
-        <span className="font-bold mb-3">
-          {...Array(limit)
-            .fill(0)
-            .map((_, index) => (
-              <Skeleton key={index} className="h-6 rounded-[8px] mb-5" />
-            ))}
-        </span>
-      </div>
-    );
+  if (items.length === 0) {
+    return <CheckboxSkeleton limit={limit} className={className} />;
   }
   return (
     <div className={cn("", className)}>

@@ -1,12 +1,14 @@
 import { cn } from "@/lib/utils";
 import BoxWrapper from "@/components/shared/common/BoxWrapper";
-import DefaultCategories from "@/components/shared/categories/DefaultCategories";
 import SortPopup from "@/components/shared/common/SortPopup";
 import { ItemVariation } from "@/lib/types/types";
+import SkeletonDefaultCategories from "@/components/shared/categories/SkeletonDefaultCategories";
+import DefaultCategories from "@/components/shared/categories/DefaultCategories";
 
 type TopBarProps = {
   className?: string;
   items: ItemVariation<string>[];
+  loading?: boolean;
 };
 const TopBar = ({ className, items }: TopBarProps) => {
   return (
@@ -17,7 +19,11 @@ const TopBar = ({ className, items }: TopBarProps) => {
       )}
     >
       <BoxWrapper className="flex items-center justify-between">
-        <DefaultCategories items={items} />
+        {items.length === 0 ? (
+          <SkeletonDefaultCategories />
+        ) : (
+          <DefaultCategories items={items} />
+        )}
         <SortPopup />
       </BoxWrapper>
     </div>

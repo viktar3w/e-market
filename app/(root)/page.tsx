@@ -7,6 +7,7 @@ import DefaultFilter from "@/components/shared/filters/DefaultFilter";
 import ProductGroupList from "@/components/shared/products/ProductGroupList";
 import { useCategories } from "@/hooks/useCategories";
 import { Suspense } from "react";
+import ProductCartSkeleton from "@/components/shared/products/ProductCartSkeleton";
 export default function Home() {
   const searchParams = useSearchParams();
   const { categories } = useCategories(searchParams.toString());
@@ -29,16 +30,20 @@ export default function Home() {
           </div>
           <div className="flex-1">
             <div className="flex flex-col gap-16">
-              {categories.map(
-                (category) =>
-                  category.products.length > 0 && (
-                    <ProductGroupList
-                      key={category.id}
-                      title={category.name}
-                      categoryId={category.id}
-                      products={category.products}
-                    />
-                  ),
+              {categories.length === 0 ? (
+                <ProductCartSkeleton />
+              ) : (
+                categories.map(
+                  (category) =>
+                    category.products.length > 0 && (
+                      <ProductGroupList
+                        key={category.id}
+                        title={category.name}
+                        categoryId={category.id}
+                        products={category.products}
+                      />
+                    ),
+                )
               )}
             </div>
           </div>
