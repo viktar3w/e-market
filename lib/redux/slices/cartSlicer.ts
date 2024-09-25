@@ -9,6 +9,7 @@ type CartSlicerType = {
     totalAmount: number;
     cartItems: CartItemState[];
     qty: number;
+    loading: boolean
   };
 };
 
@@ -17,6 +18,7 @@ export const initialState: CartSlicerType = {
     totalAmount: 0,
     cartItems: [],
     qty: 0,
+    loading: false
   },
 };
 const cartSlicer = createSlice({
@@ -26,16 +28,19 @@ const cartSlicer = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(cartApi.endpoints.getCart.matchPending, (state, action) => {
+        state.cart.loading = true
         console.log("cart matchPending: state", state);
         console.log("cart matchPending: action", action);
       })
       .addMatcher(cartApi.endpoints.getCart.matchRejected, (state) => {
+        state.cart.loading = false
         console.log("cart matchRejected: state", state);
       })
       .addMatcher(cartApi.endpoints.getCart.matchFulfilled, (state, action) => {
         state.cart.cartItems = action.payload.cartItems;
         state.cart.totalAmount = action.payload.totalAmount;
         state.cart.qty = action.payload.qty;
+        state.cart.loading = false
         localStorage.setItem(CART_LOCALSTORAGE, JSON.stringify(action.payload));
       });
   },

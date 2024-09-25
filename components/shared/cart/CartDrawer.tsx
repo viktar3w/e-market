@@ -35,7 +35,12 @@ const CartDrawer = ({ className, children }: CartDrawerProps) => {
         </SheetHeader>
         <div className="-mx-6 mt-5 overflow-auto flex-1 scrollbar">
           {cart.cartItems.map((item) => (
-            <CartDrawerItem key={item.id} item={item} className="mb-2" />
+            <CartDrawerItem
+              key={item.id}
+              item={item}
+              loading={cart.loading}
+              className="mb-2"
+            />
           ))}
         </div>
         <SheetFooter className="-mx-6 bg-white p-8">
@@ -50,7 +55,7 @@ const CartDrawer = ({ className, children }: CartDrawerProps) => {
               </span>
             </div>
             <Link href="/checkout/cart">
-              <Button className="w-full h-12 text-base">
+              <Button className="w-full h-12 text-base" disabled={cart.loading}>
                 Checkout <ArrowRight className="w-5 ml-2" />
               </Button>
             </Link>

@@ -16,8 +16,13 @@ import { useToast } from "@/components/ui/use-toast";
 type CartDrawerItemProps = {
   item: CartItemState;
   className?: string;
+  loading?: boolean;
 };
-const CartDrawerItem = ({ className, item }: CartDrawerItemProps) => {
+const CartDrawerItem = ({
+  className,
+  item,
+  loading = false,
+}: CartDrawerItemProps) => {
   const { toast } = useToast();
   const [updateCartItem, { isLoading, isError, isSuccess }] =
     useUpdateCartItemMutation();
@@ -90,15 +95,17 @@ const CartDrawerItem = ({ className, item }: CartDrawerItemProps) => {
           <CountButton
             onClick={handleButton}
             value={item.qty}
-            disabled={isLoading}
+            disabled={isLoading || loading}
           />
           <div className="flex items-center gap-3">
             <CartItemDetailPrice price={item.totalAmount} />
             <TrashIcon
               size={16}
-              className="text-gray-400 cursor-pointer hover:text-gray-600"
+              className={cn("text-gray-400 cursor-pointer hover:text-gray-600", {
+                'cursor-wait': isLoadingDeleting || loading
+              })}
               onClick={() => {
-                if (!isLoadingDeleting) {
+                if (!isLoadingDeleting && !loading) {
                   deleteCartItem({
                     id: item.id,
                   });
