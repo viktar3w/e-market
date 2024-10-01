@@ -33,7 +33,8 @@ export const useOnboarding = ({
     setLoading(true);
     const user = await createUser({
       id: values.id,
-      fullname: `${values.firstname} ${values.lastname}`,
+      firstname: values.firstname,
+      lastname: values.lastname,
       image: values.image,
       email: values.email,
     } as User);

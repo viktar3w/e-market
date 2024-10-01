@@ -9,12 +9,14 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(cuid())
-  fullname String
-  email    String  @unique
-  cart     Cart?
-  orders   Order[]
-  image    String?
+  id        String  @id @default(cuid())
+  firstname String
+  lastname  String
+  phone     String?
+  email     String  @unique
+  cart      Cart?
+  orders    Order[]
+  image     String?
 
   verified         DateTime?
   verificationCode VerificationCode?
@@ -86,15 +88,26 @@ model ProductItem {
 }
 
 model Cart {
-  id          String     @id @default(cuid())
-  userId      String?    @unique
-  user        User?      @relation(fields: [userId], references: [id])
-  totalAmount Float      @default(0)
-  qty         Int        @default(0)
-  cartItems   CartItem[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  Order       Order[]
+  id          String  @id @default(cuid())
+  userId      String? @unique
+  user        User?   @relation(fields: [userId], references: [id])
+  totalAmount Float   @default(0)
+  qty         Int     @default(0)
+
+  firstname String?
+  lastname  String?
+  phone     String?
+  email     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cartItems         CartItem[]
+  Order             Order[]
+  shippingAddress   ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
+  shippingAddressId String?
+  billingAddress    BillingAddress?  @relation(fields: [billingAddressId], references: [id])
+  billingAddressId  String?
 }
 
 model CartItem {
@@ -137,27 +150,33 @@ model Order {
 }
 
 model ShippingAddress {
-  id          String  @id @default(cuid())
-  name        String
-  street      String
-  city        String
-  postalCode  String
-  country     String
-  state       String?
-  phoneNumber String?
-  orders      Order[]
+  id        String  @id @default(cuid())
+  email     String
+  firstname String
+  lastname  String
+  street    String
+  city      String
+  postcode  String
+  country   String
+  state     String?
+  phone     String?
+  orders    Order[]
+  carts     Cart[]
 }
 
 model BillingAddress {
-  id          String  @id @default(cuid())
-  name        String
-  street      String
-  city        String
-  postalCode  String
-  country     String
-  state       String?
-  phoneNumber String?
-  orders      Order[]
+  id        String  @id @default(cuid())
+  email     String
+  firstname String
+  lastname  String
+  street    String
+  city      String
+  postcode  String
+  country   String
+  state     String?
+  phone     String?
+  orders    Order[]
+  carts     Cart[]
 }
 
 model VerificationCode {

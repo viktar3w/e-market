@@ -6,21 +6,25 @@ import { cn } from "@/lib/utils";
 import { useGetCartQuery } from "@/lib/redux/api/cart.api";
 import { useEffect, useState } from "react";
 import { CartItemState } from "@/lib/types/cart";
+import { useAppSelector } from "@/hooks/redux";
+import { selectCart } from "@/lib/redux/slices/cartSlicer";
 
 type CartButtonProps = {
   className?: string;
 };
 const CartButton = ({ className }: CartButtonProps) => {
+  const { cart } = useAppSelector(selectCart);
   const { data, isLoading } = useGetCartQuery();
   const [items, setItems] = useState<CartItemState[]>([]);
   useEffect(() => {
     setItems(data?.cartItems || []);
+    return () => setItems([]);
   }, [data?.cartItems]);
   return (
     <div className={cn("flex items-center gap-3", className)}>
       <CartDrawer>
         <Button
-          loading={isLoading}
+          loading={isLoading || cart.loading}
           variant="outline"
           className={cn("group relative", {
             "w-[105px]": isLoading,

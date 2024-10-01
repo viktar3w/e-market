@@ -2,8 +2,15 @@
 
 import { db } from "@/db";
 import { User } from "@prisma/client";
+import { sanitize } from "dompurify";
 
-export const createUser = async ({ id, email, fullname, image }: User) => {
+export const createUser = async ({
+  id,
+  email,
+  firstname,
+  lastname,
+  image,
+}: User) => {
   try {
     const user = await db.user.findUnique({
       where: {
@@ -16,9 +23,10 @@ export const createUser = async ({ id, email, fullname, image }: User) => {
     return await db.user.create({
       data: {
         id: id,
-        email: email,
-        fullname: fullname,
-        image: image,
+        email: sanitize(email),
+        firstname: sanitize(firstname),
+        lastname: sanitize(lastname),
+        image: sanitize(image || ""),
       },
     });
   } catch (err: any) {

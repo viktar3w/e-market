@@ -21,3 +21,7 @@ export type CountButtonType = {
   onClick?: (type: "plus" | "minus") => void;
   disabled?: boolean
 };
+
+export type ResultResponse = {
+  success: boolean;
+};

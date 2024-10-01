@@ -34,7 +34,7 @@ const Onboarding = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col justify-start gap-10"
         >
-          {!!!email && (
+          {!email && (
             <FormField
               control={form.control}
               name="email"

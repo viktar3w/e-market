@@ -13,7 +13,7 @@ export const GET = async (reg: NextRequest) => {
     parseArrays: true,
   });
   let options = preparePrismaCategoryFilter(components);
-  let categories: CategoryParent[] = await db.category.findMany(options);
+  let categories = await db.category.findMany(options) as CategoryParent[];
   const minPrice = !!components?.minPrice
     ? Number(components?.minPrice)
     : undefined;

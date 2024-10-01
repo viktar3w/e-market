@@ -37,9 +37,9 @@ const cartSlicer = createSlice({
         console.log("cart matchRejected: state", state);
       })
       .addMatcher(cartApi.endpoints.getCart.matchFulfilled, (state, action) => {
-        state.cart.cartItems = action.payload.cartItems;
-        state.cart.totalAmount = action.payload.totalAmount;
-        state.cart.qty = action.payload.qty;
+        state.cart.cartItems = action.payload.cartItems || [];
+        state.cart.totalAmount = action.payload.totalAmount || 0;
+        state.cart.qty = action.payload.qty || 0;
         state.cart.loading = false
         localStorage.setItem(CART_LOCALSTORAGE, JSON.stringify(action.payload));
       });

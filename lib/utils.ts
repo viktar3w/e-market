@@ -165,3 +165,8 @@ export const preparePrismaCategoryFilter = (components: qs.ParsedQs) => {
   }
   return options
 }
+
+export const areArraysEqual = (arr1: string[], arr2: string[]): boolean => {
+  if (arr1.length !== arr2.length) return false;
+  return arr1.sort().join(',') === arr2.sort().join(',');
+};

@@ -1,6 +1,5 @@
 "use client";
 import { PropsWithChildren } from "react";
-import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -15,11 +14,12 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { selectCart } from "@/lib/redux/slices/cartSlicer";
 import CartDrawerItem from "@/components/shared/cart/CartDrawerItem";
+import { useAppSelector } from "@/hooks/redux";
 type CartDrawerProps = {
   className?: string;
 } & PropsWithChildren;
 const CartDrawer = ({ className, children }: CartDrawerProps) => {
-  const { cart } = useSelector(selectCart);
+  const { cart } = useAppSelector(selectCart);
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
@@ -54,7 +54,7 @@ const CartDrawer = ({ className, children }: CartDrawerProps) => {
                 {formatPrice(cart.totalAmount)}
               </span>
             </div>
-            <Link href="/checkout/cart">
+            <Link href="/checkout/">
               <Button className="w-full h-12 text-base" disabled={cart.loading}>
                 Checkout <ArrowRight className="w-5 ml-2" />
               </Button>

@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CART_COOKIE_KEY } from "@/lib/constants";
 import { db } from "@/db";
-import { CartState } from "@/lib/types/cart";
-import { cartAction } from "@/actions/cartAction";
+import { CartState, ProductItemState } from "@/lib/types/cart";
+import { cartAction, getCart } from "@/actions/cartAction";
 import {
   CartIdRequestSchema,
   CartRequestSchema,
   CartUpdateRequestSchema,
 } from "@/lib/validations/cart";
 import { initialState } from "@/lib/redux/slices/cartSlicer";
+import { areArraysEqual } from "@/lib/utils";
 
 const GET = async (req: NextRequest) => {
   try {
@@ -38,9 +39,11 @@ const GET = async (req: NextRequest) => {
             },
           },
         },
+        shippingAddress: true,
       },
     });
     if (!cart) {
+      req.cookies.delete(CART_COOKIE_KEY);
       throw new Error("We can't find cart");
     }
     return NextResponse.json<CartState>(cart as CartState);
@@ -51,29 +54,12 @@ const GET = async (req: NextRequest) => {
 };
 
 const POST = async (req: NextRequest) => {
-  const id = req.cookies.get(CART_COOKIE_KEY)?.value;
-  if (!id) {
-    throw new Error("Something was wrong! Please try again");
-  }
-  const cart = await db.cart.findUnique({
-    where: {
-      id,
-    },
-  });
-  if (!cart) {
-    throw new Error("Something was wrong! Please try again later");
-  }
+  const cart = await getCart();
   const cartRequest = CartRequestSchema.parse(await req.json());
-  let productItem = await db.productItem.findFirst({
+  let productItem: ProductItemState | null;
+  let productItems = (await db.productItem.findMany({
     where: {
       variantId: cartRequest.variantId,
-      components: {
-        every: {
-          id: {
-            in: cartRequest.componentIds || [],
-          },
-        },
-      },
     },
     include: {
       cartItems: true,
@@ -84,10 +70,9 @@ const POST = async (req: NextRequest) => {
       },
       components: true,
     },
-  });
-  if (!productItem) {
-    // throw new Error("Something was wrong! Please try again later");
-    productItem = await db.productItem.create({
+  })) as ProductItemState[];
+  if (productItems.length === 0) {
+    productItem = (await db.productItem.create({
       data: {
         variantId: cartRequest.variantId,
         components: {
@@ -108,7 +93,47 @@ const POST = async (req: NextRequest) => {
         },
         components: true,
       },
-    });
+    })) as ProductItemState;
+  } else {
+    productItem =
+      productItems.find((item) => {
+        if (
+          item.components.length !== (cartRequest.componentIds?.length || 0)
+        ) {
+          return false;
+        }
+        return areArraysEqual(
+          item.components.map((component) => component.id),
+          cartRequest.componentIds || [],
+        );
+      }) || null;
+    if (!productItem) {
+      productItem = (await db.productItem.create({
+        data: {
+          variantId: cartRequest.variantId,
+          components: {
+            connect: (cartRequest.componentIds || []).map(
+              (componentId: string) => ({
+                id: componentId,
+              }),
+            ),
+          },
+          data: {},
+        },
+        include: {
+          cartItems: true,
+          variant: {
+            include: {
+              product: true,
+            },
+          },
+          components: true,
+        },
+      })) as ProductItemState;
+    }
+  }
+  if (!productItem) {
+    throw new Error("We can't create necessary ProductItem");
   }
   const cartItem = productItem.cartItems.find(
     (item) => item.cartId === cart.id,
@@ -138,18 +163,7 @@ const POST = async (req: NextRequest) => {
 };
 
 const PUT = async (req: NextRequest) => {
-  const id = req.cookies.get(CART_COOKIE_KEY)?.value;
-  if (!id) {
-    throw new Error("Something was wrong! Please try again");
-  }
-  const cart = await db.cart.findUnique({
-    where: {
-      id,
-    },
-  });
-  if (!cart) {
-    throw new Error("We can't find cart");
-  }
+  const cart = await getCart();
   const cartItemDetails = CartUpdateRequestSchema.parse(await req.json());
   const qty = Number(cartItemDetails.qty);
   if (!cartItemDetails.id || !qty) {
@@ -174,18 +188,7 @@ const PUT = async (req: NextRequest) => {
 };
 
 const DELETE = async (req: NextRequest) => {
-  const id = req.cookies.get(CART_COOKIE_KEY)?.value;
-  if (!id) {
-    throw new Error("Something was wrong! Please try again");
-  }
-  const cart = await db.cart.findUnique({
-    where: {
-      id,
-    },
-  });
-  if (!cart) {
-    throw new Error("We can't find cart");
-  }
+  const cart = await getCart();
   const cartItemDetails = CartIdRequestSchema.parse(await req.json());
   if (!cartItemDetails.id) {
     throw new Error("Cart Item id and qty is requite fields!");
@@ -201,11 +204,21 @@ const DELETE = async (req: NextRequest) => {
   await db.cartItem.delete({
     where: { id: cartItemDetails.id },
   });
-  await db.productItem.delete({
+  const productItem = await db.productItem.findUnique({
     where: {
       id: cartItem.productItemId,
     },
+    include: {
+      cartItems: true,
+    },
   });
+  if (!!productItem && productItem.cartItems.length === 0) {
+    await db.productItem.delete({
+      where: {
+        id: cartItem.productItemId,
+      },
+    });
+  }
   await cartAction(cart);
   return NextResponse.json({
     success: true,
