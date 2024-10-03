@@ -1,7 +1,7 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   CheckoutDeliverySchema,
   CheckoutDeliveryValidation,
@@ -9,6 +9,7 @@ import {
 import { DeliveryForm } from "@/lib/types/user";
 import { useToast } from "@/components/ui/use-toast";
 import { useAddShippingAddressMutation } from "@/lib/redux/api/cart.api";
+import { findValueInAddress } from "@/lib/utils";
 
 type CheckoutDelivery = {} & DeliveryForm;
 export const useCheckoutDelivery = ({
@@ -23,6 +24,8 @@ export const useCheckoutDelivery = ({
   phone,
 }: CheckoutDelivery) => {
   const { toast } = useToast();
+  const [addressAutocomplete, setAddressAutocomplete] =
+    useState<google.maps.places.PlaceResult | null>(null);
   const [addShippingAddress, { isLoading, isError, isSuccess }] =
     useAddShippingAddressMutation();
   const form = useForm<CheckoutDeliverySchema>({
@@ -39,6 +42,27 @@ export const useCheckoutDelivery = ({
       postcode: postcode || "",
     },
   });
+  useEffect(() => {
+    if (addressAutocomplete && form.setValue) {
+      form.setValue(
+        "postcode",
+        findValueInAddress(addressAutocomplete, "postal_code"),
+      );
+      form.setValue("street", addressAutocomplete?.name || "");
+      form.setValue(
+        "state",
+        findValueInAddress(addressAutocomplete, "sublocality"),
+      );
+      form.setValue(
+        "city",
+        findValueInAddress(addressAutocomplete, "locality"),
+      );
+      form.setValue(
+        "country",
+        findValueInAddress(addressAutocomplete, "country"),
+      );
+    }
+  }, [addressAutocomplete, form.setValue]);
   useEffect(() => {
     if (isError) {
       toast?.({
@@ -64,6 +88,7 @@ export const useCheckoutDelivery = ({
   return {
     form,
     onSubmit,
+    setAddressAutocomplete,
     loading: isLoading,
     error: isError,
     success: isSuccess,

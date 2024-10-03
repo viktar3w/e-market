@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { User } from "@prisma/client";
-import { sanitize } from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 
 export const createUser = async ({
   id,
@@ -23,10 +23,10 @@ export const createUser = async ({
     return await db.user.create({
       data: {
         id: id,
-        email: sanitize(email),
-        firstname: sanitize(firstname),
-        lastname: sanitize(lastname),
-        image: sanitize(image || ""),
+        email: DOMPurify.sanitize(email),
+        firstname: DOMPurify.sanitize(firstname),
+        lastname: DOMPurify.sanitize(lastname),
+        image: DOMPurify.sanitize(image || ""),
       },
     });
   } catch (err: any) {

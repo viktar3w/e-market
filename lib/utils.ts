@@ -6,7 +6,10 @@ import ProductWhereInput = Prisma.ProductWhereInput;
 import CategoryWhereInput = Prisma.CategoryWhereInput;
 import VariantWhereInput = Prisma.VariantWhereInput;
 import qs from "qs";
-import { DEFAULT_PRODUCT_NUMBER_PAGE, DEFAULT_PRODUCT_SIZE } from "@/lib/constants";
+import {
+  DEFAULT_PRODUCT_NUMBER_PAGE,
+  DEFAULT_PRODUCT_SIZE,
+} from "@/lib/constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -163,10 +166,21 @@ export const preparePrismaCategoryFilter = (components: qs.ParsedQs) => {
       };
     }
   }
-  return options
-}
+  return options;
+};
 
 export const areArraysEqual = (arr1: string[], arr2: string[]): boolean => {
   if (arr1.length !== arr2.length) return false;
-  return arr1.sort().join(',') === arr2.sort().join(',');
+  return arr1.sort().join(",") === arr2.sort().join(",");
+};
+
+export const findValueInAddress = (
+  addressAutocomplete: google.maps.places.PlaceResult | null,
+  setting: string,
+): string => {
+  return (
+    addressAutocomplete?.address_components?.find(
+      (address) => !!address.types.find((type) => type === setting),
+    )?.long_name || ""
+  );
 };

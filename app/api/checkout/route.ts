@@ -6,7 +6,7 @@ import {
   CheckoutPersonalDataValidation,
 } from "@/lib/validations/checkout";
 import { ShippingAddress } from "@prisma/client";
-import { sanitize } from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 
 const PATCH = async (req: NextRequest) => {
   const cart = await getCart();
@@ -16,10 +16,10 @@ const PATCH = async (req: NextRequest) => {
       id: cart.id,
     },
     data: {
-      firstname: sanitize(personalData.firstname),
-      lastname: sanitize(personalData.lastname),
-      email: sanitize(personalData.email),
-      phone: sanitize(personalData.phone),
+      firstname: DOMPurify.sanitize(personalData.firstname),
+      lastname: DOMPurify.sanitize(personalData.lastname),
+      email: DOMPurify.sanitize(personalData.email),
+      phone: DOMPurify.sanitize(personalData.phone),
     },
   });
   return NextResponse.json({
@@ -34,15 +34,15 @@ const PUT = async (req: NextRequest) => {
   );
   let shippingAddress: ShippingAddress;
   const preparedData = {
-    firstname: sanitize(shippingAddressData.firstname),
-    lastname: sanitize(shippingAddressData.lastname),
-    email: sanitize(shippingAddressData.email),
-    phone: sanitize(shippingAddressData.phone),
-    state: sanitize(shippingAddressData.state),
-    street: sanitize(shippingAddressData.street),
-    country: sanitize(shippingAddressData.country),
-    city: sanitize(shippingAddressData.city),
-    postcode: sanitize(shippingAddressData.postcode),
+    firstname: DOMPurify.sanitize(shippingAddressData.firstname),
+    lastname: DOMPurify.sanitize(shippingAddressData.lastname),
+    email: DOMPurify.sanitize(shippingAddressData.email),
+    phone: DOMPurify.sanitize(shippingAddressData.phone),
+    state: DOMPurify.sanitize(shippingAddressData.state),
+    street: DOMPurify.sanitize(shippingAddressData.street),
+    country: DOMPurify.sanitize(shippingAddressData.country),
+    city: DOMPurify.sanitize(shippingAddressData.city),
+    postcode: DOMPurify.sanitize(shippingAddressData.postcode),
   };
   if (!cart?.shippingAddressId) {
     shippingAddress = await db.shippingAddress.create({
