@@ -9,6 +9,7 @@ import { DeliveryForm as DeliveryFormType } from "@/lib/types/user";
 import CartDrawerItemCheckout from "@/components/shared/checkout/CartDrawerItemCheckout";
 import { useGetCartQuery } from "@/lib/redux/api/cart.api";
 import { useEffect, useState } from "react";
+import CheckoutSkeleton from "@/components/shared/checkout/CheckoutSkeleton";
 const CheckoutWrapper = () => {
   const { data, isLoading } = useGetCartQuery();
   const [isShippingDisabled, setIsShippingDisabled] = useState<
@@ -27,54 +28,60 @@ const CheckoutWrapper = () => {
     <BoxWrapper className="pt-5">
       <Title text="Order placement" size="xl" className="font-extrabold mb-8" />
       <div className="flex gap-10">
-        <div className="flex flex-col gap-10 flex-1 mb-20">
-          <WhiteBlock title="1. Cart Data">
-            <div className="flex flex-col gap-5">
-              {data?.cartItems.map((item) => (
-                <CartDrawerItemCheckout
-                  key={item.id}
-                  item={item}
-                  loading={isLoading}
-                  className="mb-2"
-                />
-              ))}
+        {isLoading ? (
+          <CheckoutSkeleton />
+        ) : (
+          <>
+            <div className="flex flex-col gap-10 flex-1 mb-20">
+              <WhiteBlock title="1. Cart Data">
+                <div className="flex flex-col gap-5">
+                  {data?.cartItems.map((item) => (
+                    <CartDrawerItemCheckout
+                      key={item.id}
+                      item={item}
+                      loading={isLoading}
+                      className="mb-2"
+                    />
+                  ))}
+                </div>
+              </WhiteBlock>
+              {!!data && (
+                <>
+                  <WhiteBlock title="2. Personal Data">
+                    <PersonalDataForm
+                      firstname={data?.firstname}
+                      lastname={data?.lastname}
+                      email={data?.email}
+                      phone={data?.phone}
+                    />
+                  </WhiteBlock>
+                  <WhiteBlock title="3. Delivery Data">
+                    {!!data?.shippingAddress ? (
+                      <DeliveryForm
+                        disabled={isShippingDisabled}
+                        {...(data.shippingAddress as DeliveryFormType)}
+                      />
+                    ) : (
+                      <DeliveryForm
+                        email={data?.email}
+                        firstname={data?.firstname}
+                        lastname={data?.lastname}
+                        phone={data?.phone}
+                        disabled={isShippingDisabled}
+                      />
+                    )}
+                  </WhiteBlock>
+                </>
+              )}
             </div>
-          </WhiteBlock>
-          {!!data && (
-            <>
-              <WhiteBlock title="2. Personal Data">
-                <PersonalDataForm
-                  firstname={data?.firstname}
-                  lastname={data?.lastname}
-                  email={data?.email}
-                  phone={data?.phone}
-                />
-              </WhiteBlock>
-              <WhiteBlock title="3. Delivery Data">
-                {!!data?.shippingAddress ? (
-                  <DeliveryForm
-                    disabled={isShippingDisabled}
-                    {...(data.shippingAddress as DeliveryFormType)}
-                  />
-                ) : (
-                  <DeliveryForm
-                    email={data?.email}
-                    firstname={data?.firstname}
-                    lastname={data?.lastname}
-                    phone={data?.phone}
-                    disabled={isShippingDisabled}
-                  />
-                )}
-              </WhiteBlock>
-            </>
-          )}
-        </div>
-        {!!data && (
-          <div className="">
-            <WhiteBlock title="Summary Data">
-              <Summary cart={data} disabled={isPlaceOrderDisabled} />
-            </WhiteBlock>
-          </div>
+            {!!data && (
+              <div className="">
+                <WhiteBlock title="Summary Data">
+                  <Summary cart={data} disabled={isPlaceOrderDisabled} />
+                </WhiteBlock>
+              </div>
+            )}
+          </>
         )}
       </div>
     </BoxWrapper>
