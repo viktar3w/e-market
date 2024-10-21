@@ -126,24 +126,28 @@ model CartItem {
 }
 
 model Order {
-  id          String       @id @default(cuid())
-  userId      String?
-  user        User?        @relation(fields: [userId], references: [id])
-  token       String
-  totalAmount Float
-  qty         Int          @default(1)
-  status      OrderStatus
-  paymentType PaymentType?
-  paymentId   String?
-  items       Json
+  id             String       @id @default(cuid())
+  userId         String?
+  user           User?        @relation(fields: [userId], references: [id])
+  token          String
+  taxAmount      Float
+  shippingAmount Float
+  totalAmount    Float
+  summaryAmount  Float
+  qty            Int          @default(1)
+  status         OrderStatus  @default(value: PENDING)
+  paymentType    PaymentType?
+  paymentId      String?
+  items          Json
+  currency       String       @default("USD")
 
   cartId String
   cart   Cart   @relation(fields: [cartId], references: [id])
 
   shippingAddressId String
   shippingAddress   ShippingAddress @relation(fields: [shippingAddressId], references: [id])
-  billingAddressId  String
-  billingAddress    BillingAddress  @relation(fields: [billingAddressId], references: [id])
+  billingAddressId  String?
+  billingAddress    BillingAddress? @relation(fields: [billingAddressId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

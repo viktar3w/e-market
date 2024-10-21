@@ -2,19 +2,21 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { reducer as categorySlicer } from "@/lib/redux/slices/categorySlicer";
 import { reducer as cartSlicer } from "@/lib/redux/slices/cartSlicer";
 import { cartApi } from "@/lib/redux/api/cart.api";
+import { checkoutApi } from "@/lib/redux/api/checkout.api";
 import { setupListeners } from "@reduxjs/toolkit/query";
 
 const rootReducer = combineReducers({
   category: categorySlicer,
   cart: cartSlicer,
   [cartApi.reducerPath]: cartApi.reducer,
+  [checkoutApi.reducerPath]: checkoutApi.reducer,
 });
 
 export const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.NODE_ENV !== "production",
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(cartApi.middleware),
+    getDefaultMiddleware().concat(cartApi.middleware, checkoutApi.middleware),
 });
 setupListeners(store.dispatch);
 

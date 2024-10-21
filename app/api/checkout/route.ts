@@ -4,9 +4,143 @@ import { getCart } from "@/actions/cartAction";
 import {
   CheckoutDeliveryValidation,
   CheckoutPersonalDataValidation,
+  CheckoutPlaceOrderValidation,
 } from "@/lib/validations/checkout";
-import { ShippingAddress } from "@prisma/client";
+import {
+  OrderStatus,
+  PaymentType,
+  Prisma,
+  ShippingAddress,
+} from "@prisma/client";
 import DOMPurify from "isomorphic-dompurify";
+import crypto from "crypto";
+import OrderCreateInput = Prisma.OrderCreateInput;
+import { stripe } from "@/lib/stripe/stripe";
+import Stripe from "stripe";
+
+const POST = async (req: NextRequest) => {
+  const cart = await getCart();
+  const totalInfo = CheckoutPlaceOrderValidation.parse(await req.json());
+  const cartInfo = await db.cart.findUnique({
+    where: {
+      id: cart.id,
+    },
+    include: {
+      cartItems: {
+        include: {
+          productItem: {
+            include: {
+              variant: {
+                include: {
+                  product: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      shippingAddress: true,
+    },
+  });
+  if (!cartInfo || !cartInfo.shippingAddress?.id) {
+    throw new Error("something was wrong with getting cart data");
+  }
+  const token = crypto.randomBytes(64).toString("hex");
+  const data: OrderCreateInput = {
+    token: token,
+    taxAmount: totalInfo.taxAmount,
+    shippingAmount: totalInfo.shippingAmount,
+    totalAmount: cartInfo.totalAmount,
+    summaryAmount: totalInfo.summaryAmount,
+    qty: cartInfo.qty,
+    status: OrderStatus.PENDING,
+    paymentType: PaymentType.STRIPE,
+    paymentId: "",
+    items: {},
+    currency: "USD",
+    cart: {
+      connect: {
+        id: cartInfo.id,
+      },
+    },
+    shippingAddress: {
+      connect: {
+        id: cartInfo.shippingAddress.id,
+      },
+    },
+  };
+  if (cartInfo.userId) {
+    data.user = {
+      connect: {
+        id: cartInfo.userId,
+      },
+    };
+  }
+  const order = await db.order.create({
+    data,
+  });
+  const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
+  for (const cartItem of cartInfo.cartItems) {
+    const images: string[] | undefined = [];
+    if (!!cartItem.productItem.variant.image) {
+      images.push(cartItem.productItem.variant.image);
+    }
+    const product = await stripe.products.create({
+      name: cartItem.name,
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/${cartItem.productItem.variant.product.id}`,
+      default_price_data: {
+        currency: order.currency,
+        unit_amount_decimal: String(cartItem.totalAmount),
+      },
+      images: images,
+    });
+    lineItems.push({
+      price: product.default_price as string,
+      quantity: cartItem.qty,
+    });
+  }
+  if (!!order.taxAmount) {
+    const tax = await stripe.products.create({
+      name: "Common Taxes Amount",
+      default_price_data: {
+        currency: order.currency,
+        unit_amount_decimal: String(order.taxAmount),
+      },
+    });
+    lineItems.push({
+      price: tax.default_price as string,
+      quantity: 1,
+    });
+  }
+  if (!!order.shippingAmount) {
+    const tax = await stripe.products.create({
+      name: "Common Shipping Amount",
+      default_price_data: {
+        currency: order.currency,
+        unit_amount_decimal: String(order.shippingAmount),
+      },
+    });
+    lineItems.push({
+      price: tax.default_price as string,
+      quantity: 1,
+    });
+  }
+  const stripeSession = await stripe.checkout.sessions.create({
+    success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout/success`,
+    cancel_url: process.env.NEXT_PUBLIC_SERVER_URL,
+    payment_method_types: ["card"],
+    mode: "payment",
+    metadata: {
+      token: order.token,
+    },
+    line_items: lineItems,
+  });
+  console.log(token);
+  console.log(order);
+  return NextResponse.json({
+    url: "",
+  });
+};
 
 const PATCH = async (req: NextRequest) => {
   const cart = await getCart();
@@ -77,4 +211,4 @@ const PUT = async (req: NextRequest) => {
   });
 };
 
-export { PATCH, PUT };
+export { POST, PATCH, PUT };

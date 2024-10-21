@@ -6,7 +6,10 @@ import {
   CartRequest,
   CartUpdateRequest,
 } from "@/lib/validations/cart";
-import { CheckoutDeliverySchema, CheckoutPersonalDataSchema } from "@/lib/validations/checkout";
+import {
+  CheckoutDeliverySchema,
+  CheckoutPersonalDataSchema,
+} from "@/lib/validations/checkout";
 
 export const cartApi = createApi({
   reducerPath: "cartApi",
@@ -22,12 +25,7 @@ export const cartApi = createApi({
       }),
       providesTags: [{ type: "Cart", id: "LIST" }],
     }),
-    addCartItem: builder.mutation<
-      {
-        success: boolean;
-      },
-      CartRequest
-    >({
+    addCartItem: builder.mutation<ResultResponse, CartRequest>({
       query: (body) => ({
         url: "cart",
         method: "POST",
@@ -53,23 +51,29 @@ export const cartApi = createApi({
       },
       invalidatesTags: [{ type: "Cart", id: "LIST" }],
     }),
-    updatePersonalData: builder.mutation<ResultResponse, CheckoutPersonalDataSchema>({
+    updatePersonalData: builder.mutation<
+      ResultResponse,
+      CheckoutPersonalDataSchema
+    >({
       query(body) {
         return {
           url: "checkout",
           method: "PATCH",
           body,
-        }
+        };
       },
       invalidatesTags: [{ type: "Cart", id: "LIST" }],
     }),
-    addShippingAddress: builder.mutation<ResultResponse, CheckoutDeliverySchema>({
+    addShippingAddress: builder.mutation<
+      ResultResponse,
+      CheckoutDeliverySchema
+    >({
       query(body) {
         return {
           url: "checkout",
           method: "PUT",
           body,
-        }
+        };
       },
       invalidatesTags: [{ type: "Cart", id: "LIST" }],
     }),
