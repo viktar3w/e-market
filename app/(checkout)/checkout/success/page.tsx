@@ -1,27 +1,46 @@
-import { cookies } from "next/headers";
-import { CART_COOKIE_KEY } from "@/lib/constants";
+import { redirect } from "next/navigation";
 import { db } from "@/db";
-import CheckoutWrapper from "@/components/shared/checkout/CheckoutWrapper";
+import CheckoutSuccess from "@/components/shared/checkout/CheckoutSuccess";
 
-const Page = async () => {
-  const cartId = cookies().get(CART_COOKIE_KEY)?.value;
-  if (!cartId) {
-    return <></>;
+const Page = async ({
+  searchParams,
+}: {
+  searchParams?: { token?: string };
+}) => {
+  const token = searchParams?.token;
+  if (!token) {
+    redirect("/");
   }
-  const cart = await db.cart.findUnique({
+  const order = await db.order.findFirst({
     where: {
-      id: cartId,
+      token,
     },
     include: {
-      _count: {
-        select: { cartItems: true },
+      cart: {
+        include: {
+          cartItems: {
+            include: {
+              productItem: {
+                include: {
+                  variant: {
+                    include: {
+                      product: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
+      shippingAddress: true,
     },
   });
-  if (!cart || !cart?._count?.cartItems) {
-    return <></>;
+  if (!order) {
+    redirect("/");
   }
-  return <CheckoutWrapper />;
+
+  return <CheckoutSuccess order={order} />;
 };
 
 export default Page;

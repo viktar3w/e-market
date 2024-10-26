@@ -17,6 +17,8 @@ import crypto from "crypto";
 import OrderCreateInput = Prisma.OrderCreateInput;
 import { stripe } from "@/lib/stripe/stripe";
 import Stripe from "stripe";
+import { cookies } from "next/headers";
+import { CART_COOKIE_KEY } from "@/lib/constants";
 
 const POST = async (req: NextRequest) => {
   const cart = await getCart();
@@ -81,8 +83,9 @@ const POST = async (req: NextRequest) => {
   });
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
   for (const cartItem of cartInfo.cartItems) {
-    const images: string[] | undefined = [];
-    if (!!cartItem.productItem.variant.image) {
+    const images: string[] = [];
+    console.log(cartItem.productItem.variant.image);
+    if (!!cartItem?.productItem?.variant?.image) {
       images.push(cartItem.productItem.variant.image);
     }
     const product = await stripe.products.create({
@@ -90,7 +93,7 @@ const POST = async (req: NextRequest) => {
       url: `${process.env.NEXT_PUBLIC_SERVER_URL}/${cartItem.productItem.variant.product.id}`,
       default_price_data: {
         currency: order.currency,
-        unit_amount_decimal: String(cartItem.totalAmount),
+        unit_amount_decimal: Number(cartItem.totalAmount * 100).toFixed(2),
       },
       images: images,
     });
@@ -104,7 +107,7 @@ const POST = async (req: NextRequest) => {
       name: "Common Taxes Amount",
       default_price_data: {
         currency: order.currency,
-        unit_amount_decimal: String(order.taxAmount),
+        unit_amount_decimal: Number(order.taxAmount * 100).toFixed(),
       },
     });
     lineItems.push({
@@ -117,7 +120,9 @@ const POST = async (req: NextRequest) => {
       name: "Common Shipping Amount",
       default_price_data: {
         currency: order.currency,
-        unit_amount_decimal: String(order.shippingAmount),
+        unit_amount_decimal: Number(
+          Number(order.shippingAmount.toFixed(2)) * 100,
+        ).toFixed(2),
       },
     });
     lineItems.push({
@@ -126,19 +131,19 @@ const POST = async (req: NextRequest) => {
     });
   }
   const stripeSession = await stripe.checkout.sessions.create({
-    success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout/success`,
-    cancel_url: process.env.NEXT_PUBLIC_SERVER_URL,
+    success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout/success?token=${token}`,
+    cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout/error?token=${token}`,
     payment_method_types: ["card"],
     mode: "payment",
+    billing_address_collection: "required",
     metadata: {
       token: order.token,
     },
     line_items: lineItems,
   });
-  console.log(token);
-  console.log(order);
+  cookies().delete(CART_COOKIE_KEY);
   return NextResponse.json({
-    url: "",
+    url: stripeSession.url,
   });
 };
 

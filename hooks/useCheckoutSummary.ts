@@ -12,11 +12,11 @@ export const useCheckoutSummary = (cart: CartState) => {
   const [taxes, setTaxes] = useState<number>(0);
   const { push } = useRouter();
   useEffect(() => {
-    setTaxes(cart.totalAmount * 0.2);
+    setTaxes(Number((cart.totalAmount * 0.2).toFixed(2)));
   }, [cart.totalAmount]);
   const shipping = 100;
   const fullTotal = useMemo(() => {
-    return cart.totalAmount + taxes + shipping;
+    return Number((cart.totalAmount + taxes + shipping).toFixed(2));
   }, [cart.totalAmount, taxes, shipping]);
   const onSubmit = useCallback(() => {
     placeOrder({
