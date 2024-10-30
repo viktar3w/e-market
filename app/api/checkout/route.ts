@@ -19,6 +19,9 @@ import { stripe } from "@/lib/stripe/stripe";
 import Stripe from "stripe";
 import { cookies } from "next/headers";
 import { CART_COOKIE_KEY } from "@/lib/constants";
+import { sendEmail } from "@/lib/email";
+import OrderEmail from "@/components/shared/emails/OrderEmail";
+import { OrderState } from "@/lib/types/checkout";
 
 const POST = async (req: NextRequest) => {
   const cart = await getCart();
@@ -47,7 +50,7 @@ const POST = async (req: NextRequest) => {
   if (!cartInfo || !cartInfo.shippingAddress?.id) {
     throw new Error("something was wrong with getting cart data");
   }
-  const token = crypto.randomBytes(64).toString("hex");
+  const token = crypto.randomBytes(24).toString("hex");
   const data: OrderCreateInput = {
     token: token,
     taxAmount: totalInfo.taxAmount,
@@ -142,6 +145,16 @@ const POST = async (req: NextRequest) => {
     line_items: lineItems,
   });
   cookies().delete(CART_COOKIE_KEY);
+  try {
+    sendEmail({
+      to: cartInfo.shippingAddress.email,
+      subject: "e-Market: Your order was created",
+      from: "v.starovoitou@trial-3z0vklo17n7g7qrx.mlsender.net",
+      template: OrderEmail({ order: order as OrderState, cart: cartInfo }),
+    });
+  } catch (e: any) {
+    console.log("[ERROR] can't send order create email: ", e?.message);
+  }
   return NextResponse.json({
     url: stripeSession.url,
   });

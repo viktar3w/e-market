@@ -1,48 +1,63 @@
 "use client";
-import { Order } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { CheckCircle, Home } from "lucide-react";
+import { formatPrice } from "@/lib/utils";
+import { OrderState } from "@/lib/types/checkout";
 
 type CheckoutSuccessProps = {
-  order: Order;
+  order: OrderState;
 };
 const CheckoutSuccess = ({ order }: CheckoutSuccessProps) => {
   const { push } = useRouter();
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="bg-white shadow-lg rounded-lg overflow-hidden w-full">
-        <div className="p-6">
-          <h1 className="text-3xl font-bold text-center text-base-semibold mb-3">
-            Order Successful!
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="max-w-lg w-full bg-white rounded-lg shadow-md p-8">
+        <div className="text-center mb-8">
+          <CheckCircle className="text-green-500 w-16 h-16 mb-4" />
+          <h1 className="text-2xl font-semibold mt-4">
+            Thank you for your order!
           </h1>
-          <p className="text-center text-gray-500 mb-4">
-            Thank you for your purchase! Your order has been placed
-            successfully.
+          <p className="text-gray-600 mt-2">
+            Your order has been successfully placed.
           </p>
-          <div className="mt-4">
-            <h2 className="text-lg font-semibold">Order Summary:</h2>
-            <ul className="list-disc list-inside my-2 text-gray-700">
-              <li>
-                Order Number: <span className="font-medium">{order.token}</span>
-              </li>
-              <li>
-                Total Amount: <span className="font-medium">$99.99</span>
-              </li>
-              <li>
-                Shipping Address:{" "}
-                <span className="font-medium">
-                  123 Example St, City, Country
-                </span>
-              </li>
-            </ul>
-          </div>
-          <Button
-            onClick={() => push("/")}
-            className="w-full h-14 rounded-2xl mt-6 text-base font-bold"
-          >
-            Go to Dashboard
-          </Button>
         </div>
+        <div className="mb-6">
+          <h2 className="text-lg font-medium">Order Summary</h2>
+          <p className="text-gray-600 mb-4">Order ID: {order.token}</p>
+          <div className="border-t border-gray-200 mt-4">
+            {order.cart.cartItems.map((item) => (
+              <div
+                key={item.id}
+                className="py-4 flex justify-between text-gray-800"
+              >
+                <span>
+                  {item.name} x {item.qty}
+                </span>
+                <span>${item.totalAmount.toFixed(2)}</span>
+              </div>
+            ))}
+          </div>
+          <div className="border-t border-gray-200 mt-4 pt-4 flex justify-between font-medium text-gray-900">
+            <span>Tax Amount</span>
+            <span>{formatPrice(order.taxAmount)}</span>
+          </div>
+          <div className="border-t border-gray-200 mt-4 pt-4 flex justify-between font-medium text-gray-900">
+            <span>Shipping Amount</span>
+            <span>{formatPrice(order.taxAmount)}</span>
+          </div>
+          <div className="border-t border-gray-200 mt-4 pt-4 flex justify-between font-medium text-gray-900">
+            <span>Summary Amount</span>
+            <span>{formatPrice(order.summaryAmount)}</span>
+          </div>
+        </div>
+        <Button
+          onClick={() => push("/")}
+          className="w-full text-base text-white py-2 rounded-md mt-4 hover:text-base-700 transition"
+        >
+          <Home className="w-5 h-5 mr-2" />
+          Continue Shopping
+        </Button>
       </div>
     </div>
   );
