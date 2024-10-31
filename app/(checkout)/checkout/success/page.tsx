@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import CheckoutSuccess from "@/components/shared/checkout/CheckoutSuccess";
+import { OrderState } from "@/lib/types/checkout";
 
 const Page = async ({
   searchParams,
@@ -40,7 +41,7 @@ const Page = async ({
     redirect("/");
   }
 
-  return <CheckoutSuccess order={order} />;
+  return <CheckoutSuccess order={order as OrderState} />;
 };
 
 export default Page;

@@ -22,6 +22,7 @@ import { CART_COOKIE_KEY } from "@/lib/constants";
 import { sendEmail } from "@/lib/email";
 import OrderEmail from "@/components/shared/emails/OrderEmail";
 import { OrderState } from "@/lib/types/checkout";
+import { CartState } from "@/lib/types/cart";
 
 const POST = async (req: NextRequest) => {
   const cart = await getCart();
@@ -150,7 +151,7 @@ const POST = async (req: NextRequest) => {
       to: cartInfo.shippingAddress.email,
       subject: "e-Market: Your order was created",
       from: "v.starovoitou@trial-3z0vklo17n7g7qrx.mlsender.net",
-      template: OrderEmail({ order: order as OrderState, cart: cartInfo }),
+      template: OrderEmail({ order: order as OrderState, cart: cartInfo as CartState }),
     });
   } catch (e: any) {
     console.log("[ERROR] can't send order create email: ", e?.message);
