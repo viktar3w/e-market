@@ -9,7 +9,6 @@ const Page = async ({
   searchParams?: { token?: string };
 }) => {
   const token = searchParams?.token;
-
   if (!token) {
     redirect("/");
   }
