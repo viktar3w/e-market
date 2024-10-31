@@ -50,7 +50,7 @@ const POST = async (req: NextRequest) => {
   if (!cartInfo || !cartInfo.shippingAddress?.id) {
     throw new Error("something was wrong with getting cart data");
   }
-  const token = crypto.randomBytes(24).toString("hex");
+  const token = crypto.randomBytes(15).toString("hex");
   const data: OrderCreateInput = {
     token: token,
     taxAmount: totalInfo.taxAmount,

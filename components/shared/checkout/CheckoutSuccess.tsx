@@ -44,7 +44,7 @@ const CheckoutSuccess = ({ order }: CheckoutSuccessProps) => {
           </div>
           <div className="border-t border-gray-200 mt-4 pt-4 flex justify-between font-medium text-gray-900">
             <span>Shipping Amount</span>
-            <span>{formatPrice(order.taxAmount)}</span>
+            <span>{formatPrice(order.shippingAmount)}</span>
           </div>
           <div className="border-t border-gray-200 mt-4 pt-4 flex justify-between font-medium text-gray-900">
             <span>Summary Amount</span>
