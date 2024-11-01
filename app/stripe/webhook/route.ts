@@ -15,8 +15,6 @@ export async function POST(req: Request) {
       process.env.NODE_ENV === "development"
         ? process.env.STRIPE_WEBHOOK_DEV_SECRET_KEY!
         : process.env.STRIPE_WEBHOOK_SECRET_KEY!;
-    console.log("sig: ", sig)
-    console.log("webToken: ", webToken)
     console.log(
       "[verifyHeader] ",
       stripe.webhooks.signature.verifyHeader(body, sig, webToken),
