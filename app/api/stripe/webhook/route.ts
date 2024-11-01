@@ -42,19 +42,25 @@ export async function POST(req: Request) {
     const data: Prisma.OrderUpdateInput = {
       status: order.status,
     };
-    const billingAddress: Stripe.Checkout.Session.ShippingDetails | undefined =
+    const billingAddress: Stripe.Checkout.Session.CustomerDetails | null =
       // @ts-ignore
-      session?.billing_details;
+      session?.customer_details;
     switch (event.type) {
       case "checkout.session.async_payment_failed":
         data.status = OrderStatus.CANCELLED;
         break;
       case "checkout.session.async_payment_succeeded":
+        break;
+      case "checkout.session.completed":
+        const customText = (session?.custom_text ||
+          {}) as Stripe.Checkout.Session.CustomText;
         data.status = OrderStatus.SUCCEEDED;
+        data.paymentId = session.id;
         data.items = {
-          stripeId: session.id,
-          status: session?.status || "",
-          customerDetails: session?.customer_details || {},
+          status: String(session?.status),
+          custom_text: {
+            ...customText
+          },
         } as Prisma.InputJsonObject;
         if (!order.billingAddress && !!billingAddress) {
           const name = billingAddress?.name?.split(" ") || [
