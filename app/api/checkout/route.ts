@@ -9,6 +9,7 @@ import {
 import {
   OrderStatus,
   PaymentType,
+  CartStatus,
   Prisma,
   ShippingAddress,
 } from "@prisma/client";
@@ -145,6 +146,14 @@ const POST = async (req: NextRequest) => {
     },
     line_items: lineItems,
   });
+  await db.cart.update({
+    where: {
+      id: cartInfo.id
+    },
+    data: {
+      status: CartStatus.NOT_ACTIVE
+    }
+  })
   cookies().delete(CART_COOKIE_KEY);
   try {
     sendEmail({

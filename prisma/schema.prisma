@@ -9,14 +9,15 @@ datasource db {
 }
 
 model User {
-  id        String  @id @default(cuid())
+  id        String   @id @default(cuid())
   firstname String
   lastname  String
   phone     String?
-  email     String  @unique
-  cart      Cart?
+  email     String   @unique
+  carts     Cart[]
   orders    Order[]
   image     String?
+  status    UserType @default(value: ENABLED)
 
   verified         DateTime?
   verificationCode VerificationCode?
@@ -98,6 +99,7 @@ model Cart {
   lastname  String?
   phone     String?
   email     String?
+  status    CartStatus @default(value: ACTIVE)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -234,4 +236,14 @@ enum PaymentType {
 enum ProductType {
   SIMPLE
   PIZA
+}
+
+enum UserType {
+  ENABLED
+  DISABLED
+}
+
+enum CartStatus {
+  ACTIVE
+  NOT_ACTIVE
 }
