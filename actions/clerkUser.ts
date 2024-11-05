@@ -154,6 +154,15 @@ export const sessionCreateWebhook = async (
         path: "/",
         httpOnly: true,
       });
+    } else {
+      db.cart.update({
+        where: {
+          id: cart.id
+        },
+         data: {
+          userId: user.id
+         }
+      })
     }
   }
 };
