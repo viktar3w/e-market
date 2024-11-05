@@ -14,7 +14,7 @@ import {
 
 export const POST = async (req: Request) => {
   try {
-    const secret = process.env.WEBHOOK_SECRET;
+    const secret = process.env.WEBHOOK_CLERK_SECRET;
     if (!secret) {
       throw new Error("Please add WEBHOOK_CLERK_SECRET");
     }
