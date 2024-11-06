@@ -30,6 +30,7 @@ export const POST = async (req: Request) => {
       );
     }
     const cartId = cookies().get(CART_COOKIE_KEY)?.value;
+    console.log("cartId: ", cartId)
     let cart: CartState | undefined;
     if (!!cartId) {
       cart = (await db.cart.findUnique({
@@ -49,6 +50,7 @@ export const POST = async (req: Request) => {
           },
         },
       })) as CartState;
+      console.log("cart was got: ", cartId)
     }
     const payload = await req.json();
     const body = JSON.stringify(payload);
@@ -72,6 +74,6 @@ export const POST = async (req: Request) => {
     console.error("Error verifying webhook:", err);
     return NextResponse.json({ error: "Something was wrong" }, { status: 400 });
   }
-  console.log("Order was updated");
+  console.log("Cart was updated");
   return NextResponse.json({ error: "" });
 };
