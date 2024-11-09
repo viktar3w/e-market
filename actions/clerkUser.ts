@@ -5,12 +5,10 @@ import { cookies } from "next/headers";
 import { CART_COOKIE_KEY } from "@/lib/constants";
 import { areArraysEqual } from "@/lib/utils";
 import { CartState } from "@/lib/types/cart";
+import { cartAction } from "@/actions/cartAction";
 
-export const userCreateWebhook = async (
-  userData: UserJSON,
-  cartId?: string,
-) => {
-  const user = await db.user.create({
+export const userCreateWebhook = async (userData: UserJSON) => {
+  return db.user.create({
     data: {
       id: userData.id,
       firstname: userData.first_name || "User",
@@ -23,23 +21,9 @@ export const userCreateWebhook = async (
       image: (userData.has_image && userData.image_url) || undefined,
     },
   });
-  if (!!cartId) {
-    await db.cart.update({
-      where: {
-        id: cartId,
-      },
-      data: {
-        userId: user.id,
-      },
-    });
-  }
-  return user;
 };
 
-export const userDeleteWebhook = async (
-  userId: string,
-  cartUserId?: string,
-) => {
+export const userDeleteWebhook = async (userId: string) => {
   const user = await db.user.findUnique({
     where: {
       id: userId,
@@ -54,7 +38,7 @@ export const userDeleteWebhook = async (
         status: UserType.DISABLED,
       },
     });
-    await db.cart.update({
+    await db.cart.updateMany({
       where: {
         userId: userId,
       },
@@ -62,9 +46,6 @@ export const userDeleteWebhook = async (
         status: CartStatus.NOT_ACTIVE,
       },
     });
-    if (cartUserId === userId) {
-      cookies().delete(CART_COOKIE_KEY);
-    }
   }
 };
 
@@ -86,11 +67,7 @@ export const sessionCreateWebhook = async (
             include: {
               productItem: {
                 include: {
-                  variant: {
-                    include: {
-                      product: true,
-                    },
-                  },
+                  variant: true,
                   components: true,
                 },
               },
@@ -101,35 +78,61 @@ export const sessionCreateWebhook = async (
     },
   });
   if (!!cart && !!user && cart?.userId !== user.id) {
-    if (cart.cartItems.length > 0) {
+    const cartItems = cart?.cartItems || [];
+    if (cartItems.length > 0) {
       const disableCartIds: string[] = [];
+      const addingCartItems: { id: string }[] = [];
       for (const userCart of user?.carts || []) {
         for (const userCartItem of userCart?.cartItems || []) {
-          const oldCartItem = cart.cartItems.find(
-            (cartItem) =>
+          const oldCartItem = cartItems.find((cartItem) => {
+            const userItemComponents =
+              userCartItem.productItem?.components ?? [];
+            const cartItemComponents = cartItem.productItem?.components ?? [];
+            return (
               cartItem.productItem.variantId ===
                 userCartItem.productItem.variantId &&
               areArraysEqual(
-                cartItem.productItem.components.map((c) => c.id),
-                userCartItem.productItem.components.map((c) => c.id),
-              ),
-          );
+                userItemComponents.map((c) => c.id),
+                cartItemComponents.map((c) => c.id),
+              )
+            );
+          });
           if (!oldCartItem) {
-            db.cartItem.create({
-              data: {
-                cartId: cart.id,
-                name: userCartItem.name,
-                productItemId: userCartItem.productItemId,
-                qty: userCartItem.qty,
-                totalAmount: userCartItem.totalAmount,
-              },
-            });
+            addingCartItems.push({ id: userCartItem.id });
           }
         }
         disableCartIds.push(userCart.id);
       }
+      if (addingCartItems.length > 0) {
+        addingCartItems.concat(cart.cartItems.map((item) => ({ id: item.id })));
+        const data = {
+          userId: user.id,
+          cartItems: {
+            connect: addingCartItems,
+          },
+          firstname: user.firstname,
+          lastname: user.lastname,
+          email: user.email,
+          phone: user.phone,
+        };
+        await db.cart.update({
+          where: {
+            id: cart.id,
+          },
+          data,
+        });
+      } else {
+        await db.cart.update({
+          where: {
+            id: cart.id,
+          },
+          data: {
+            userId: user.id,
+          },
+        });
+      }
       if (disableCartIds.length > 0) {
-        db.cart.updateMany({
+        await db.cart.updateMany({
           where: {
             id: {
               in: disableCartIds,
@@ -140,6 +143,23 @@ export const sessionCreateWebhook = async (
           },
         });
       }
+      await cartAction(cart);
+    } else if (user.carts.length > 0) {
+      cookies().delete(CART_COOKIE_KEY);
+      cookies().set(CART_COOKIE_KEY, user.carts.find((cart) => !!cart.id)!.id, {
+        path: "/",
+        httpOnly: true,
+      });
+      await db.cart.update({
+        where: {
+          id: cart.id,
+        },
+        data: {
+          status: CartStatus.NOT_ACTIVE,
+        },
+      });
+      await cartAction(cart);
+    } else {
       db.cart.update({
         where: {
           id: cart.id,
@@ -148,25 +168,10 @@ export const sessionCreateWebhook = async (
           userId: user.id,
         },
       });
-    } else if (user.carts.length > 0) {
-      cookies().delete(CART_COOKIE_KEY);
-      cookies().set(CART_COOKIE_KEY, user.carts.find((cart) => !!cart.id)!.id, {
-        path: "/",
-        httpOnly: true,
-      });
-    } else {
-      db.cart.update({
-        where: {
-          id: cart.id
-        },
-         data: {
-          userId: user.id
-         }
-      })
     }
   }
 };
 
 export const deleteCartIdWebhook = () => {
   cookies().delete(CART_COOKIE_KEY);
-}
+};

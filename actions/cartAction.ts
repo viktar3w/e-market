@@ -1,7 +1,8 @@
 import { db } from "@/db";
-import { Cart } from "@prisma/client";
+import { Cart, CartStatus } from "@prisma/client";
 import { CART_COOKIE_KEY } from "@/lib/constants";
 import { cookies } from "next/headers";
+import { auth } from "@clerk/nextjs/server";
 
 export const cartAction = async (cart: Cart) => {
   const items = await db.cartItem.findMany({
@@ -12,7 +13,7 @@ export const cartAction = async (cart: Cart) => {
   const data: { totalAmount: number; qty: number } = items.reduce(
     (result, item) => {
       result.qty += item.qty;
-      result.totalAmount += item.qty * item.totalAmount;
+      result.totalAmount += Number((item.qty * item.totalAmount).toFixed(2));
       return result;
     },
     { totalAmount: 0, qty: 0 } as { totalAmount: number; qty: number },
@@ -33,19 +34,37 @@ export const getCart = async () => {
     throw new Error("Something was wrong! Please try again");
   }
   const cart = await db.cart.findUnique({
-    where: { id },
+    where: { id, status: CartStatus.ACTIVE },
   });
   if (!cart) {
     cookies().delete(CART_COOKIE_KEY);
     throw new Error("We can't find cart");
   }
+  const { userId } = auth();
+  if (
+    (!userId && !!cart?.userId) ||
+    (!!userId && !!cart?.userId && userId !== cart.userId)
+  ) {
+    cookies().delete(CART_COOKIE_KEY);
+    throw new Error("Customer was logout");
+  }
   return cart;
 };
 
-export const getCartToken = async (): Promise<string> => {
+export const getCartToken = async (userId?: string): Promise<string> => {
   try {
+    let user;
+    if (!!userId) {
+      user = await db.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+    }
     const cart = await db.cart.create({
-      data: {},
+      data: {
+        userId: user?.id,
+      },
     });
     return cart.id;
   } catch (e: any) {

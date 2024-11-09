@@ -6,7 +6,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 export const Providers = ({ children }: { children: ReactNode }) => {
   return (
-    <ClerkProvider>
+    <ClerkProvider afterSignOutUrl={`${process.env.NEXT_PUBLIC_SERVER_URL}/api/clerk/redirect`}>
       <Provider store={store}>{children}</Provider>
     </ClerkProvider>
   );

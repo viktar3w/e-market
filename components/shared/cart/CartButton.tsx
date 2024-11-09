@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ShoppingCart } from "lucide-react";
 import CartDrawer from "@/components/shared/cart/CartDrawer";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { useGetCartQuery } from "@/lib/redux/api/cart.api";
 import { useEffect, useState } from "react";
 import { CartItemState } from "@/lib/types/cart";
@@ -32,7 +32,7 @@ const CartButton = ({ className }: CartButtonProps) => {
         >
           {items.length > 0 ? (
             <>
-              <strong>{data?.totalAmount}</strong>
+              <strong>{formatPrice(data?.totalAmount || 0)}</strong>
               <span className="h-full bg-black/30 mx-3 w-[1px]" />
               <div className="flex items-center gap-1 transition duration-300 group-hover:opacity-0">
                 <ShoppingCart size={16} className="relative" strokeWidth={2} />

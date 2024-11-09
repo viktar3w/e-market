@@ -10,10 +10,13 @@ import {
 } from "@/lib/validations/cart";
 import { initialState } from "@/lib/redux/slices/cartSlicer";
 import { areArraysEqual } from "@/lib/utils";
+import { cookies } from "next/headers";
+import { auth } from "@clerk/nextjs/server";
 
 const GET = async (req: NextRequest) => {
   try {
-    const id = req.cookies.get(CART_COOKIE_KEY)?.value;
+    const id = cookies().get(CART_COOKIE_KEY)?.value;
+    const { userId } = auth();
     if (!id) {
       throw new Error("Something was wrong! Please try again");
     }
@@ -42,13 +45,13 @@ const GET = async (req: NextRequest) => {
         shippingAddress: true,
       },
     });
-    if (!cart) {
-      req.cookies.delete(CART_COOKIE_KEY);
+    if (!cart || (!userId && !!cart?.userId)) {
+      cookies().delete(CART_COOKIE_KEY);
       throw new Error("We can't find cart");
     }
     return NextResponse.json<CartState>(cart as CartState);
   } catch (e: any) {
-    console.log("[ERROR]: ", e);
+    console.log("[ERROR]: getCart ", e);
   }
   return NextResponse.json(initialState);
 };
@@ -145,7 +148,7 @@ const POST = async (req: NextRequest) => {
         name: productItem.variant.product.name,
         productItemId: productItem.id,
         qty: cartRequest.qty,
-        totalAmount: cartRequest.amount,
+        totalAmount: Number(cartRequest.amount.toFixed(2)),
       },
     });
   } else {

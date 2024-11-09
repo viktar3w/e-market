@@ -1,4 +1,5 @@
 export const CART_COOKIE_KEY = "cartToken";
+export const SIGN_OUT_KEY = "signOut";
 export const CART_LOCALSTORAGE = "cart";
 
 export const DEFAULT_COMPONENT_SIZE = 10;

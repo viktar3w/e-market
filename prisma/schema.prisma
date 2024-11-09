@@ -90,7 +90,7 @@ model ProductItem {
 
 model Cart {
   id          String  @id @default(cuid())
-  userId      String? @unique
+  userId      String?
   user        User?   @relation(fields: [userId], references: [id])
   totalAmount Float   @default(0)
   qty         Int     @default(0)

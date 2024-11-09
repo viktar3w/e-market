@@ -9,9 +9,10 @@ export default clerkMiddleware(async (auth, request) => {
   if (isProtectedRoute(request)) {
     auth().protect();
   }
+  const { userId } = auth();
   const cartId = request.cookies.get(CART_COOKIE_KEY)?.value;
   if (!cartId) {
-    const token = await getCartToken();
+    const token = await getCartToken(userId || undefined);
     if (token !== "") {
       res.cookies.set(CART_COOKIE_KEY, token, { path: "/", httpOnly: true });
     }
