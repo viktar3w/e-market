@@ -18,7 +18,7 @@ export const cartAction = async (cart: Cart) => {
     },
     { totalAmount: 0, qty: 0 } as { totalAmount: number; qty: number },
   );
-  await db.cart.update({
+  return db.cart.update({
     where: {
       id: cart.id,
     },

@@ -1,3 +1,7 @@
+import { User } from "@prisma/client";
+import { CartState } from "@/lib/types/cart";
+import { OrderState } from "@/lib/types/checkout";
+
 export type CustomerCreateForm = {
   id: string;
   firstname: string | null;
@@ -19,4 +23,9 @@ export type DeliveryForm = CustomerForm & {
   country?: string;
   state?: string;
   postcode?: string;
+};
+
+export type UserState = User & {
+  carts: CartState[];
+  orders: OrderState[];
 };
