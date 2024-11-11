@@ -21,30 +21,39 @@ const CartButton = ({ className }: CartButtonProps) => {
     return () => setItems([]);
   }, [data?.cartItems]);
   return (
-    <div className={cn("flex items-center gap-3", className)}>
+    <div className={cn("flex items-center gap-2 md:gap-3", className)}>
       <CartDrawer>
         <Button
           loading={isLoading || cart.loading}
           variant="outline"
-          className={cn("group relative", {
-            "w-[105px]": isLoading,
+          className={cn("group relative px-2 py-1 md:px-4 md:py-2", {
+            "w-[85px] md:w-[105px]": isLoading,
           })}
         >
           {items.length > 0 ? (
             <>
-              <strong>{formatPrice(data?.totalAmount || 0)}</strong>
-              <span className="h-full bg-black/30 mx-3 w-[1px]" />
+              <strong className="text-xs md:text-base">
+                {formatPrice(data?.totalAmount || 0)}
+              </strong>
+              <span className="h-full bg-black/30 mx-2 md:mx-3 w-[1px]" />
               <div className="flex items-center gap-1 transition duration-300 group-hover:opacity-0">
-                <ShoppingCart size={16} className="relative" strokeWidth={2} />
-                <strong>{data?.qty}</strong>
+                <ShoppingCart
+                  size={14}
+                  className="relative"
+                  strokeWidth={2}
+                />
+                <strong className="text-xs md:text-base">{data?.qty}</strong>
               </div>
               <ArrowRight
-                size={20}
-                className="absolute right-5 transition duration-300 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0"
+                size={18}
+                className="absolute right-3 md:right-5 transition duration-300 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0"
               />
             </>
           ) : (
-            <ShoppingCart className="h-4 w-4 relative" strokeWidth={2} />
+            <ShoppingCart
+              className="h-4 w-4 md:h-5 md:w-5 relative"
+              strokeWidth={2}
+            />
           )}
         </Button>
       </CartDrawer>

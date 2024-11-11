@@ -27,7 +27,7 @@ const CheckoutWrapper = () => {
   return (
     <BoxWrapper className="pt-5">
       <Title text="Order placement" size="xl" className="font-extrabold mb-8" />
-      <div className="flex gap-10">
+      <div className="flex gap-10 max-md:flex-col">
         {isLoading ? (
           <CheckoutSkeleton />
         ) : (

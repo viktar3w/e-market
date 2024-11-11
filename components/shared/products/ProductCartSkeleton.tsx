@@ -6,7 +6,7 @@ type ProductCartSkeletonProps = {
 };
 const ProductCartSkeleton = ({ className }: ProductCartSkeletonProps) => {
   return (
-    <div className={cn("", className)}>
+    <div className={cn("group", className)}>
       <Skeleton className="mb-5 h-12 rounded-[8px] w-[50%]" />
       <div className="grid grid-cols-3 gap-[50px]">
         {...Array(6)

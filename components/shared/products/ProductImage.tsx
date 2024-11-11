@@ -1,6 +1,8 @@
 import { ProductSize } from "@/lib/enums/product";
 import { cn } from "@/lib/utils";
 import { ProductType } from "@prisma/client";
+import Image from "next/image";
+import { DEFAULT_EMPTY_PRODUCT_IMAGE } from "@/lib/constants";
 
 type ProductImageProps = {
   src: string;
@@ -23,14 +25,19 @@ const ProductImage = ({
         className,
       )}
     >
-      <img
+      <Image
         src={src}
         alt={alt}
+        width={400}
+        height={400}
+        loading="lazy"
+        overrideSrc={DEFAULT_EMPTY_PRODUCT_IMAGE}
+        quality={80}
         className={cn(
           "relative left-2 top-2 transition-all z-10 duration-300",
           {
             "w-[300px] h-[300px]":
-              !!!size ||
+              !size ||
               (!!size &&
                 (size === ProductSize.SMALL || size === ProductSize.DEFAULT)),
             "w-[400px] h-[400px]": !!size && size === ProductSize.MEDIUM,

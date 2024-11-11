@@ -7,6 +7,7 @@ import CategoryWhereInput = Prisma.CategoryWhereInput;
 import VariantWhereInput = Prisma.VariantWhereInput;
 import qs from "qs";
 import {
+  DEFAULT_EMPTY_PRODUCT_IMAGE,
   DEFAULT_PRODUCT_NUMBER_PAGE,
   DEFAULT_PRODUCT_SIZE,
 } from "@/lib/constants";
@@ -183,4 +184,13 @@ export const findValueInAddress = (
       (address) => !!address.types.find((type) => type === setting),
     )?.long_name || ""
   );
+};
+
+export const getImage = (image?: string | null): string => {
+  // @ts-ignore
+  return showImage(image) ? image : DEFAULT_EMPTY_PRODUCT_IMAGE;
+};
+
+export const showImage = (image?: string | null) => {
+  return !!image && image.includes("http");
 };

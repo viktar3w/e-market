@@ -1,6 +1,7 @@
 "use client";
+import Image from "next/image";
 import { Component } from "@prisma/client";
-import { cn, formatPrice } from "@/lib/utils";
+import { cn, formatPrice, getImage } from "@/lib/utils";
 import { CircleCheck } from "lucide-react";
 import { DEFAULT_EMPTY_PRODUCT_IMAGE } from "@/lib/constants";
 
@@ -30,11 +31,15 @@ const ProductComponent = ({
       {active && (
         <CircleCheck className="absolute top-2 right-2 text-primary" />
       )}
-      <img
-        src={component.image || DEFAULT_EMPTY_PRODUCT_IMAGE}
-        alt={component.name}
+      <Image
+        src={getImage(component.image)}
         width={110}
         height={110}
+        loading="lazy"
+        quality={80}
+        alt={component.name}
+        overrideSrc={DEFAULT_EMPTY_PRODUCT_IMAGE}
+        className="w-auto h-auto"
       />
       <span className="text-xs mb-1">{component.name}</span>
       <span className="font-bold">{formatPrice(component.price)}</span>

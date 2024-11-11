@@ -39,7 +39,7 @@ const ChooseProductForm = ({
   };
   return (
     <BoxWrapper className={cn("flex flex-col my-10", className)}>
-      <div className="flex flex-1">
+      <div className="flex flex-1 max-md:flex-col">
         <ProductImage
           alt={product.name}
           src={mainImage}
@@ -48,7 +48,7 @@ const ChooseProductForm = ({
           }
           type={product.type}
         />
-        <div className="w-[490px] bg-[#FCFCFC] p-7">
+        <div className="bg-[#FCFCFC] p-7 max-md:m-auto">
           <Title
             text={product.name}
             size="md"

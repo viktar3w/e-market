@@ -14,17 +14,21 @@ const TopBar = ({ className, items }: TopBarProps) => {
   return (
     <div
       className={cn(
-        "sticky top-0 bg-white py-5 shadow-lg shadow-black/5 z-10",
+        "sticky top-0 bg-white py-3 md:py-5 shadow-lg shadow-black/5 z-10",
         className,
       )}
     >
-      <BoxWrapper className="flex items-center justify-between">
-        {items.length === 0 ? (
-          <SkeletonDefaultCategories />
-        ) : (
-          <DefaultCategories items={items} />
-        )}
-        <SortPopup />
+      <BoxWrapper className="flex flex-col md:flex-row items-center justify-between gap-3 md:gap-0">
+        <div className="w-full overflow-x-auto">
+          {items.length === 0 ? (
+            <SkeletonDefaultCategories />
+          ) : (
+            <DefaultCategories items={items} />
+          )}
+        </div>
+        <div className="w-full md:w-auto mt-2 md:mt-0">
+          <SortPopup />
+        </div>
       </BoxWrapper>
     </div>
   );

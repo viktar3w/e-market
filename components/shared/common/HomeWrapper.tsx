@@ -15,7 +15,7 @@ const HomeWrapper = () => {
   return (
     <>
       <BoxWrapper className="mt-10">
-        <Title text="All Food" size="lg" className="font-extrabold" />
+        <Title text="All Categories" size="lg" className="font-extrabold" />
       </BoxWrapper>
       <Suspense>
         <TopBar
@@ -25,8 +25,8 @@ const HomeWrapper = () => {
         />
       </Suspense>
       <BoxWrapper className="mt-10 pb-14">
-        <div className="flex gap-[80px]">
-          <div className="w-[250px]">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-10">
+          <div className="w-full lg:w-[25%]">
             <Suspense>
               <DefaultFilter />
             </Suspense>

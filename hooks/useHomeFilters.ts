@@ -9,6 +9,9 @@ import qs from "qs";
 
 export const useHomeFilters = () => {
   const searchParams = useSearchParams();
+  const [activeTab, setActiveTab] = useState<"filters" | "price" | "types">(
+    "filters",
+  );
   const { push } = useRouter();
   const [isAvailable, setIsAvailable] = useState<boolean | undefined>(
     !searchParams.get("available")
@@ -87,5 +90,7 @@ export const useHomeFilters = () => {
     setIsNew,
     isAvailable,
     setIsAvailable,
+    activeTab,
+    setActiveTab,
   };
 };

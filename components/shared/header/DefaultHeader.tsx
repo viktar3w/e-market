@@ -14,22 +14,30 @@ type DefaultHeaderProps = {
 const DefaultHeader = ({ className }: DefaultHeaderProps) => {
   return (
     <header className={cn("border border-b", className)}>
-      <BoxWrapper className="flex items-center justify-between py-8">
+      <BoxWrapper className="flex flex-col md:flex-row items-center justify-between py-4 md:py-8">
         <Link href="/">
-          <div className="flex items-center gap-4">
-            <Image src="/logo.svg" alt="logo" width={35} height={35} />
-            <div>
-              <h1 className="text-2xl uppercase font-black">eMarket</h1>
-              <p className="text-sm text-gray-400 leading-3">
+          <div className="flex items-center gap-2 md:gap-4">
+            <Image
+              src="/logo.svg"
+              alt="logo"
+              width={30}
+              height={30}
+              className="w-auto h-auto"
+            />
+            <div className="hidden sm:block">
+              <h1 className="text-xl md:text-2xl uppercase font-black">
+                eMarket
+              </h1>
+              <p className="text-xs md:text-sm text-gray-400 leading-3">
                 you can find everything
               </p>
             </div>
           </div>
         </Link>
-        <div className="mx-10 flex-1">
+        <div className="w-full mt-4 md:mt-0 md:mx-10 md:flex-1">
           <HeaderSearch />
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3 mt-4 md:mt-0">
           <Auth />
           <CartButton />
         </div>
