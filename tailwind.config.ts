@@ -18,6 +18,13 @@ const config = {
       },
     },
     extend: {
+      transitionProperty: {
+        'max-height': 'max-height',
+      },
+      maxHeight: {
+        '0': '0',
+        'full': '1000px',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

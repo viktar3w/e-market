@@ -8,31 +8,39 @@ import Summary from "@/components/shared/checkout/Summary";
 import { DeliveryForm as DeliveryFormType } from "@/lib/types/user";
 import CartDrawerItemCheckout from "@/components/shared/checkout/CartDrawerItemCheckout";
 import { useGetCartQuery } from "@/lib/redux/api/cart.api";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CheckoutSkeleton from "@/components/shared/checkout/CheckoutSkeleton";
+import ProgressBar from "@/components/shared/checkout/ProgressBar";
+import Accordion from "@/components/shared/common/Accordion";
+import { CheckoutStep } from "@/lib/enums/checkout";
 const CheckoutWrapper = () => {
   const { data, isLoading } = useGetCartQuery();
-  const [isShippingDisabled, setIsShippingDisabled] = useState<
-    boolean | undefined
-  >(true);
-  const [isPlaceOrderDisabled, setIsPlaceOrderDisabled] = useState<
-    boolean | undefined
-  >(true);
+  const [isShippingDisabled, setIsShippingDisabled] = useState<boolean>(true);
+  const [isPlaceOrderDisabled, setIsPlaceOrderDisabled] =
+    useState<boolean>(true);
   useEffect(() => {
     const isShippingDisabled =
       !data?.phone || !data?.email || !data?.firstname || !data?.lastname;
     setIsShippingDisabled(isShippingDisabled);
     setIsPlaceOrderDisabled(isShippingDisabled || !data?.shippingAddress);
   }, [data]);
+  const currentStep = useMemo(() => {
+    return !isPlaceOrderDisabled
+      ? CheckoutStep.THREE
+      : !isShippingDisabled
+        ? CheckoutStep.TWO
+        : CheckoutStep.ONE;
+  }, [isPlaceOrderDisabled, isShippingDisabled]);
   return (
     <BoxWrapper className="pt-5">
       <Title text="Order placement" size="xl" className="font-extrabold mb-8" />
+      <ProgressBar currentStep={currentStep} />
       <div className="flex gap-10 max-md:flex-col">
         {isLoading ? (
           <CheckoutSkeleton />
         ) : (
           <>
-            <div className="flex flex-col gap-10 flex-1 mb-20">
+            <div className="flex flex-col gap-10 flex-1">
               <WhiteBlock title="1. Cart Data">
                 <div className="flex flex-col gap-5">
                   {data?.cartItems.map((item) => (
@@ -45,38 +53,42 @@ const CheckoutWrapper = () => {
                   ))}
                 </div>
               </WhiteBlock>
-              {!!data && (
-                <>
-                  <WhiteBlock title="2. Personal Data">
-                    <PersonalDataForm
-                      firstname={data?.firstname}
-                      lastname={data?.lastname}
-                      email={data?.email}
-                      phone={data?.phone}
-                    />
-                  </WhiteBlock>
-                  <WhiteBlock title="3. Delivery Data">
-                    {!!data?.shippingAddress ? (
-                      <DeliveryForm
-                        disabled={isShippingDisabled}
-                        {...(data.shippingAddress as DeliveryFormType)}
-                      />
-                    ) : (
-                      <DeliveryForm
-                        email={data?.email}
-                        firstname={data?.firstname}
-                        lastname={data?.lastname}
-                        phone={data?.phone}
-                        disabled={isShippingDisabled}
-                      />
-                    )}
-                  </WhiteBlock>
-                </>
-              )}
+              <Accordion
+                title={`${CheckoutStep.ONE}. Personal Data`}
+                isOpen={currentStep === CheckoutStep.ONE}
+                isOpenByDefault={currentStep >= CheckoutStep.ONE}
+              >
+                <PersonalDataForm
+                  firstname={data?.firstname}
+                  lastname={data?.lastname}
+                  email={data?.email}
+                  phone={data?.phone}
+                />
+              </Accordion>
+              <Accordion
+                title={`${CheckoutStep.TWO}. Delivery Data`}
+                isOpen={currentStep === CheckoutStep.TWO}
+                isOpenByDefault={currentStep >= CheckoutStep.TWO}
+              >
+                {!!data?.shippingAddress ? (
+                  <DeliveryForm
+                    disabled={isShippingDisabled}
+                    {...(data.shippingAddress as DeliveryFormType)}
+                  />
+                ) : (
+                  <DeliveryForm
+                    email={data?.email}
+                    firstname={data?.firstname}
+                    lastname={data?.lastname}
+                    phone={data?.phone}
+                    disabled={isShippingDisabled}
+                  />
+                )}
+              </Accordion>
             </div>
             {!!data && (
-              <div className="">
-                <WhiteBlock title="Summary Data">
+              <div className="pb-20">
+                <WhiteBlock title={`${CheckoutStep.THREE}. Summary Data`}>
                   <Summary cart={data} disabled={isPlaceOrderDisabled} />
                 </WhiteBlock>
               </div>

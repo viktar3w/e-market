@@ -31,19 +31,34 @@ const DefaultFilter = ({ className }: DefaultFilterProps) => {
       <Title text="Filters" size="sm" className="mb-5 font-bold" />
       <div className="flex gap-4 mb-5 border-b border-b-neutral-200">
         <button
-          className={cn("text-lg font-semibold p-2", activeTab === "filters" ? "border-b-2 border-b-primary" : "text-gray-500")}
+          className={cn(
+            "text-lg font-semibold p-2",
+            activeTab === "filters"
+              ? "border-b-2 border-b-primary"
+              : "text-gray-500",
+          )}
           onClick={() => setActiveTab("filters")}
         >
           Filters
         </button>
         <button
-          className={cn("text-lg font-semibold p-2", activeTab === "price" ? "border-b-2 border-b-primary" : "text-gray-500")}
+          className={cn(
+            "text-lg font-semibold p-2",
+            activeTab === "price"
+              ? "border-b-2 border-b-primary"
+              : "text-gray-500",
+          )}
           onClick={() => setActiveTab("price")}
         >
           Price
         </button>
         <button
-          className={cn("text-lg font-semibold p-2", activeTab === "types" ? "border-b-2 border-b-primary" : "text-gray-500")}
+          className={cn(
+            "text-lg font-semibold p-2",
+            activeTab === "types"
+              ? "border-b-2 border-b-primary"
+              : "text-gray-500",
+          )}
           onClick={() => setActiveTab("types")}
         >
           Types

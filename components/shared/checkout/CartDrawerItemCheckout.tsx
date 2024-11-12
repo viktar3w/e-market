@@ -79,7 +79,7 @@ const CartDrawerItemCheckout = ({
   );
   return (
     <div className={cn("flex items-center justify-between", className)}>
-      <div className="flex items-center gap-5 flex-1">
+      <div className="flex items-center gap-5 md:flex-1 max-md:flex-col max-md:justify-left max-md:items-left max-md:text-left">
         <CartItemDetailImg
           src={
             item.productItem.variant.image ||
@@ -92,9 +92,9 @@ const CartDrawerItemCheckout = ({
           variant={item.productItem.variant}
           components={item.productItem.components}
         />
+        <CartItemDetailPrice price={item.totalAmount} />
       </div>
-      <CartItemDetailPrice price={item.totalAmount} />
-      <div className="flex items-center gap-5 ml-20">
+      <div className="flex items-center gap-5 ml-20 max-md:ml-1">
         <CountButton
           onClick={handleButton}
           value={item.qty}

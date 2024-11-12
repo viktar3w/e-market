@@ -84,14 +84,14 @@ const CartDrawerItem = ({
           item.productItem.variant.image || "/products/default_product_img.png"
         }
       />
-      <div className="flex-1">
+      <div className="md:flex-1">
         <CartItemInfo
           name={item.name}
           variant={item.productItem.variant}
           components={item.productItem.components}
         />
         <hr className="my-3" />
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between max-md:flex-col">
           <CountButton
             onClick={handleButton}
             value={item.qty}
