@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { fontFamily } from "tailwindcss/defaultTheme";
 
 const config = {
   darkMode: ["class"],
@@ -18,12 +19,15 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        heading: ["var(--font-heading)", ...fontFamily.sans],
+      },
       transitionProperty: {
-        'max-height': 'max-height',
+        "max-height": "max-height",
       },
       maxHeight: {
-        '0': '0',
-        'full': '1000px',
+        "0": "0",
+        full: "1000px",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -66,6 +70,25 @@ const config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        brand: {
+          25: "#F7FAFD",
+          50: "#F0F5FA",
+          100: "#E1EBF5",
+          200: "#C7D7EB",
+          300: "#A9C3DE",
+          400: "#8BAECF",
+          500: "#6D99BF",
+          600: "#5483A3",
+          700: "#426A86",
+          800: "#335269",
+          900: "#273E4F",
+          950: "#1C2D3A",
+        },
+        "telegram-bg": "#36393f",
+        "telegram-brand-color": "#28b5f8",
+        "telegram-gray": "#36393f",
+        "telegram-text": "#dcddde",
+        "telegram-timestamp": "#72767d",
       },
       borderRadius: {
         lg: "var(--radius)",

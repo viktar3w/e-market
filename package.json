@@ -38,6 +38,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
+    "framer-motion": "^11.11.17",
     "isomorphic-dompurify": "^2.16.0",
     "lucide-react": "^0.427.0",
     "mailersend": "^2.3.0",

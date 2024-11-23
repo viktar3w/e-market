@@ -6,21 +6,47 @@ import {
   UserButton,
   useClerk,
 } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { useLazyGetCartQuery } from "@/lib/redux/api/cart.api";
 import { SIGN_OUT_KEY } from "@/lib/constants";
-import { LogOut } from "lucide-react";
+import {
+  ArrowRight,
+  LogOut,
+  MessageCircleQuestion,
+  UserRoundSearch,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Auth = () => {
   const { signOut } = useClerk();
+  const path = usePathname()
   const [getCartQuery] = useLazyGetCartQuery();
 
   return (
     <div>
       <SignedOut>
-        <SignInButton>
-          <Button>Sign In</Button>
-        </SignInButton>
+        <div className="flex items-center justify-center">
+          <SignInButton>
+            <Button
+              className={buttonVariants({
+                size: "sm",
+                className: "flex items-center gap-1",
+              })}>Sign In</Button>
+          </SignInButton>
+          {path !== "/support" && (
+            <Link
+              href="/support"
+              className={buttonVariants({
+                size: "sm",
+                className: "flex items-center gap-1",
+                variant: "link"
+              })}
+            >
+              Support <ArrowRight className="ml-1.5 size-4" />
+            </Link>
+          )}
+        </div>
       </SignedOut>
       <SignedIn>
         <UserButton
@@ -46,6 +72,11 @@ const Auth = () => {
               }}
             />
           </UserButton.MenuItems>
+          <UserButton.UserProfileLink
+            url="/support/dashboard"
+            label="Support Dashboard"
+            labelIcon={<UserRoundSearch className="w-4 h-4" />}
+          />
         </UserButton>
       </SignedIn>
     </div>
