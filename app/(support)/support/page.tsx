@@ -1,19 +1,37 @@
 import BoxWrapper from "@/components/shared/common/BoxWrapper";
 import Heading from "@/components/shared/common/Heading";
-import { Check } from "lucide-react";
+import { Icons } from "@/components/shared/support/Icons";
+import { Check, Star } from "lucide-react";
 import ShinyButton from "@/components/shared/common/ShinyButton";
 import { SignedOut, SignInButton } from "@clerk/nextjs";
 import { MockTelegramUi } from "@/components/ui/mock-telegram-ui";
-import { AnimatedList, AnimatedListItem } from "@/components/ui/animated-list";
+import { AnimatedList } from "@/components/ui/animated-list";
 import TelegramMessage from "@/components/shared/support/telegram/TelegramMessage";
 import Image from "next/image";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+
+const lines = [
+  "Real-time Telegram alerts for critical events",
+  "Buy once, use forever",
+  "Track sales, new users, or other events",
+];
+const codeSnippet = `await fetch("http://localhost:3000/api/support/events", {
+    method: "POST",
+    body: JSON.stringify({
+      category: "sale",
+      fields: {
+        plan: "PRO",
+        email: "your@private.email.com",
+        amount: 48.24
+      }
+    }),
+    headers: {
+      Authorisation: "Bearer <YOUR_API_KEY>"
+    }
+  });`;
 
 const Page = () => {
-  const lines = [
-    "Real-time Telegram alerts for critical events",
-    "Buy once, use forever",
-    "Track sales, new users, or other events",
-  ];
   return (
     <>
       <section className="relative py-24 sm:py-32 bg-brand-25">
@@ -195,17 +213,106 @@ const Page = () => {
                       </div>
                     </div>
                     <div className="overflow-hidden">
-                      <div className="max-h-[30rem]">code</div>
+                      <div className="max-h-[30rem]">
+                        <SyntaxHighlighter
+                          language="typescript"
+                          style={{
+                            ...oneDark,
+                            'pre[class*="language-"]': {
+                              ...oneDark['pre[class*="language-"]'],
+                              background: "transparent",
+                              overflow: "hidden",
+                            },
+                            'code[class*="language-"]': {
+                              ...oneDark['code[class*="language-"]'],
+                              background: "transparent",
+                            },
+                          }}
+                        >
+                          {codeSnippet}
+                        </SyntaxHighlighter>
+                      </div>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"></div>
+            </div>
+          </div>
+        </BoxWrapper>
+      </section>
+      <section className="relative py-24 sm:py-32 bg-white">
+        <BoxWrapper className="flex flex-col items-center gap-16 sm:gap-20">
+          <div className="">
+            <h2 className="text-center text-base/7 font-semibold text-brend-600">
+              Real World experiences
+            </h2>
+            <Heading className="text-center">What our customers say</Heading>
+          </div>
+          <div className="mx-auto grid max-w-2xl grid-cols-1 px-4 lg:mx-0 lg:max-w-none lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-gray-200">
+            {/* first customer review */}
+            <div className="flex flex-auto flex-col gap-4 bg-brand-25 p-6 sm:p-8 lg:p-16 rounded-t-[2rem] lg:rounded-tr-none lg:rounded-l-[2rem]">
+              <div className="flex gap-0.5 mb-2 justify-center lg:justify-start">
+                <Star className="size-5 text-brand-600 fill-brand-600" />
+                <Star className="size-5 text-brand-600 fill-brand-600" />
+                <Star className="size-5 text-brand-600 fill-brand-600" />
+                <Star className="size-5 text-brand-600 fill-brand-600" />
+                <Star className="size-5 text-brand-600 fill-brand-600" />
+              </div>
+              <p className="text-base sm:text-lg lg:text-lg/8 font-medium tracking-tighter text-brand-950 text-center lg:text-left text-pretty">
+                SUpoRT has been a game changer for me. I&apos;ve been using it for
+                months now and seeing sales pop up in reel time is super
+                satisfying
+              </p>
+              <div className="flex flex-col justify-center lg:justify-start sm:flex-row items-center sm:items-start gap-4 mt-2">
+                <Image
+                  src="/support/user-2.png"
+                  alt="Review User one"
+                  className="rounded-full object-cover"
+                  width={48}
+                  height={48}
+                />
+                <div className="flex flex-col items-center sm:items-start">
+                  <p className="font-semibold flex items-center">
+                    Freya Larsson
+                    <Icons.verificationBadge className="size-4 inline-block ml-1.5" />
+                  </p>
+                  <p className="text-sm text-gray-600">@itsfreya</p>
+                </div>
+              </div>
+            </div>
+            {/* second customer review */}
+            <div className="flex flex-auto flex-col gap-4 bg-brand-25 p-6 sm:p-8 lg:p-16 rounded-b-[2rem] lg:rounded-bl-none lg:rounded-r-[2rem]">
+              <div className="flex gap-0.5 mb-2 justify-center lg:justify-start">
+                <Star className="size-5 text-brand-600 fill-brand-600" />
+                <Star className="size-5 text-brand-600 fill-brand-600" />
+                <Star className="size-5 text-brand-600 fill-brand-600" />
+                <Star className="size-5 text-brand-600 fill-brand-600" />
+                <Star className="size-5 text-brand-600 fill-brand-600" />
+              </div>
+              <p className="text-base sm:text-lg lg:text-lg/8 font-medium tracking-tighter text-brand-950 text-center lg:text-left text-pretty">
+                SUpoRT has been a game changer for me.
+              </p>
+              <div className="flex flex-col justify-center lg:justify-start sm:flex-row items-center sm:items-start gap-4 mt-2">
+                <Image
+                  src="/support/user-2.png"
+                  alt="Review User one"
+                  className="rounded-full object-cover"
+                  width={48}
+                  height={48}
+                />
+                <div className="flex flex-col items-center sm:items-start">
+                  <p className="font-semibold flex items-center">
+                    NotFreya Larsson
+                    <Icons.verificationBadge className="size-4 inline-block ml-1.5" />
+                  </p>
+                  <p className="text-sm text-gray-600">@itsnotfreya</p>
                 </div>
               </div>
             </div>
           </div>
         </BoxWrapper>
       </section>
-      <section></section>
-      <section></section>
     </>
   );
 };

@@ -22,6 +22,87 @@ model User {
   verified         DateTime?
   verificationCode VerificationCode?
 
+  support Support?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Support {
+  id              String          @id @default(cuid())
+  user            User            @relation(fields: [userId], references: [id])
+  userId          String          @unique
+  apiKey          String          @unique @default(cuid())
+  limit           Int
+  plan            SupportPlan
+  socials         Social[]
+  eventCategories EventCategory[]
+  events          Event[]
+
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  LimitSupport LimitSupport[]
+
+  @@index([apiKey, userId])
+}
+
+model LimitSupport {
+  id        String  @id @default(cuid())
+  support   Support @relation(fields: [supportId], references: [id])
+  supportId String
+
+  year Int
+  month Int
+  count Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EventCategory {
+  id        String  @id @default(cuid())
+  name      String
+  color     Int
+  emoji     String?
+  suport    Support @relation(fields: [supportId], references: [id])
+  suportId  String
+  supportId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Event     Event[]
+
+  @@index([suportId, name])
+}
+
+model Event {
+  id      String @id @default(cuid())
+  data    Json
+  message String
+
+  support   Support @relation(fields: [supportId], references: [id])
+  supportId String
+
+  name   String
+  fields Json
+  status DeliveryStatus @default(value: PENDING)
+
+  eventCategory   EventCategory? @relation(fields: [eventCategoryId], references: [id])
+  eventCategoryId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+}
+
+model Social {
+  id        String     @id @default(cuid())
+  type      SocialType @default(value: TELEGRAM)
+  typeId    String     @unique
+  Support   Support?   @relation(fields: [supportId], references: [id])
+  supportId String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -246,4 +327,19 @@ enum UserType {
 enum CartStatus {
   ACTIVE
   NOT_ACTIVE
+}
+
+enum SupportPlan {
+  PRO
+  FREE
+}
+
+enum SocialType {
+  TELEGRAM
+}
+
+enum DeliveryStatus {
+  PENDING
+  DELIVERED
+  FAILD
 }
