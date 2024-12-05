@@ -194,3 +194,8 @@ export const getImage = (image?: string | null): string => {
 export const showImage = (image?: string | null) => {
   return !!image && image.includes("http");
 };
+
+export const parseColor = (color: string) => {
+  const hex = color.startsWith("#") ? color.slice(1) : color
+  return parseInt(hex, 16)
+}

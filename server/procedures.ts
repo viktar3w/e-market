@@ -5,32 +5,34 @@ import { HTTPException } from "hono/http-exception";
 
 const authMiddleware = j.middleware(async ({ c, next }) => {
   const authHeader = c.req.header("Authorization");
-
   if (authHeader) {
-    const apiKey = authHeader.split(" ")[1]; // bearer <API_KEY>
-
-    const user = await db.support.findUnique({
+    const apiKey = authHeader.split(" ")[1];
+    const support = await db.support.findUnique({
       where: { apiKey },
+      include: {
+        user: true,
+      },
     });
-
-    if (user) return next({ user });
+    if (support) return next({ support });
   }
-
   const auth = await currentUser();
-
   if (!auth) {
     throw new HTTPException(401, { message: "Unauthorized" });
   }
-
   const user = await db.user.findUnique({
     where: { id: auth.id },
+    include: {
+      support: {
+        include: {
+          user: true
+        }
+      },
+    },
   });
-
-  if (!user) {
+  if (!user || !user?.support) {
     throw new HTTPException(401, { message: "Unauthorized" });
   }
-
-  return next({ user });
+  return next({ support: user.support });
 });
 
 /**
