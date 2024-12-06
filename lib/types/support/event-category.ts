@@ -1,3 +1,5 @@
+import { LucideIcon } from "lucide-react";
+
 export type EventCategory = {
   id: string;
   name: string;
@@ -8,4 +10,15 @@ export type EventCategory = {
   uniqueFieldCount: number;
   eventsCount: number;
   lastPing: Date | null;
+};
+
+export type SidebarCategory = {
+  category: string;
+  items: SidebarItem[];
+};
+
+export type SidebarItem = {
+  href: string;
+  icon: LucideIcon;
+  text: string;
 };

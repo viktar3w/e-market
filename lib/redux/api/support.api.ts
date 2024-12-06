@@ -1,6 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { EventCategory } from "@/lib/types/support/event-category";
-import { SupportCategoryDeleteByNameRequest } from "@/lib/validations/support";
+import {
+  SupportCategoryDeleteByNameRequest,
+  SupportCreateEventCategoryRequest,
+} from "@/lib/validations/support";
 import { ResultResponse } from "@/lib/types/types";
 
 export const supportApi = createApi({
@@ -37,6 +40,28 @@ export const supportApi = createApi({
       }),
       invalidatesTags: [{ type: "Support_Categories", id: "LIST" }],
     }),
+    createEventCategory: builder.mutation<
+      EventCategory,
+      SupportCreateEventCategoryRequest
+    >({
+      query: (body) => ({
+        url: "categories/createEventCategory",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: [{ type: "Support_Categories", id: "LIST" }],
+    }),
+    insertQuickstartCategories: builder.mutation<
+      { count: number } & ResultResponse,
+      void
+    >({
+      query: (body) => ({
+        url: "categories/insertQuickstartCategories",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: [{ type: "Support_Categories", id: "LIST" }],
+    }),
   }),
 });
 
@@ -44,4 +69,6 @@ export const {
   useGetDatabaseSyncStatusQuery,
   useGetEventCategoriesQuery,
   useDeleteCategoryMutation,
+  useCreateEventCategoryMutation,
+  useInsertQuickstartCategoriesMutation,
 } = supportApi;

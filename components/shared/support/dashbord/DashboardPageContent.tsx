@@ -11,6 +11,7 @@ import {
 import LoadingSpinner from "@/components/shared/common/LoadingSpinner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
+import DashboardEmptyState from "@/components/shared/support/dashbord/DashboardEmptyState";
 
 type DashboardPageContentProps = {};
 
@@ -32,7 +33,7 @@ const DashboardPageContent = ({}: DashboardPageContentProps) => {
     );
   }
   if (!data?.categories || data.categories.length === 0) {
-    return <div className="">Empty State</div>;
+    return <DashboardEmptyState />;
   }
   return (
     <>
@@ -91,7 +92,7 @@ const DashboardPageContent = ({}: DashboardPageContentProps) => {
 
               <div className="flex items-center justify-between mt-4">
                 <Link
-                  href={`/support/dashboard/category/${category.name}`}
+                  href={`/app/(support)/support/(dashboatd)/dashboard/category/${category.name}`}
                   className={buttonVariants({
                     variant: "outline",
                     size: "sm",

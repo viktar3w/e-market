@@ -6,7 +6,10 @@ import { z } from "zod";
 import { CATEGORY_NAME_VALIDATOR } from "@/lib/validations/category";
 import { parseColor } from "@/lib/utils";
 import { HTTPException } from "hono/http-exception";
-import { SupportCategoryDeleteByNameSchema } from "@/lib/validations/support";
+import {
+  SupportCategoryDeleteByNameSchema,
+  SupportCreateEventCategorySchema,
+} from "@/lib/validations/support";
 
 export const categoryRouter = router({
   getEventCategories: privateProcedure.query(async ({ c, ctx }) => {
@@ -87,22 +90,10 @@ export const categoryRouter = router({
     }),
 
   createEventCategory: privateProcedure
-    .input(
-      z.object({
-        name: CATEGORY_NAME_VALIDATOR,
-        color: z
-          .string()
-          .min(1, "Color is required")
-          .regex(/^#[0-9A-F]{6}$/i, "Invalid color format."),
-        emoji: z.string().emoji("Invalid emoji").optional(),
-      }),
-    )
+    .input(SupportCreateEventCategorySchema)
     .mutation(async ({ c, ctx, input }) => {
       const { support } = ctx;
       const { color, name, emoji } = input;
-
-      // TODO: ADD PAID PLAN LOGIC
-
       const eventCategory = await db.eventCategory.create({
         data: {
           name: name.toLowerCase(),
@@ -111,7 +102,6 @@ export const categoryRouter = router({
           supportId: support.id,
         },
       });
-
       return c.json({ eventCategory });
     }),
 
@@ -126,7 +116,6 @@ export const categoryRouter = router({
         supportId: ctx.support.id,
       })),
     });
-
     return c.json({ success: true, count: categories.count });
   }),
 

@@ -1,3 +1,6 @@
+import { SidebarCategory } from "@/lib/types/support/event-category";
+import { Gem, Home, Key, Settings } from "lucide-react";
+
 export const CART_COOKIE_KEY = "cartToken";
 export const SIGN_OUT_KEY = "signOut";
 export const CART_LOCALSTORAGE = "cart";
@@ -41,4 +44,26 @@ export const EMOJI_OPTIONS = [
   { emoji: "🏆", label: "Achievement" },
   { emoji: "💡", label: "Idea" },
   { emoji: "🔔", label: "Notification" },
+];
+
+export const SIDEBAR_ITEMS: SidebarCategory[] = [
+  {
+    category: "Overview",
+    items: [{ href: "/support/dashboard", icon: Home, text: "Dashboard" }],
+  },
+  {
+    category: "Account",
+    items: [{ href: "/support/dashboard/upgrade", icon: Gem, text: "Upgrade" }],
+  },
+  {
+    category: "Settings",
+    items: [
+      { href: "/support/dashboard/api-key", icon: Key, text: "API Key" },
+      {
+        href: "/support/dashboard/account-settings",
+        icon: Settings,
+        text: "Account Settings",
+      },
+    ],
+  },
 ];

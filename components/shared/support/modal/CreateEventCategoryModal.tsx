@@ -1,5 +1,6 @@
 "use client";
-import { PropsWithChildren, useState } from "react";
+
+import { PropsWithChildren, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -11,19 +12,53 @@ import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { COLOR_OPTIONS, EMOJI_OPTIONS } from "@/lib/constants";
+import { EMOJI_OPTIONS, COLOR_OPTIONS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-const CreateEventCategoryModal = ({ children }: PropsWithChildren) => {
+import { useCreateEventCategoryMutation } from "@/lib/redux/api/support.api";
+import { useToast } from "@/components/ui/use-toast";
+
+type CreateEventCategoryModal = {
+  containerClassName?: string
+} & PropsWithChildren
+
+const CreateEventCategoryModal = ({ containerClassName, children }: CreateEventCategoryModal) => {
+  const [createCategoryEvent, { isSuccess, isError, isLoading }] =
+    useCreateEventCategoryMutation();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const form = useForm<SupportCreateEventCategoryRequest>({
     resolver: zodResolver(SupportCreateEventCategorySchema),
   });
+  const { toast } = useToast();
   const color = form.watch("color");
   const selectedEmoji = form.watch("emoji");
-  const onSubmit = (event: SupportCreateEventCategoryRequest) => {};
+  const onSubmit = (event: SupportCreateEventCategoryRequest) => {
+    createCategoryEvent({ ...event });
+  };
+  useEffect(() => {
+    if (isError) {
+      toast({
+        description: "We can't create new Category",
+        variant: "destructive",
+      });
+    }
+  }, [toast, isError]);
+  useEffect(() => {
+    if (isSuccess) {
+      form.reset({
+        name: "",
+        emoji: undefined,
+        color: "",
+      });
+      toast({
+        description: "Category was created!",
+        variant: "success",
+      });
+      setIsOpen(false);
+    }
+  }, [toast, isSuccess]);
   return (
     <>
-      <div className="" onClick={() => setIsOpen(true)}>
+      <div className={containerClassName} onClick={() => setIsOpen(true)}>
         {children}
       </div>
       <Modal showModal={isOpen} setShowModal={setIsOpen} className="p-8">
@@ -105,8 +140,16 @@ const CreateEventCategoryModal = ({ children }: PropsWithChildren) => {
               </div>
             </div>
             <div className="flex justify-end space-x-3 pt-3 border-t">
-              <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>Cansel</Button>
-              <Button type="submit">Create Category</Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsOpen(false)}
+              >
+                Cansel
+              </Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? "Creating..." : "Create Category"}
+              </Button>
             </div>
           </form>
         </Form>
