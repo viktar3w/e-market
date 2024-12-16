@@ -13,7 +13,7 @@ import { areArraysEqual } from "@/lib/utils";
 import { cookies } from "next/headers";
 import { auth } from "@clerk/nextjs/server";
 
-const GET = async (req: NextRequest) => {
+const GET = async () => {
   try {
     const id = cookies().get(CART_COOKIE_KEY)?.value;
     const { userId } = auth();

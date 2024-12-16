@@ -15,10 +15,22 @@ export const SupportCreateEventCategorySchema = z.object({
   emoji: z.string().emoji("Invalid emoji").optional(),
 });
 
+export const SupportEventsRequestSchema = z
+  .object({
+    category: CATEGORY_NAME_VALIDATOR,
+    fields: z.record(z.string().or(z.number()).or(z.boolean())).optional(),
+    description: z.string().max(500),
+  })
+  .strict();
+
 export type SupportCategoryDeleteByNameRequest = z.infer<
   typeof SupportCategoryDeleteByNameSchema
 >;
 
 export type SupportCreateEventCategoryRequest = z.infer<
   typeof SupportCreateEventCategorySchema
+>;
+
+export type SupportEventsRequestRequest = z.infer<
+  typeof SupportEventsRequestSchema
 >;

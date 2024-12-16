@@ -92,7 +92,7 @@ const DashboardPageContent = ({}: DashboardPageContentProps) => {
 
               <div className="flex items-center justify-between mt-4">
                 <Link
-                  href={`/app/(support)/support/(dashboatd)/dashboard/category/${category.name}`}
+                  href={`/support/dashboard/${category.name}`}
                   className={buttonVariants({
                     variant: "outline",
                     size: "sm",

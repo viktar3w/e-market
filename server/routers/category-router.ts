@@ -140,11 +140,8 @@ export const categoryRouter = router({
           message: `Category "${name}" not found`,
         });
       }
-
       // @ts-ignore
-      const hasEvents = category._count.events > 0;
-
-      return c.json({ hasEvents });
+      return c.json({ success: category._count.events > 0 });
     }),
 
   getEventsByCategoryName: privateProcedure

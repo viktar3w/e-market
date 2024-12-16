@@ -1,24 +1,25 @@
 import { SidebarCategory } from "@/lib/types/support/event-category";
 import { Gem, Home, Key, Settings } from "lucide-react";
 
-export const CART_COOKIE_KEY = "cartToken";
+export const CART_COOKIE_KEY = "cartToken" as const;
 export const SIGN_OUT_KEY = "signOut";
-export const CART_LOCALSTORAGE = "cart";
+export const CART_LOCALSTORAGE = "cart" as const;
 
-export const DEFAULT_COMPONENT_SIZE = 10;
-export const DEFAULT_PRODUCT_SIZE = 10;
-export const DEFAULT_PRODUCT_NUMBER_PAGE = 1;
+export const DEFAULT_COMPONENT_SIZE = 10 as const;
+export const DEFAULT_PRODUCT_SIZE = 10 as const;
+export const DEFAULT_PRODUCT_NUMBER_PAGE = 1 as const;
 
-export const MIN_PRICE = 0;
-export const MAX_PRICE = 3000;
-export const PRICE_STEP = 10;
+export const MIN_PRICE = 0 as const;
+export const MAX_PRICE = 3000 as const;
+export const PRICE_STEP = 10 as const;
 
-export const CHECKBOX_ITEMS_LIMIT = 5;
+export const CHECKBOX_ITEMS_LIMIT = 5 as const;
 
-export const GET_ID_KEY = "variant";
-export const DEFAULT_EMPTY_PRODUCT_IMAGE = "/products/default_product_img.png";
+export const GET_ID_KEY = "variant" as const;
+export const DEFAULT_EMPTY_PRODUCT_IMAGE =
+  "/products/default_product_img.png" as const;
 
-export const DEFAULT_TYPES_LIMIT = 6;
+export const DEFAULT_TYPES_LIMIT = 6 as const;
 
 export const COLOR_OPTIONS = [
   "#FF6B6B", // bg-[#FF6B6B] ring-[#FF6B6B] Bright Red
@@ -31,7 +32,7 @@ export const COLOR_OPTIONS = [
   "#FF85A2", // bg-[#FF85A2] ring-[#FF85A2] Pink
   "#2ECC71", // bg-[#2ECC71] ring-[#2ECC71] Emerald Green
   "#E17055", // bg-[#E17055] ring-[#E17055] Terracotta
-];
+] as const;
 
 export const EMOJI_OPTIONS = [
   { emoji: "💰", label: "Money (Sale)" },
@@ -44,7 +45,7 @@ export const EMOJI_OPTIONS = [
   { emoji: "🏆", label: "Achievement" },
   { emoji: "💡", label: "Idea" },
   { emoji: "🔔", label: "Notification" },
-];
+] as const;
 
 export const SIDEBAR_ITEMS: SidebarCategory[] = [
   {
@@ -66,4 +67,22 @@ export const SIDEBAR_ITEMS: SidebarCategory[] = [
       },
     ],
   },
-];
+] as const;
+
+export const SUPPORT_FREE_LIMIT = {
+  maxEventsPerMonth: 100,
+  maxEventsCategories: 3,
+} as const;
+
+export const SUPPORT_PRO_LIMIT = {
+  maxEventsPerMonth: 1000,
+  maxEventsCategories: 10,
+} as const;
+
+export const BLOCK_DURATION = 3600000 as const;
+export const ATTEMPT_LIMIT = 5 as const;
+
+export const TELEGRAM_AUTH = "/auth" as const;
+export const TELEGRAM_COMMANDS: Record<string, string> = {
+  [TELEGRAM_AUTH]: "message: `/auth <YOUR_SUPPORT_TOKEN>`",
+};

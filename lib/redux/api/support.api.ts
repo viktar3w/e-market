@@ -29,6 +29,15 @@ export const supportApi = createApi({
       }),
       providesTags: [{ type: "Support_Categories", id: "LIST" }],
     }),
+    pollCategory: builder.query<
+      ResultResponse,
+      SupportCategoryDeleteByNameRequest
+    >({
+      query: (body) => ({
+        url: `categories/pollCategory?name=${body?.name}`,
+      }),
+      providesTags: [{ type: "Support_Categories", id: "LIST" }],
+    }),
     deleteCategory: builder.mutation<
       ResultResponse,
       SupportCategoryDeleteByNameRequest
@@ -68,6 +77,7 @@ export const supportApi = createApi({
 export const {
   useGetDatabaseSyncStatusQuery,
   useGetEventCategoriesQuery,
+  usePollCategoryQuery,
   useDeleteCategoryMutation,
   useCreateEventCategoryMutation,
   useInsertQuickstartCategoriesMutation,

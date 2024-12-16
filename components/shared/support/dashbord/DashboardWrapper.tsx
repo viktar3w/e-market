@@ -1,7 +1,10 @@
+"use client";
+
 import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Heading from "@/components/shared/common/Heading";
+import { useRouter } from "next/navigation";
 
 type DashboardWrapperProps = {
   title: string;
@@ -16,13 +19,18 @@ const DashboardWrapper = ({
   hideBlockButton,
   children,
 }: DashboardWrapperProps) => {
+  const { push } = useRouter();
   return (
     <section className="flex flex-1 h-full w-full flex-col">
       <div className="p-6 w-full sm:p-8 flex justify-between border-b border-gray-200">
         <div className="flex w-full flex-col sm:flex-row items-start sm:items-center gap-6">
           <div className="flex items-center gap-8">
             {!hideBlockButton && (
-              <Button className="w-fit bg-white" variant="outline">
+              <Button
+                onClick={() => push("/support/dashboard")}
+                className="w-fit bg-white"
+                variant="outline"
+              >
                 <ArrowLeft className="size-4" />
               </Button>
             )}

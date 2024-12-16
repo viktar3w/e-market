@@ -39,9 +39,9 @@ model Support {
   eventCategories EventCategory[]
   events          Event[]
 
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  LimitSupport LimitSupport[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  limits    LimitSupport[]
 
   @@index([apiKey, userId])
 }
@@ -49,9 +49,9 @@ model Support {
 model LimitSupport {
   id        String  @id @default(cuid())
   support   Support @relation(fields: [supportId], references: [id])
-  supportId String
+  supportId String  @unique
 
-  year Int
+  year  Int
   month Int
   count Int @default(0)
 
@@ -64,12 +64,12 @@ model EventCategory {
   name      String
   color     Int
   emoji     String?
-  support    Support @relation(fields: [supportId], references: [id])
+  support   Support @relation(fields: [supportId], references: [id])
   supportId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  events     Event[]
+  events    Event[]
 
   @@unique([supportId, name])
 }
@@ -98,12 +98,14 @@ model Event {
 model Social {
   id        String     @id @default(cuid())
   type      SocialType @default(value: TELEGRAM)
-  typeId    String     @unique
-  Support   Support?   @relation(fields: [supportId], references: [id])
-  supportId String?
+  authKey   String     @unique
+  support   Support    @relation(fields: [supportId], references: [id])
+  supportId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([authKey, type])
 }
 
 model Category {
@@ -296,6 +298,20 @@ model StoryItem {
   sourceUrl String
 
   createdAt DateTime @default(now())
+}
+
+model BlockedUser {
+  id     String     @id @default(cuid())
+  chatId Int        @unique
+  type   SocialType @default(value: TELEGRAM)
+  reason String?
+  limit  Int        @default(3)
+
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([chatId, type])
 }
 
 enum OrderStatus {
