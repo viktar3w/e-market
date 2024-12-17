@@ -44,7 +44,7 @@ const COMMAND_HANDLERS: Record<string, CommandHandler> = {
   [TELEGRAM_AUTH]: handleAuthCommand,
 };
 
-export const POST = async (req: NextRequest) => {
+const handler = async (req: NextRequest) => {
   try {
     const body = await req.json();
     const message = body?.message;
@@ -96,3 +96,5 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ success: false }, { status: 500 });
   }
 };
+
+export { handler as GET, handler as POST };
