@@ -45,6 +45,9 @@ const COMMAND_HANDLERS: Record<string, CommandHandler> = {
 };
 
 const handler = async (req: NextRequest) => {
+  if (req.method === "GET") {
+    return NextResponse.json({ success: true });
+  }
   try {
     const body = await req.json();
     const message = body?.message;
