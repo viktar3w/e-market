@@ -24,7 +24,7 @@ const handleAuthCommand: CommandHandler = async (chatId, args) => {
   const support = await db.support.findFirst({
     where: { apiKey },
   });
-  let message = "";
+  let message: string;
   if (support) {
     await db.social.create({
       data: {
@@ -50,21 +50,20 @@ const handler = async (req: NextRequest) => {
     const message = body?.message;
     const chatId = message?.chat?.id;
     const text = message?.text;
-    console.log("method: ", req.method)
-    console.log("body: ", JSON.stringify(body))
+
     if (!text || !chatId) {
       return NextResponse.json({ success: false }, { status: 400 });
     }
+
     const social = await db.social.findUnique({
       where: {
         authKey_type: { authKey: String(chatId), type: SocialType.TELEGRAM },
       },
     });
 
-    if (!social) {
-      return NextResponse.json({ success: false });
+    if (!!social) {
+      return NextResponse.json({ success: true });
     }
-
     if (await isBlocked(chatId)) {
       await sendTelegramMessage(
         chatId,
