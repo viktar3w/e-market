@@ -17,14 +17,16 @@ const sendTelegramMessage = async (chatId: number, text: string) => {
 
 const handleAuthCommand: CommandHandler = async (chatId, args) => {
   const apiKey = args[0];
+  console.log("apiKey: ", apiKey)
   if (!apiKey) {
-    sendTelegramMessage(chatId, TELEGRAM_COMMANDS[TELEGRAM_AUTH]);
+    await sendTelegramMessage(chatId, TELEGRAM_COMMANDS[TELEGRAM_AUTH]);
     return;
   }
   const support = await db.support.findFirst({
     where: { apiKey },
   });
   let message: string;
+  console.log("support: ", JSON.stringify(support))
   if (!!support) {
     await db.social.create({
       data: {
@@ -38,7 +40,7 @@ const handleAuthCommand: CommandHandler = async (chatId, args) => {
     message = "Invalid support API token.";
   }
   console.log("message: ", message)
-  sendTelegramMessage(chatId, message);
+  await sendTelegramMessage(chatId, message);
 };
 
 const COMMAND_HANDLERS: Record<string, CommandHandler> = {
@@ -85,7 +87,6 @@ const handler = async (req: NextRequest) => {
       return NextResponse.json({ success: false });
     }
     const handler = COMMAND_HANDLERS[command];
-    console.log("handler: ", handler)
     if (!handler) {
       await sendTelegramMessage(
         chatId,
@@ -93,8 +94,7 @@ const handler = async (req: NextRequest) => {
       );
       return NextResponse.json({ success: true });
     }
-    console.log(22222)
-    handler(chatId, args);
+    await handler(chatId, args);
     return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error("Error handling Telegram Webhook:", error);
