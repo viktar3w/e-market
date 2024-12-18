@@ -17,16 +17,13 @@ const sendTelegramMessage = async (chatId: number, text: string) => {
 
 const handleAuthCommand: CommandHandler = async (chatId, args) => {
   const apiKey = args[0];
-  console.log("apiKey: ", apiKey)
   if (!apiKey) {
-    await sendTelegramMessage(chatId, TELEGRAM_COMMANDS[TELEGRAM_AUTH]);
-    return;
+    return await sendTelegramMessage(chatId, TELEGRAM_COMMANDS[TELEGRAM_AUTH]);
   }
   const support = await db.support.findFirst({
     where: { apiKey },
   });
   let message: string;
-  console.log("support: ", JSON.stringify(support))
   if (!!support) {
     await db.social.create({
       data: {
@@ -39,7 +36,6 @@ const handleAuthCommand: CommandHandler = async (chatId, args) => {
   } else {
     message = "Invalid support API token.";
   }
-  console.log("message: ", message)
   await sendTelegramMessage(chatId, message);
 };
 
@@ -68,6 +64,7 @@ const handler = async (req: NextRequest) => {
     });
 
     if (!!social) {
+      await sendTelegramMessage(chatId, "Your were authenticated before");
       return NextResponse.json({ success: true });
     }
     if (await isBlocked(chatId)) {
