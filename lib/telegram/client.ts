@@ -5,7 +5,7 @@ const botSingleton = (): BotStructure<TelegramBot> => {
   const token = process.env.TELEGRAM_BOT_TOKEN!;
   const apiUrl = `https://api.telegram.org/bot${token}`;
   return {
-    client: new TelegramBot(token, { polling: true }),
+    client: new TelegramBot(token, { polling: false }),
     sendMessage: async (chatId: number, text: string) => {
       await fetch(`${apiUrl}/sendMessage`, {
         method: "POST",
