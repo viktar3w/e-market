@@ -84,10 +84,8 @@ const handler = async (req: NextRequest) => {
       await sendTelegramMessage(chatId, "Please send a command.");
       return NextResponse.json({ success: false });
     }
-    console.log("command: ", command)
-    console.log("args: ", JSON.stringify(args))
     const handler = COMMAND_HANDLERS[command];
-
+    console.log("handler: ", handler)
     if (!handler) {
       await sendTelegramMessage(
         chatId,
@@ -95,6 +93,7 @@ const handler = async (req: NextRequest) => {
       );
       return NextResponse.json({ success: true });
     }
+    console.log(22222)
     handler(chatId, args);
     return NextResponse.json({ success: true });
   } catch (error: any) {
