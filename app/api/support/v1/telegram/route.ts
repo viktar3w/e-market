@@ -52,7 +52,7 @@ const handler = async (req: NextRequest) => {
     const text = message?.text;
 
     if (!text || !chatId) {
-      return NextResponse.json({ success: false }, { status: 400 });
+      return NextResponse.json({ success: false });
     }
 
     const social = await db.social.findUnique({
@@ -94,7 +94,7 @@ const handler = async (req: NextRequest) => {
     return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error("Error handling Telegram Webhook:", error);
-    return NextResponse.json({ success: false }, { status: 500 });
+    return NextResponse.json({ success: false });
   }
 };
 
