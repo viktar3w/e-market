@@ -25,7 +25,7 @@ const handleAuthCommand: CommandHandler = async (chatId, args) => {
     where: { apiKey },
   });
   let message: string;
-  if (support) {
+  if (!!support) {
     await db.social.create({
       data: {
         type: SocialType.TELEGRAM,
@@ -37,6 +37,7 @@ const handleAuthCommand: CommandHandler = async (chatId, args) => {
   } else {
     message = "Invalid support API token.";
   }
+  console.log("message: ", message)
   sendTelegramMessage(chatId, message);
 };
 
@@ -83,7 +84,8 @@ const handler = async (req: NextRequest) => {
       await sendTelegramMessage(chatId, "Please send a command.");
       return NextResponse.json({ success: false });
     }
-
+    console.log("command: ", command)
+    console.log("args: ", JSON.stringify(args))
     const handler = COMMAND_HANDLERS[command];
 
     if (!handler) {
