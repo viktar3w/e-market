@@ -18,14 +18,13 @@ const sendTelegramMessage = async (chatId: number, text: string) => {
 const handleAuthCommand: CommandHandler = async (chatId, args) => {
   const apiKey = args[0];
   if (!apiKey) {
-    sendTelegramMessage(chatId, TELEGRAM_COMMANDS[TELEGRAM_AUTH]);
-    return;
+    return await sendTelegramMessage(chatId, TELEGRAM_COMMANDS[TELEGRAM_AUTH]);
   }
   const support = await db.support.findFirst({
     where: { apiKey },
   });
-  let message = "";
-  if (support) {
+  let message: string;
+  if (!!support) {
     await db.social.create({
       data: {
         type: SocialType.TELEGRAM,
@@ -37,7 +36,7 @@ const handleAuthCommand: CommandHandler = async (chatId, args) => {
   } else {
     message = "Invalid support API token.";
   }
-  sendTelegramMessage(chatId, message);
+  await sendTelegramMessage(chatId, message);
 };
 
 const COMMAND_HANDLERS: Record<string, CommandHandler> = {
@@ -50,19 +49,21 @@ export const POST = async (req: NextRequest) => {
     const message = body?.message;
     const chatId = message?.chat?.id;
     const text = message?.text;
+
     if (!text || !chatId) {
-      return NextResponse.json({ success: false }, { status: 400 });
+      return NextResponse.json({ success: false });
     }
+
     const social = await db.social.findUnique({
       where: {
         authKey_type: { authKey: String(chatId), type: SocialType.TELEGRAM },
       },
     });
 
-    if (!social) {
-      return NextResponse.json({ success: false });
+    if (!!social) {
+      await sendTelegramMessage(chatId, "Your were authenticated before");
+      return NextResponse.json({ success: true });
     }
-
     if (await isBlocked(chatId)) {
       await sendTelegramMessage(
         chatId,
@@ -79,9 +80,7 @@ export const POST = async (req: NextRequest) => {
       await sendTelegramMessage(chatId, "Please send a command.");
       return NextResponse.json({ success: false });
     }
-
     const handler = COMMAND_HANDLERS[command];
-
     if (!handler) {
       await sendTelegramMessage(
         chatId,
@@ -89,10 +88,14 @@ export const POST = async (req: NextRequest) => {
       );
       return NextResponse.json({ success: true });
     }
-    handler(chatId, args);
+    await handler(chatId, args);
     return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error("Error handling Telegram Webhook:", error);
-    return NextResponse.json({ success: false }, { status: 500 });
+    return NextResponse.json({ success: false });
   }
+};
+
+export const GET = () => {
+  return NextResponse.json({ success: true });
 };
