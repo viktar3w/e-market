@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "@/lib/redux/store";
-import { cartApi } from "@/lib/redux/api/cart.api";
-import { CartItemState } from "@/lib/types/cart";
+
 import { CART_LOCALSTORAGE } from "@/lib/constants";
+import { cartApi } from "@/lib/redux/api/cart.api";
+import { RootState } from "@/lib/redux/store";
+import { CartItemState } from "@/lib/types/cart";
 
 type CartSlicerType = {
   cart: {

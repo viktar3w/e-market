@@ -1,9 +1,12 @@
-import { memo } from "react";
-import { cn } from "@/lib/utils";
-import BoxWrapper from "@/components/shared/common/BoxWrapper";
 import Image from "next/image";
-import Auth from "@/components/auth/Clerk";
 import Link from "next/link";
+
+import { memo } from "react";
+
+import Auth from "@/components/auth/Clerk";
+import BoxWrapper from "@/components/shared/common/BoxWrapper";
+import { cn } from "@/lib/utils";
+
 
 type DefaultHeaderProps = {
   className?: string;

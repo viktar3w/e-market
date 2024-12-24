@@ -1,5 +1,10 @@
 "use client";
+import Link from "next/link";
+
+import { ArrowRight } from "lucide-react";
 import { PropsWithChildren } from "react";
+
+import CartDrawerItem from "@/components/shared/cart/CartDrawerItem";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -9,12 +14,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { cn, formatPrice } from "@/lib/utils";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { selectCart } from "@/lib/redux/slices/cartSlicer";
-import CartDrawerItem from "@/components/shared/cart/CartDrawerItem";
 import { useAppSelector } from "@/hooks/redux";
+import { selectCart } from "@/lib/redux/slices/cartSlicer";
+import { cn, formatPrice } from "@/lib/utils";
+
 type CartDrawerProps = {
   className?: string;
 } & PropsWithChildren;

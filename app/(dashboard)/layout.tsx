@@ -1,7 +1,9 @@
-import type { Metadata } from "next";
 import { ReactNode } from "react";
-import { Toaster } from "@/components/ui/toaster";
+
 import DefaultHeader from "@/components/shared/header/DefaultHeader";
+import { Toaster } from "@/components/ui/toaster";
+
+import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "e-Market",
   description: "Generated e-Market",

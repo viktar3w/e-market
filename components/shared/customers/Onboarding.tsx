@@ -1,7 +1,6 @@
 "use client";
 import BoxWrapper from "@/components/shared/common/BoxWrapper";
-import { CustomerCreateForm } from "@/lib/types/user";
-import { useOnboarding } from "@/hooks/useOnboarding";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -11,7 +10,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useOnboarding } from "@/hooks/useOnboarding";
+import { CustomerCreateForm } from "@/lib/types/user";
 
 const Onboarding = ({
   id,

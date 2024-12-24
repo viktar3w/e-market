@@ -1,11 +1,13 @@
-import { db } from "@/db";
 import { NextRequest, NextResponse } from "next/server";
+
 import qs from "qs";
+
+import { db } from "@/db";
+import { CategoryParent } from "@/lib/types/product";
 import {
   preparedCategoryProductVariantsByPrice,
   preparePrismaCategoryFilter,
 } from "@/lib/utils";
-import { CategoryParent } from "@/lib/types/product";
 
 export const GET = async (reg: NextRequest) => {
   const components = qs.parse(reg.nextUrl.search.replaceAll("?", ""), {

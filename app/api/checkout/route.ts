@@ -1,29 +1,26 @@
-import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { getCart } from "@/actions/cartAction";
+import { cookies } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
+
+import { OrderStatus, PaymentType, CartStatus, Prisma, ShippingAddress } from '@prisma/client';
+import crypto from 'crypto';
+import DOMPurify from 'isomorphic-dompurify';
+import Stripe from 'stripe';
+
+import { getCart } from '@/actions/cartAction';
+import OrderEmail from '@/components/shared/emails/OrderEmail';
+import { db } from '@/db';
+import { CART_COOKIE_KEY } from '@/lib/constants';
+import { sendEmail } from '@/lib/email';
+import { stripe } from '@/lib/stripe/stripe';
+import { CartState } from '@/lib/types/cart';
+import { OrderState } from '@/lib/types/checkout';
 import {
   CheckoutDeliveryValidation,
   CheckoutPersonalDataValidation,
   CheckoutPlaceOrderValidation,
-} from "@/lib/validations/checkout";
-import {
-  OrderStatus,
-  PaymentType,
-  CartStatus,
-  Prisma,
-  ShippingAddress,
-} from "@prisma/client";
-import DOMPurify from "isomorphic-dompurify";
-import crypto from "crypto";
+} from '@/lib/validations/checkout';
+
 import OrderCreateInput = Prisma.OrderCreateInput;
-import { stripe } from "@/lib/stripe/stripe";
-import Stripe from "stripe";
-import { cookies } from "next/headers";
-import { CART_COOKIE_KEY } from "@/lib/constants";
-import { sendEmail } from "@/lib/email";
-import OrderEmail from "@/components/shared/emails/OrderEmail";
-import { OrderState } from "@/lib/types/checkout";
-import { CartState } from "@/lib/types/cart";
 
 const POST = async (req: NextRequest) => {
   const cart = await getCart();
@@ -50,9 +47,9 @@ const POST = async (req: NextRequest) => {
     },
   });
   if (!cartInfo || !cartInfo.shippingAddress?.id) {
-    throw new Error("something was wrong with getting cart data");
+    throw new Error('something was wrong with getting cart data');
   }
-  const token = crypto.randomBytes(15).toString("hex");
+  const token = crypto.randomBytes(15).toString('hex');
   const data: OrderCreateInput = {
     token: token,
     taxAmount: totalInfo.taxAmount,
@@ -62,9 +59,9 @@ const POST = async (req: NextRequest) => {
     qty: cartInfo.qty,
     status: OrderStatus.PENDING,
     paymentType: PaymentType.STRIPE,
-    paymentId: "",
+    paymentId: '',
     items: {},
-    currency: "USD",
+    currency: 'USD',
     cart: {
       connect: {
         id: cartInfo.id,
@@ -109,7 +106,7 @@ const POST = async (req: NextRequest) => {
   }
   if (!!order.taxAmount) {
     const tax = await stripe.products.create({
-      name: "Common Taxes Amount",
+      name: 'Common Taxes Amount',
       default_price_data: {
         currency: order.currency,
         unit_amount_decimal: Number(order.taxAmount * 100).toFixed(),
@@ -122,12 +119,10 @@ const POST = async (req: NextRequest) => {
   }
   if (!!order.shippingAmount) {
     const tax = await stripe.products.create({
-      name: "Common Shipping Amount",
+      name: 'Common Shipping Amount',
       default_price_data: {
         currency: order.currency,
-        unit_amount_decimal: Number(
-          Number(order.shippingAmount.toFixed(2)) * 100,
-        ).toFixed(2),
+        unit_amount_decimal: Number(Number(order.shippingAmount.toFixed(2)) * 100).toFixed(2),
       },
     });
     lineItems.push({
@@ -138,9 +133,9 @@ const POST = async (req: NextRequest) => {
   const stripeSession = await stripe.checkout.sessions.create({
     success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout/success?token=${token}`,
     cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout/error?token=${token}`,
-    payment_method_types: ["card"],
-    mode: "payment",
-    billing_address_collection: "required",
+    payment_method_types: ['card'],
+    mode: 'payment',
+    billing_address_collection: 'required',
     metadata: {
       token: order.token,
     },
@@ -148,18 +143,18 @@ const POST = async (req: NextRequest) => {
   });
   await db.cart.update({
     where: {
-      id: cartInfo.id
+      id: cartInfo.id,
     },
     data: {
-      status: CartStatus.NOT_ACTIVE
-    }
-  })
+      status: CartStatus.NOT_ACTIVE,
+    },
+  });
   cookies().delete(CART_COOKIE_KEY);
   try {
     sendEmail({
       to: cartInfo.shippingAddress.email,
-      subject: "e-Market: Your order was created",
-      from: "v.starovoitou@trial-3z0vklo17n7g7qrx.mlsender.net",
+      subject: 'e-Market: Your order was created',
+      from: 'v.starovoitou@trial-3z0vklo17n7g7qrx.mlsender.net',
       template: OrderEmail({ order: order as OrderState, cart: cartInfo as CartState }),
     });
   } catch (e: any) {
@@ -191,9 +186,7 @@ const PATCH = async (req: NextRequest) => {
 
 const PUT = async (req: NextRequest) => {
   const cart = await getCart();
-  const shippingAddressData = CheckoutDeliveryValidation.parse(
-    await req.json(),
-  );
+  const shippingAddressData = CheckoutDeliveryValidation.parse(await req.json());
   let shippingAddress: ShippingAddress;
   const preparedData = {
     firstname: DOMPurify.sanitize(shippingAddressData.firstname),

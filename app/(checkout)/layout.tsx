@@ -1,7 +1,9 @@
-import type { Metadata } from "next";
 import { ReactNode } from "react";
-import { Toaster } from "@/components/ui/toaster";
+
 import CheckoutHeader from "@/components/shared/header/CheckoutHeader";
+import { Toaster } from "@/components/ui/toaster";
+
+import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "e-Market | Checkout",
   description: "Checkout e-Market",

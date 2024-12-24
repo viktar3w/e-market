@@ -1,11 +1,11 @@
 "use client";
-import { cn } from "@/lib/utils";
 import Title from "@/components/shared/common/Title";
 import CheckboxFilter from "@/components/shared/filters/CheckboxFilter";
-import PriceFilter from "@/components/shared/filters/PriceFilter";
 import CheckboxGroupFilter from "@/components/shared/filters/CheckboxGroupFilter";
-import { DEFAULT_TYPES_LIMIT } from "@/lib/constants";
+import PriceFilter from "@/components/shared/filters/PriceFilter";
 import { useHomeFilters } from "@/hooks/useHomeFilters";
+import { DEFAULT_TYPES_LIMIT } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 type DefaultFilterProps = {
   className?: string;

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
-import { db } from "@/db";
+
 import ProductForm from "@/components/shared/products/ProductForm";
+import { db } from "@/db";
 import { CategoryProductParent } from "@/lib/types/product";
 
 type PageProps = {

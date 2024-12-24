@@ -1,5 +1,6 @@
-import React, { ReactNode, useCallback, useEffect, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import React, { ReactNode, useCallback, useEffect, useState } from "react";
+
 import { cn } from "@/lib/utils";
 
 type AccordionProps = {

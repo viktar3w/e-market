@@ -1,14 +1,18 @@
 "use client";
+import { useRouter } from "next/navigation";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { User } from "@prisma/client";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { OnboardingValidation } from "@/lib/validations/onboarding";
-import { CustomerCreateForm } from "@/lib/types/user";
+
 import { createUser } from "@/actions/createUser";
-import { User } from "@prisma/client";
 import { toast } from "@/components/ui/use-toast";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { CustomerCreateForm } from "@/lib/types/user";
+import { OnboardingValidation } from "@/lib/validations/onboarding";
+
+
 
 export const useOnboarding = ({
   firstname,

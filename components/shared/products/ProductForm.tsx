@@ -1,5 +1,5 @@
-import { CategoryProductParent } from "@/lib/types/product";
 import ChooseProductForm from "@/components/shared/products/ChooseProductForm";
+import { CategoryProductParent } from "@/lib/types/product";
 
 type ProductFormProps = {
   className?: string;

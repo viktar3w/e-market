@@ -1,11 +1,12 @@
 "use client";
-import { cn } from "@/lib/utils";
-import { CheckboxFilterType } from "@/lib/types/types";
-import { CHECKBOX_ITEMS_LIMIT } from "@/lib/constants";
-import { Input } from "@/components/ui/input";
-import CheckboxFilter from "@/components/shared/filters/CheckboxFilter";
 import { useEffect, useState } from "react";
+
+import CheckboxFilter from "@/components/shared/filters/CheckboxFilter";
 import CheckboxSkeleton from "@/components/shared/filters/CheckboxSkeleton";
+import { Input } from "@/components/ui/input";
+import { CHECKBOX_ITEMS_LIMIT } from "@/lib/constants";
+import { CheckboxFilterType } from "@/lib/types/types";
+import { cn } from "@/lib/utils";
 
 type CheckboxGroupFilterProps = {
   title: string;

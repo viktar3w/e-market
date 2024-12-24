@@ -1,9 +1,11 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+
 import { CheckCircle, Home } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
+
+import { Button } from "@/components/ui/button";
 import { OrderState } from "@/lib/types/checkout";
+import { formatPrice } from "@/lib/utils";
 
 type CheckoutSuccessProps = {
   order: OrderState;

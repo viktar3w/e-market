@@ -1,8 +1,8 @@
 "use client";
-import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/hooks/redux";
 import { selectCategory } from "@/lib/redux/slices/categorySlicer";
 import { ItemVariation } from "@/lib/types/types";
+import { cn } from "@/lib/utils";
 
 type DefaultCategories = {
   className?: string;

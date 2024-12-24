@@ -1,15 +1,19 @@
 "use client";
-import { cn } from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
+
+import { Product } from "@prisma/client";
 import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { useEffect, useRef, useState } from "react";
 import { useClickAway } from "react-use";
-import Link from "next/link";
-import { useInput } from "@/hooks/useInput";
+
+import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useInput } from "@/hooks/useInput";
 import { API } from "@/lib/services/api-client";
-import { Product } from "@prisma/client";
-import Image from "next/image";
+import { cn } from "@/lib/utils";
+
+
 
 type HeaderSearchProps = {
   className?: string;

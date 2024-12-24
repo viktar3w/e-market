@@ -1,6 +1,7 @@
 import { Minus, Plus } from "lucide-react";
-import { CountButtonType } from "@/lib/types/types";
+
 import { Button } from "@/components/ui/button";
+import { CountButtonType } from "@/lib/types/types";
 import { cn } from "@/lib/utils";
 
 type IconButtonProps = {

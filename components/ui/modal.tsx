@@ -1,8 +1,11 @@
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 import { Drawer } from "vaul";
-import { Dialog, DialogContent, DialogTitle } from "./dialog";
+
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
+
+import { Dialog, DialogContent, DialogTitle } from "./dialog";
+
 
 interface ModalProps {
   children?: ReactNode;

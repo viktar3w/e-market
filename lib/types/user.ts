@@ -1,4 +1,5 @@
 import { User } from "@prisma/client";
+
 import { CartState } from "@/lib/types/cart";
 import { OrderState } from "@/lib/types/checkout";
 

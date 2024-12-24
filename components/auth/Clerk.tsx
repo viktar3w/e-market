@@ -1,4 +1,7 @@
 "use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 import {
   SignedIn,
   SignedOut,
@@ -6,17 +9,16 @@ import {
   UserButton,
   useClerk,
 } from "@clerk/nextjs";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { useLazyGetCartQuery } from "@/lib/redux/api/cart.api";
-import { SIGN_OUT_KEY } from "@/lib/constants";
 import {
   ArrowRight,
   LogOut,
   MessageCircleQuestion,
   UserRoundSearch,
 } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+
+import { Button, buttonVariants } from "@/components/ui/button";
+import { SIGN_OUT_KEY } from "@/lib/constants";
+import { useLazyGetCartQuery } from "@/lib/redux/api/cart.api";
 
 const Auth = () => {
   const { signOut } = useClerk();

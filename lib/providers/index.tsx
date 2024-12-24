@@ -1,8 +1,10 @@
 "use client";
-import { Provider } from "react-redux";
-import { ReactNode } from "react";
-import { store } from "@/lib/redux/store";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ReactNode } from "react";
+import { Provider } from "react-redux";
+
+import { store } from "@/lib/redux/store";
+
 
 export const Providers = ({ children }: { children: ReactNode }) => {
   return (

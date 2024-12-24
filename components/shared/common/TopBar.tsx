@@ -1,9 +1,9 @@
-import { cn } from "@/lib/utils";
+import DefaultCategories from "@/components/shared/categories/DefaultCategories";
+import SkeletonDefaultCategories from "@/components/shared/categories/SkeletonDefaultCategories";
 import BoxWrapper from "@/components/shared/common/BoxWrapper";
 import SortPopup from "@/components/shared/common/SortPopup";
 import { ItemVariation } from "@/lib/types/types";
-import SkeletonDefaultCategories from "@/components/shared/categories/SkeletonDefaultCategories";
-import DefaultCategories from "@/components/shared/categories/DefaultCategories";
+import { cn } from "@/lib/utils";
 
 type TopBarProps = {
   className?: string;

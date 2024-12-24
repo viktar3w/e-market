@@ -6,6 +6,7 @@ import {
   ProductItem,
   ShippingAddress,
 } from "@prisma/client";
+
 import { VariantItem } from "@/lib/types/product";
 export type CartState = Cart & {
   cartItems: CartItemState[];

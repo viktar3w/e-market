@@ -1,8 +1,10 @@
-import { stripe } from "@/lib/stripe/stripe";
 import { NextResponse } from "next/server";
-import Stripe from "stripe";
-import { db } from "@/db";
+
 import { OrderStatus, Prisma } from "@prisma/client";
+import Stripe from "stripe";
+
+import { db } from "@/db";
+import { stripe } from "@/lib/stripe/stripe";
 
 export async function POST(req: Request) {
   try {

@@ -1,11 +1,14 @@
-import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { db } from "@/db";
-import DashboardWrapper from "@/components/shared/support/dashbord/DashboardWrapper";
+
+import { currentUser } from "@clerk/nextjs/server";
+import { PlusIcon } from "lucide-react";
+
 import DashboardPageContent from "@/components/shared/support/dashbord/DashboardPageContent";
+import DashboardWrapper from "@/components/shared/support/dashbord/DashboardWrapper";
 import CreateEventCategoryModal from "@/components/shared/support/modal/CreateEventCategoryModal";
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
+import { db } from "@/db";
+
 const Page = async () => {
   const auth = await currentUser();
   if (!auth) {

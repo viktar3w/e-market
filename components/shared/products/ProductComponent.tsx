@@ -1,9 +1,11 @@
 "use client";
 import Image from "next/image";
+
 import { Component } from "@prisma/client";
-import { cn, formatPrice, getImage } from "@/lib/utils";
 import { CircleCheck } from "lucide-react";
+
 import { DEFAULT_EMPTY_PRODUCT_IMAGE } from "@/lib/constants";
+import { cn, formatPrice, getImage } from "@/lib/utils";
 
 type ProductComponentProps = {
   className?: string;

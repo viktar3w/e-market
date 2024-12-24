@@ -1,13 +1,14 @@
-import { CustomerForm } from "@/lib/types/user";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback, useEffect } from "react";
+import { useForm } from "react-hook-form";
+
+import { useToast } from "@/components/ui/use-toast";
+import { useUpdatePersonalDataMutation } from "@/lib/redux/api/cart.api";
+import { CustomerForm } from "@/lib/types/user";
 import {
   CheckoutPersonalDataSchema,
   CheckoutPersonalDataValidation,
 } from "@/lib/validations/checkout";
-import { useCallback, useEffect } from "react";
-import { useUpdatePersonalDataMutation } from "@/lib/redux/api/cart.api";
-import { useToast } from "@/components/ui/use-toast";
 
 type CheckoutPersonalData = {} & CustomerForm;
 export const useCheckoutPersonalData = ({

@@ -1,10 +1,5 @@
-// import { httpHandler } from "@/server";
-//
-// export const runtime = "edge";
-//
-// export { httpHandler as GET, httpHandler as POST };
-import { NextResponse } from "next/server";
+import { httpHandler } from "@/server";
 
-export const POST = () => {
-  return NextResponse.json({ ok: true });
-};
+export const runtime = "edge";
+
+export { httpHandler as GET, httpHandler as POST };

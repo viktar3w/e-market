@@ -1,5 +1,6 @@
-import { SidebarCategory } from "@/lib/types/support/event-category";
 import { Gem, Home, Key, Settings } from "lucide-react";
+
+import { SidebarCategory } from "@/lib/types/support/event-category";
 
 export const CART_COOKIE_KEY = "cartToken" as const;
 export const SIGN_OUT_KEY = "signOut";
@@ -85,4 +86,9 @@ export const ATTEMPT_LIMIT = 5 as const;
 export const TELEGRAM_AUTH = "/auth" as const;
 export const TELEGRAM_COMMANDS: Record<string, string> = {
   [TELEGRAM_AUTH]: "message: `/auth <YOUR_SUPPORT_TOKEN>`",
+};
+export const TIME_RANGE_LABELS = {
+  today: "today",
+  week: "this week",
+  month: "this month",
 };

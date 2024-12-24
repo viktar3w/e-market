@@ -1,10 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { db } from "@/db";
-import { CartState } from "@/lib/types/cart";
-import { sessionCreateWebhook } from "@/actions/clerkUser";
 import { cookies } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
+
+import { auth } from "@clerk/nextjs/server";
+
+import { sessionCreateWebhook } from "@/actions/clerkUser";
+import { db } from "@/db";
 import { CART_COOKIE_KEY, SIGN_OUT_KEY } from "@/lib/constants";
+import { CartState } from "@/lib/types/cart";
 
 export const POST = (req: NextRequest) => {
   const searchParams = req.nextUrl.searchParams;

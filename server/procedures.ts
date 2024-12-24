@@ -1,7 +1,9 @@
-import { db } from "@/db";
-import { j } from "./__internals/j";
 import { currentUser } from "@clerk/nextjs/server";
 import { HTTPException } from "hono/http-exception";
+
+import { db } from "@/db";
+
+import { j } from "./__internals/j";
 
 const authMiddleware = j.middleware(async ({ c, next }) => {
   const authHeader = c.req.header("Authorization");
@@ -24,8 +26,8 @@ const authMiddleware = j.middleware(async ({ c, next }) => {
     include: {
       support: {
         include: {
-          user: true
-        }
+          user: true,
+        },
       },
     },
   });

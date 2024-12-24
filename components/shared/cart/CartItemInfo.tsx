@@ -1,8 +1,10 @@
 "use client";
-import { VariantItem } from "@/lib/types/product";
 import { Component } from "@prisma/client";
-import { cn, getProductDetails } from "@/lib/utils";
 import { useMemo } from "react";
+
+import { VariantItem } from "@/lib/types/product";
+import { cn, getProductDetails } from "@/lib/utils";
+
 
 type CartItemInfoProps = {
   className?: string;

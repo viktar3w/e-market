@@ -1,8 +1,10 @@
 "use client";
-import { AlertTriangle, Home } from "lucide-react";
-import { OrderState } from "@/lib/types/checkout";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+
+import { AlertTriangle, Home } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { OrderState } from "@/lib/types/checkout";
 
 type CheckoutErrorProps = {
   order: OrderState;

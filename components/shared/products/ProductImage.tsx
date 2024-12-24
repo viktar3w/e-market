@@ -1,8 +1,11 @@
+import Image from "next/image";
+
+import { ProductType } from "@prisma/client";
+
+import { DEFAULT_EMPTY_PRODUCT_IMAGE } from "@/lib/constants";
 import { ProductSize } from "@/lib/enums/product";
 import { cn } from "@/lib/utils";
-import { ProductType } from "@prisma/client";
-import Image from "next/image";
-import { DEFAULT_EMPTY_PRODUCT_IMAGE } from "@/lib/constants";
+
 
 type ProductImageProps = {
   src: string;

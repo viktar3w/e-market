@@ -1,6 +1,8 @@
 "use client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
 import { useCallback, useEffect, useState } from "react";
+
 import { DEFAULT_EMPTY_PRODUCT_IMAGE, GET_ID_KEY } from "@/lib/constants";
 import { CategoryProductParent, VariantItem } from "@/lib/types/product";
 import { reduceProductVariants } from "@/lib/utils";

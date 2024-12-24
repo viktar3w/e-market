@@ -1,6 +1,7 @@
 import { PropsWithChildren, ReactNode } from "react";
-import { cn } from "@/lib/utils";
+
 import Title from "@/components/shared/common/Title";
+import { cn } from "@/lib/utils";
 
 type WhiteBlockProps = {
   className?: string;

@@ -1,9 +1,10 @@
-import { cn } from "@/lib/utils";
-import BoxWrapper from "@/components/shared/common/BoxWrapper";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+
 import Auth from "@/components/auth/Clerk";
+import BoxWrapper from "@/components/shared/common/BoxWrapper";
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type SupportHeaderProps = {
   className?: string;

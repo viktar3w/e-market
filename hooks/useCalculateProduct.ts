@@ -1,10 +1,11 @@
 "use client";
-import { VariantItem } from "@/lib/types/product";
 import { Component } from "@prisma/client";
 import { useCallback, useEffect, useMemo } from "react";
-import { getProductDetails } from "@/lib/utils";
-import { useAddCartItemMutation } from "@/lib/redux/api/cart.api";
+
 import { useToast } from "@/components/ui/use-toast";
+import { useAddCartItemMutation } from "@/lib/redux/api/cart.api";
+import { VariantItem } from "@/lib/types/product";
+import { getProductDetails } from "@/lib/utils";
 
 const useCalculateProduct = (
   activeVariant: VariantItem | null,

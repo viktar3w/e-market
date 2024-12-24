@@ -1,6 +1,6 @@
+import RangeSliderFilter from "@/components/shared/filters/RangeSliderFilter";
 import { Input } from "@/components/ui/input";
 import { MAX_PRICE, MIN_PRICE, PRICE_STEP } from "@/lib/constants";
-import RangeSliderFilter from "@/components/shared/filters/RangeSliderFilter";
 
 type PriceFilterProps = {
   title: string;

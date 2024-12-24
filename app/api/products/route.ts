@@ -1,5 +1,6 @@
-import { db } from "@/db";
 import { NextRequest, NextResponse } from "next/server";
+
+import { db } from "@/db";
 import { DEFAULT_PRODUCT_NUMBER_PAGE, DEFAULT_PRODUCT_SIZE } from "@/lib/constants";
 
 

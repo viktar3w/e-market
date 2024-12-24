@@ -1,7 +1,7 @@
 "use client";
 
-import { forwardRef, Fragment, RefObject, useEffect, useState } from "react";
 import * as SliderPrimitive from "@radix-ui/react-slider";
+import { forwardRef, Fragment, RefObject, useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 

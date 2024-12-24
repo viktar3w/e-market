@@ -1,6 +1,7 @@
 "use client";
-import { CategoryProductParent } from "@/lib/types/product";
 import { useSet } from "react-use";
+
+import { CategoryProductParent } from "@/lib/types/product";
 
 const useProductComponents = (product: CategoryProductParent) => {
   const [componentIds, {toggle: addComponent}] = useSet(new Set<string>([]))

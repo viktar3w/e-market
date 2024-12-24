@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CheckoutPlaceOrderSchema } from "@/lib/validations/checkout";
+
 import { PlaceOrderType } from "@/lib/types/checkout";
+import { CheckoutPlaceOrderSchema } from "@/lib/validations/checkout";
 
 export const checkoutApi = createApi({
   reducerPath: "checkoutApi",

@@ -1,11 +1,14 @@
 "use client";
 
-import { Modal } from "@/components/ui/modal";
-import { Menu, X } from "lucide-react";
-import Link from "next/link";
-import { PropsWithChildren, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+
+import { Menu, X } from "lucide-react";
+import { PropsWithChildren, useState } from "react";
+
+
 import Sidebar from "@/components/shared/support/header/Sidebar";
+import { Modal } from "@/components/ui/modal";
 
 const Layout = ({ children }: PropsWithChildren) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);

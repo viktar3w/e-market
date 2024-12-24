@@ -1,8 +1,9 @@
-import { AppType } from "@/server";
 import { hc } from "hono/client";
 import { HTTPException } from "hono/http-exception";
 import { StatusCode } from "hono/utils/http-status";
 import superjson from "superjson";
+
+import { AppType } from "@/server";
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") {

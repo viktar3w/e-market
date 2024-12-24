@@ -1,8 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
-import { API } from "@/lib/services/api-client";
 import { Component } from "@prisma/client";
+import { useEffect, useState } from "react";
 import { useSet } from "react-use";
+
+import { API } from "@/lib/services/api-client";
 
 export const useComponents = (ids: string[]) => {
   const [error, setError] = useState<any | null>(null);

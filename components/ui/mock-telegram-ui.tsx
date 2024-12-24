@@ -1,5 +1,5 @@
-import { PropsWithChildren } from "react";
 import { User, Menu, MoreVertical, Send } from "lucide-react";
+import { PropsWithChildren } from "react";
 
 export const MockTelegramUi = ({ children }: PropsWithChildren) => {
   return (

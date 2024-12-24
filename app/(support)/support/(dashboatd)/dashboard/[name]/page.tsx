@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
+
 import { currentUser } from "@clerk/nextjs/server";
 
-import { db } from "@/db";
-import DashboardWrapper from "@/components/shared/support/dashbord/DashboardWrapper";
 import CategoryPageContent from "@/components/shared/support/dashbord/category/CategoryPageContent";
+import EmptyCategoryState from "@/components/shared/support/dashbord/category/EmptyCategoryState";
+import DashboardWrapper from "@/components/shared/support/dashbord/DashboardWrapper";
+import { db } from "@/db";
 
 type PageProps = {
   params: {
@@ -50,8 +52,14 @@ const Page = async ({ params }: PageProps) => {
   }
   const hasEvents = category._count.events > 0;
   return (
-    <DashboardWrapper title={`${category.emoji} ${category.name} events`}>
-      <CategoryPageContent hasEvents={hasEvents} category={category} />
+    <DashboardWrapper
+      title={`${category.emoji} ${category.name.charAt(0).toUpperCase() + category.name.slice(1)} events`}
+    >
+      {hasEvents ? (
+        <CategoryPageContent category={category} />
+      ) : (
+        <EmptyCategoryState categoryName={category.name} />
+      )}
     </DashboardWrapper>
   );
 };

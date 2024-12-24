@@ -1,6 +1,6 @@
-import { ReactNode, isValidElement } from "react";
 import { render } from "@react-email/render";
 import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
+import { ReactNode, isValidElement } from "react";
 
 type SendEmailProps = {
   to: string;

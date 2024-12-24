@@ -1,7 +1,9 @@
-import { NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { Webhook } from "svix";
+import { NextResponse } from "next/server";
+
 import { WebhookEvent } from "@clerk/nextjs/server";
+import { Webhook } from "svix";
+
 import { userCreateWebhook, userDeleteWebhook } from "@/actions/clerkUser";
 
 export const POST = async (req: Request) => {

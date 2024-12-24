@@ -1,7 +1,9 @@
-import type { Metadata } from "next";
 import { ReactNode } from "react";
-import { Toaster } from "@/components/ui/toaster";
+
 import SupportHeader from "@/components/shared/header/SupportHeader";
+import { Toaster } from "@/components/ui/toaster";
+
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Create Next App",

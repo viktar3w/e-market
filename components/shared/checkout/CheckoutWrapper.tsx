@@ -1,18 +1,19 @@
 "use client";
+import { useEffect, useMemo, useState } from "react";
+
+import CartDrawerItemCheckout from "@/components/shared/checkout/CartDrawerItemCheckout";
+import CheckoutSkeleton from "@/components/shared/checkout/CheckoutSkeleton";
+import DeliveryForm from "@/components/shared/checkout/DeliveryForm";
+import PersonalDataForm from "@/components/shared/checkout/PersonalDataForm";
+import ProgressBar from "@/components/shared/checkout/ProgressBar";
+import Summary from "@/components/shared/checkout/Summary";
+import Accordion from "@/components/shared/common/Accordion";
 import BoxWrapper from "@/components/shared/common/BoxWrapper";
 import Title from "@/components/shared/common/Title";
 import WhiteBlock from "@/components/shared/common/WhiteBlock";
-import PersonalDataForm from "@/components/shared/checkout/PersonalDataForm";
-import DeliveryForm from "@/components/shared/checkout/DeliveryForm";
-import Summary from "@/components/shared/checkout/Summary";
-import { DeliveryForm as DeliveryFormType } from "@/lib/types/user";
-import CartDrawerItemCheckout from "@/components/shared/checkout/CartDrawerItemCheckout";
-import { useGetCartQuery } from "@/lib/redux/api/cart.api";
-import { useEffect, useMemo, useState } from "react";
-import CheckoutSkeleton from "@/components/shared/checkout/CheckoutSkeleton";
-import ProgressBar from "@/components/shared/checkout/ProgressBar";
-import Accordion from "@/components/shared/common/Accordion";
 import { CheckoutStep } from "@/lib/enums/checkout";
+import { useGetCartQuery } from "@/lib/redux/api/cart.api";
+import { DeliveryForm as DeliveryFormType } from "@/lib/types/user";
 const CheckoutWrapper = () => {
   const { data, isLoading } = useGetCartQuery();
   const [isShippingDisabled, setIsShippingDisabled] = useState<boolean>(true);

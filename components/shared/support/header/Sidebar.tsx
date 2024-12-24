@@ -1,9 +1,12 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+
+import { UserButton } from "@clerk/nextjs";
+
+import { buttonVariants } from "@/components/ui/button";
 import { SIDEBAR_ITEMS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import { UserButton } from "@clerk/nextjs";
+
 
 type SidebarProps = {
   onClose?: () => void;

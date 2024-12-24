@@ -1,7 +1,9 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { notFound, permanentRedirect } from "next/navigation";
-import { db } from "@/db";
+
+import { auth, currentUser } from "@clerk/nextjs/server";
+
 import Onboarding from "@/components/shared/customers/Onboarding";
+import { db } from "@/db";
 
 const Page = async () => {
   const { userId } = auth();

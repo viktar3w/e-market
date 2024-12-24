@@ -1,5 +1,6 @@
-import { CartState } from "@/lib/types/cart";
 import { Order, ShippingAddress } from "@prisma/client";
+
+import { CartState } from "@/lib/types/cart";
 
 export type PlaceOrderType = {
   url: string;

@@ -1,10 +1,12 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { reducer as categorySlicer } from "@/lib/redux/slices/categorySlicer";
-import { reducer as cartSlicer } from "@/lib/redux/slices/cartSlicer";
+import { setupListeners } from "@reduxjs/toolkit/query";
+
 import { cartApi } from "@/lib/redux/api/cart.api";
 import { checkoutApi } from "@/lib/redux/api/checkout.api";
 import { supportApi } from "@/lib/redux/api/support.api";
-import { setupListeners } from "@reduxjs/toolkit/query";
+import { reducer as cartSlicer } from "@/lib/redux/slices/cartSlicer";
+import { reducer as categorySlicer } from "@/lib/redux/slices/categorySlicer";
+
 
 const rootReducer = combineReducers({
   category: categorySlicer,

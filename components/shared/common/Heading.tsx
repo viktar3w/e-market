@@ -1,4 +1,5 @@
 import { HTMLAttributes, ReactNode } from "react";
+
 import { cn } from "@/lib/utils";
 
 type HeadingProps = HTMLAttributes<HTMLHeadElement> & {

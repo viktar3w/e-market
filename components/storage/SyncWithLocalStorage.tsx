@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
+
+import { useAppDispatch } from "@/hooks/redux";
 import { CART_LOCALSTORAGE } from "@/lib/constants";
 import { cartApi } from "@/lib/redux/api/cart.api";
-import { useAppDispatch } from "@/hooks/redux";
 
 const SyncWithLocalStorage = () => {
   const dispatch = useAppDispatch();

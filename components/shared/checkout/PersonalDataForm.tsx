@@ -1,4 +1,6 @@
 "use client";
+import BoxWrapper from "@/components/shared/common/BoxWrapper";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -8,10 +10,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import BoxWrapper from "@/components/shared/common/BoxWrapper";
-import { CustomerForm } from "@/lib/types/user";
 import { useCheckoutPersonalData } from "@/hooks/useCheckoutPersonalData";
+import { CustomerForm } from "@/lib/types/user";
 import { cn } from "@/lib/utils";
 type PersonalDataFormProps = {
   className?: string;

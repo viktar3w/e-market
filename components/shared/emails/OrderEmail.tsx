@@ -1,8 +1,9 @@
-import { Html } from "@react-email/html";
 import { Body } from "@react-email/body";
+import { Html } from "@react-email/html";
+
+import { CartState } from "@/lib/types/cart";
 import { OrderState } from "@/lib/types/checkout";
 import { formatPrice } from "@/lib/utils";
-import { CartState } from "@/lib/types/cart";
 type OrderEmailProps = {
   order: OrderState;
   cart: CartState;

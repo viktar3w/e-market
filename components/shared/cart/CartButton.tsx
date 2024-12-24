@@ -1,13 +1,14 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { ArrowRight, ShoppingCart } from "lucide-react";
-import CartDrawer from "@/components/shared/cart/CartDrawer";
-import { cn, formatPrice } from "@/lib/utils";
-import { useGetCartQuery } from "@/lib/redux/api/cart.api";
 import { useEffect, useState } from "react";
-import { CartItemState } from "@/lib/types/cart";
+
+import CartDrawer from "@/components/shared/cart/CartDrawer";
+import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/hooks/redux";
+import { useGetCartQuery } from "@/lib/redux/api/cart.api";
 import { selectCart } from "@/lib/redux/slices/cartSlicer";
+import { CartItemState } from "@/lib/types/cart";
+import { cn, formatPrice } from "@/lib/utils";
 
 type CartButtonProps = {
   className?: string;

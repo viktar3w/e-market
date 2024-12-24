@@ -1,5 +1,6 @@
-import { db } from "@/db";
 import { NextResponse } from "next/server";
+
+import { db } from "@/db";
 import { DEFAULT_COMPONENT_SIZE } from "@/lib/constants";
 
 export const GET = async () => {

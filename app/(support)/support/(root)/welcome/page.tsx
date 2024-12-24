@@ -1,10 +1,14 @@
 "use client";
-import { Icons } from "@/components/shared/support/Icons";
-import LoadingSpinner from "@/components/shared/common/LoadingSpinner";
-import Heading from "@/components/shared/common/Heading";
-import { useGetDatabaseSyncStatusQuery } from "@/lib/redux/api/support.api";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+
+import { useEffect } from "react";
+
+import Heading from "@/components/shared/common/Heading";
+import LoadingSpinner from "@/components/shared/common/LoadingSpinner";
+import { Icons } from "@/components/shared/support/Icons";
+import { useGetDatabaseSyncStatusQuery } from "@/lib/redux/api/support.api";
+
+
 
 const Page = () => {
   const { push } = useRouter();

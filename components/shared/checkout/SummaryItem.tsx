@@ -1,5 +1,6 @@
-import { cn, formatPrice } from "@/lib/utils";
 import { ReactNode } from "react";
+
+import { cn, formatPrice } from "@/lib/utils";
 
 type SummaryItemProps = {
   className?: string;

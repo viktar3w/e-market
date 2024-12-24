@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
-import { db } from "@/db";
+
 import CheckoutSuccess from "@/components/shared/checkout/CheckoutSuccess";
+import { db } from "@/db";
 import { OrderState } from "@/lib/types/checkout";
 
 const Page = async ({

@@ -1,15 +1,19 @@
-import BoxWrapper from "@/components/shared/common/BoxWrapper";
-import Heading from "@/components/shared/common/Heading";
-import { Icons } from "@/components/shared/support/Icons";
-import { Check, Star } from "lucide-react";
-import ShinyButton from "@/components/shared/common/ShinyButton";
-import { SignedOut, SignInButton } from "@clerk/nextjs";
-import { MockTelegramUi } from "@/components/ui/mock-telegram-ui";
-import { AnimatedList } from "@/components/ui/animated-list";
-import TelegramMessage from "@/components/shared/support/telegram/TelegramMessage";
 import Image from "next/image";
+
+import { SignedOut, SignInButton } from "@clerk/nextjs";
+import { Check, Star } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+
+import BoxWrapper from "@/components/shared/common/BoxWrapper";
+import Heading from "@/components/shared/common/Heading";
+import ShinyButton from "@/components/shared/common/ShinyButton";
+import { Icons } from "@/components/shared/support/Icons";
+import TelegramMessage from "@/components/shared/support/telegram/TelegramMessage";
+import { AnimatedList } from "@/components/ui/animated-list";
+import { MockTelegramUi } from "@/components/ui/mock-telegram-ui";
+
+
 
 const lines = [
   "Real-time Telegram alerts for critical events",

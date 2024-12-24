@@ -1,11 +1,13 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { useComponents } from "@/hooks/useComponents";
-import { PriceProps } from "@/components/shared/filters/PriceFilter";
-import { MAX_PRICE, MIN_PRICE } from "@/lib/constants";
-import { useDebounce } from "@/hooks/useDebounce";
+
 import qs from "qs";
+import { useEffect, useMemo, useState } from "react";
+
+import { PriceProps } from "@/components/shared/filters/PriceFilter";
+import { useComponents } from "@/hooks/useComponents";
+import { useDebounce } from "@/hooks/useDebounce";
+import { MAX_PRICE, MIN_PRICE } from "@/lib/constants";
 
 export const useHomeFilters = () => {
   const searchParams = useSearchParams();

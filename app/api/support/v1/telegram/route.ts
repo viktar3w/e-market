@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+
+import { SocialType } from "@prisma/client";
+
 import { handleFailedAttempt, isBlocked } from "@/actions/telegramUser";
 import { db } from "@/db";
-import { SocialType } from "@prisma/client";
-import { bot } from "@/lib/telegram/client";
 import { TELEGRAM_AUTH, TELEGRAM_COMMANDS } from "@/lib/constants";
+import { bot } from "@/lib/telegram/client";
 
 type CommandHandler = (chatId: number, args: string[]) => Promise<void>;
 

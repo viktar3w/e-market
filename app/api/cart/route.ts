@@ -1,17 +1,20 @@
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { CART_COOKIE_KEY } from "@/lib/constants";
-import { db } from "@/db";
-import { CartState, ProductItemState } from "@/lib/types/cart";
+
+import { auth } from "@clerk/nextjs/server";
+
 import { cartAction, getCart } from "@/actions/cartAction";
+import { db } from "@/db";
+import { CART_COOKIE_KEY } from "@/lib/constants";
+import { initialState } from "@/lib/redux/slices/cartSlicer";
+import { CartState, ProductItemState } from "@/lib/types/cart";
+import { areArraysEqual } from "@/lib/utils";
 import {
   CartIdRequestSchema,
   CartRequestSchema,
   CartUpdateRequestSchema,
 } from "@/lib/validations/cart";
-import { initialState } from "@/lib/redux/slices/cartSlicer";
-import { areArraysEqual } from "@/lib/utils";
-import { cookies } from "next/headers";
-import { auth } from "@clerk/nextjs/server";
+
 
 const GET = async () => {
   try {

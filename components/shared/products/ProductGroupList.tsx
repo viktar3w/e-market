@@ -1,13 +1,14 @@
 "use client";
-import ProductCart from "@/components/shared/products/ProductCart";
-import { cn, getMinimumPrice } from "@/lib/utils";
-import Title from "@/components/shared/common/Title";
 import { useEffect, useRef } from "react";
 import { useIntersection } from "react-use";
+
+import Title from "@/components/shared/common/Title";
+import ProductCart from "@/components/shared/products/ProductCart";
 import { useAppDispatch } from "@/hooks/redux";
+import { DEFAULT_EMPTY_PRODUCT_IMAGE } from "@/lib/constants";
 import { actions } from "@/lib/redux/slices/categorySlicer";
 import { CategoryProductParent } from "@/lib/types/product";
-import { DEFAULT_EMPTY_PRODUCT_IMAGE } from "@/lib/constants";
+import { cn, getMinimumPrice } from "@/lib/utils";
 
 type ProductGroupListProps = {
   categoryId: string;

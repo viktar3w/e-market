@@ -1,21 +1,22 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { PropsWithChildren, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Modal } from "@/components/ui/modal";
+import { useToast } from "@/components/ui/use-toast";
+import { EMOJI_OPTIONS, COLOR_OPTIONS } from "@/lib/constants";
+import { useCreateEventCategoryMutation } from "@/lib/redux/api/support.api";
+import { cn } from "@/lib/utils";
 import {
   SupportCreateEventCategoryRequest,
   SupportCreateEventCategorySchema,
 } from "@/lib/validations/support";
-import { Modal } from "@/components/ui/modal";
-import { Form } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { EMOJI_OPTIONS, COLOR_OPTIONS } from "@/lib/constants";
-import { cn } from "@/lib/utils";
-import { useCreateEventCategoryMutation } from "@/lib/redux/api/support.api";
-import { useToast } from "@/components/ui/use-toast";
 
 type CreateEventCategoryModal = {
   containerClassName?: string

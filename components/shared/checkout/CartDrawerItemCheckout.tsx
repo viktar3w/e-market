@@ -1,17 +1,18 @@
 "use client";
-import { cn } from "@/lib/utils";
+import { TrashIcon } from "lucide-react";
+import { useCallback, useEffect } from "react";
+
 import CartItemDetailImg from "@/components/shared/cart/CartItemDetailImg";
+import CartItemDetailPrice from "@/components/shared/cart/CartItemDetailPrice";
 import CartItemInfo from "@/components/shared/cart/CartItemInfo";
 import CountButton from "@/components/shared/common/CountButton";
-import CartItemDetailPrice from "@/components/shared/cart/CartItemDetailPrice";
-import { TrashIcon } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 import {
   useDeleteCartItemMutation,
   useUpdateCartItemMutation,
 } from "@/lib/redux/api/cart.api";
 import { CartItemState } from "@/lib/types/cart";
-import { useCallback, useEffect } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 type CartDrawerItemProps = {
   item: CartItemState;

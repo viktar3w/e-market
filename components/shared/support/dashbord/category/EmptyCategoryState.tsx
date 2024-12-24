@@ -1,23 +1,21 @@
-"use client";
+'use client';
 
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 
-import Card from "@/components/shared/common/Card";
-import { cn } from "@/lib/utils";
-import { usePollCategoryQuery } from "@/lib/redux/api/support.api";
+import { useEffect } from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+import Card from '@/components/shared/common/Card';
+import { usePollCategoryQuery } from '@/lib/redux/api/support.api';
+import { cn } from '@/lib/utils';
 
 type EmptyCategoryStateProps = {
   categoryName: string;
   className?: string;
 };
 
-const EmptyCategoryState = ({
-  categoryName,
-  className,
-}: EmptyCategoryStateProps) => {
+const EmptyCategoryState = ({ categoryName, className }: EmptyCategoryStateProps) => {
   const { refresh } = useRouter();
   const { data } = usePollCategoryQuery(
     { name: categoryName },
@@ -28,7 +26,7 @@ const EmptyCategoryState = ({
   useEffect(() => {
     !!data?.success && refresh();
   }, [data?.success, refresh]);
-  const codeSnippet = `await fetch('http://localhost:3000/api/support/v1/events', {
+  const codeSnippet = `await fetch('${process.env.NEXT_PUBLIC_SERVER_URL}/api/support/v1/[messenger_type]/events', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY'
@@ -36,19 +34,19 @@ const EmptyCategoryState = ({
   body: JSON.stringify({
     category: '${categoryName}',
     fields: {
-      field1: 'value1', // for example: user id
-      field2: 'value2' // for example: user email
+      field1: 'value1', // for example: "user_id: 1234"
+      field2: 'value2' // for example: "email: 'email@test.com'"
     }
   })
 })`;
   return (
     <Card
       contentClassName="max-w-2xl w-full flex flex-col items-center p-6"
-      className={cn("flex-1 flex items-center justify-center", className)}
+      className={cn('flex-1 flex items-center justify-center', className)}
     >
       <h2 className="text-xl/8 font-medium text-center tracking-tight text-gray-950">
-        {" "}
-        Create your first {categoryName} event
+        {' '}
+        Create your first {categoryName.charAt(0).toUpperCase() + categoryName.slice(1)} event
       </h2>
       <p className="text-sm/6 text-gray-600 mb-8 max-w-md text-center text-pretty">
         Get started by sending a request to our tracking API:
@@ -66,11 +64,11 @@ const EmptyCategoryState = ({
           language="javascript"
           style={atomDark}
           customStyle={{
-            borderRadius: "0",
+            borderRadius: '0',
             margin: 0,
-            padding: "1rem",
-            fontSize: "0.875rem",
-            lineHeight: "1.5",
+            padding: '1rem',
+            fontSize: '0.875rem',
+            lineHeight: '1.5',
           }}
         >
           {codeSnippet}
@@ -79,17 +77,15 @@ const EmptyCategoryState = ({
       <div className="mt-8 flex flex-col items-center space-x-2">
         <div className="flex gap-2 items-center">
           <div className="size-2 bg-green-500 rounded-full animate-pulse" />
-          <span className="text-sm text-gray-600">
-            Listening to incoming events...
-          </span>
+          <span className="text-sm text-gray-600">Listening to incoming events...</span>
         </div>
 
         <p className="text-sm/6 text-gray-600 mt-2">
-          Need help? Check out our{" "}
+          Need help? Check out our{' '}
           <a href="#" className="text-blue-600 hover:underline">
             documentation
-          </a>{" "}
-          or{" "}
+          </a>{' '}
+          or{' '}
           <a href="#" className="text-blue-600 hover:underline">
             contact us
           </a>

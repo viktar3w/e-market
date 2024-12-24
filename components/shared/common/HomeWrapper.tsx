@@ -1,13 +1,15 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { useCategories } from "@/hooks/useCategories";
+
+import { Suspense } from "react";
+
 import BoxWrapper from "@/components/shared/common/BoxWrapper";
 import Title from "@/components/shared/common/Title";
-import { Suspense } from "react";
 import TopBar from "@/components/shared/common/TopBar";
 import DefaultFilter from "@/components/shared/filters/DefaultFilter";
 import ProductCartSkeleton from "@/components/shared/products/ProductCartSkeleton";
 import ProductGroupList from "@/components/shared/products/ProductGroupList";
+import { useCategories } from "@/hooks/useCategories";
 
 const HomeWrapper = () => {
   const searchParams = useSearchParams();
