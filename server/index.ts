@@ -4,8 +4,8 @@ import { handle } from "hono/vercel"
 
 import { authRouter } from "./routers/auth-router"
 import { categoryRouter } from "./routers/category-router"
-// import { paymentRouter } from "./routers/payment-router"
-// import { projectRouter } from "./routers/project-router"
+import { paymentRouter } from "./routers/payment-router"
+import { projectRouter } from "./routers/project-router"
 
 const app = new Hono().basePath("/api/support").use(cors())
 
@@ -17,8 +17,8 @@ const app = new Hono().basePath("/api/support").use(cors())
 const appRouter = app
   .route("/auth", authRouter)
   .route("/categories", categoryRouter)
-  // .route("/payment", paymentRouter)
-  // .route("/project", projectRouter)
+  .route("/payment", paymentRouter)
+  .route("/project", projectRouter)
 
 // The handler Next.js uses to answer API requests
 export const httpHandler = handle(app)

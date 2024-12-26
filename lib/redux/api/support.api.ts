@@ -1,3 +1,4 @@
+import { SupportPlan } from '@prisma/client';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { EventByNameRequest, EventByNameResponse } from '@/lib/types/support/event';
@@ -11,7 +12,7 @@ export const supportApi = createApi({
     baseUrl: '/api/support/',
     credentials: 'same-origin',
   }),
-  tagTypes: ['Support_Default', 'Support_Categories', 'Support_Events'],
+  tagTypes: ['Support_Default', 'Support_Categories', 'Support_Events', 'Support_Project'],
   endpoints: (builder) => ({
     getDatabaseSyncStatus: builder.query<{ isSynced: boolean }, void>({
       query: () => ({
@@ -72,6 +73,46 @@ export const supportApi = createApi({
       },
       providesTags: [{ type: 'Support_Events', id: 'LIST' }],
     }),
+    createCheckoutSession: builder.mutation<{ url: string }, void>({
+      query: () => ({
+        url: 'payment/createCheckoutSession',
+        method: 'POST',
+      }),
+      invalidatesTags: [{ type: 'Support_Default', id: 'LIST' }],
+    }),
+    getUserPlan: builder.query<{ plan: SupportPlan }, void>({
+      query: () => ({
+        url: 'payment/getUserPlan',
+      }),
+      providesTags: [{ type: 'Support_Default', id: 'LIST' }],
+    }),
+    getUsage: builder.query<
+      {
+        categoriesUsed: number;
+        categoriesLimit: number;
+        eventsUsed: number;
+        eventsLimit: number;
+        resetDate: Date;
+      },
+      void
+    >({
+      query: () => ({
+        url: 'project/getUsage',
+        responseHandler: async (response): Promise<EventByNameResponse> => {
+          const data = await response.json();
+          return (
+            data?.json || {
+              categoriesUsed: 0,
+              categoriesLimit: 0,
+              eventsUsed: 0,
+              eventsLimit: 0,
+              resetDate: new Date(),
+            }
+          );
+        },
+      }),
+      providesTags: [{ type: 'Support_Project', id: 'LIST' }],
+    }),
   }),
 });
 
@@ -82,5 +123,8 @@ export const {
   useDeleteCategoryMutation,
   useCreateEventCategoryMutation,
   useInsertQuickstartCategoriesMutation,
+  useCreateCheckoutSessionMutation,
   useGetEventsByCategoryNameQuery,
+  useGetUserPlanQuery,
+  useGetUsageQuery,
 } = supportApi;
