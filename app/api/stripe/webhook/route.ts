@@ -1,109 +1,51 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
-import { OrderStatus, Prisma } from "@prisma/client";
-import Stripe from "stripe";
+import Stripe from 'stripe';
 
-import { db } from "@/db";
-import { stripe } from "@/lib/stripe/stripe";
+import { updateOrder } from '@/actions/checkoutAction';
+import { updateUserPlan } from '@/actions/supportAction';
+import { PaymentType } from '@/lib/enums/payment';
+import { stripe } from '@/lib/stripe/stripe';
 
 export async function POST(req: Request) {
+  let message = '';
   try {
     const body = await req.text();
-    const sig = req.headers.get("stripe-signature");
+    const sig = req.headers.get('stripe-signature');
     if (!sig) {
-      return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
     const webToken =
-      process.env.NODE_ENV === "development"
+      process.env.NODE_ENV === 'development'
         ? process.env.STRIPE_WEBHOOK_DEV_SECRET_KEY!
         : process.env.STRIPE_WEBHOOK_SECRET_KEY!;
-    console.log(
-      "[verifyHeader] ",
-      stripe.webhooks.signature.verifyHeader(body, sig, webToken),
-    );
+    console.log('[verifyHeader] ', stripe.webhooks.signature.verifyHeader(body, sig, webToken));
     const event = stripe.webhooks.constructEvent(body, sig, webToken);
     const session = event?.data?.object as Stripe.Checkout.Session;
-    const token = session?.metadata?.token;
-    if (!token) {
-      console.log("Invalid metadata");
-      return new NextResponse("Invalid metadata");
+    const type = session?.metadata?.type;
+    if (!type) {
+      console.log('Invalid metadata');
+      return new NextResponse('Invalid metadata');
     }
-    const order = await db.order.findFirst({
-      where: {
-        token,
-      },
-      include: {
-        billingAddress: true,
-        shippingAddress: true,
-      },
-    });
-    if (!order) {
-      console.log("Invalid order");
-      return new NextResponse("Invalid order");
+    if (type === PaymentType.SHOP_PRODUCT) {
+      const result = await updateOrder(session, event.type);
+      if (typeof result === 'string') {
+        console.log('[ERROR] checkout updateOrder: ', result);
+        return new NextResponse(result);
+      }
+      message = result ? 'Order was updated' : 'Something was wrong, try again later';
+    } else if (type === PaymentType.SUPPORT) {
+      const result = await updateUserPlan(session, event.type);
+      if (typeof result === 'string') {
+        console.log(result);
+        return new NextResponse(result);
+      }
+      message = result ? 'Support plan was updated' : "We couldn't update support plan. Please try again later";
     }
-    const data: Prisma.OrderUpdateInput = {
-      status: order.status,
-    };
-    const billingAddress: Stripe.Checkout.Session.CustomerDetails | null =
-      // @ts-ignore
-      session?.customer_details;
-    switch (event.type) {
-      case "checkout.session.async_payment_failed":
-        data.status = OrderStatus.CANCELLED;
-        break;
-      case "checkout.session.async_payment_succeeded":
-        break;
-      case "checkout.session.completed":
-        const customText = (session?.custom_text ||
-          {}) as Stripe.Checkout.Session.CustomText;
-        data.status = OrderStatus.SUCCEEDED;
-        data.paymentId = session.id;
-        data.items = {
-          status: String(session?.status),
-          custom_text: {
-            ...customText
-          },
-        } as Prisma.InputJsonObject;
-        if (!order.billingAddress && !!billingAddress) {
-          const name = billingAddress?.name?.split(" ") || [
-            order.shippingAddress.firstname,
-            order.shippingAddress.lastname,
-          ];
-          data.billingAddress = {
-            create: {
-              city: billingAddress.address?.city || order.shippingAddress.city,
-              country:
-                billingAddress.address?.country ||
-                order.shippingAddress.country,
-              street: [
-                billingAddress.address?.line1 || "",
-                billingAddress.address?.line2 || "",
-              ].join(" "),
-              postcode:
-                billingAddress.address?.postal_code ||
-                order.shippingAddress.postcode,
-              state:
-                billingAddress.address?.state || order.shippingAddress.state,
-              firstname: name[0],
-              lastname: name[1] || order.shippingAddress.lastname,
-              phone: billingAddress.phone || order.shippingAddress.phone,
-              // @ts-ignore
-              email: billingAddress?.email || order.shippingAddress.email,
-            },
-          };
-        }
-        break;
-    }
-    await db.order.update({
-      data: data,
-      where: {
-        id: order.id,
-      },
-    });
   } catch (err: any) {
-    console.log("[ERROR] ", err);
-    return NextResponse.json({ error: "Something was wrong" }, { status: 400 });
+    console.log('[ERROR] ', err);
+    return NextResponse.json({ error: 'Something was wrong' }, { status: 400 });
   }
-  console.log("Order was updated");
-  return new NextResponse("Order was updated");
+  console.log(message);
+  return new NextResponse(message);
 }

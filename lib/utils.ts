@@ -178,3 +178,7 @@ export const parseColor = (color: string) => {
   const hex = color.startsWith('#') ? color.slice(1) : color;
   return parseInt(hex, 16);
 };
+
+export const sanitize = (html: string) => {
+  return html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+};

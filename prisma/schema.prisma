@@ -106,6 +106,7 @@ model Social {
   updatedAt DateTime @updatedAt
 
   @@unique([authKey, type])
+  @@index([supportId, type])
 }
 
 model Category {

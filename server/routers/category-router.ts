@@ -2,7 +2,7 @@ import { startOfDay, startOfMonth, startOfWeek } from 'date-fns';
 import { HTTPException } from 'hono/http-exception';
 
 import { db } from '@/db';
-import { parseColor } from '@/lib/utils';
+import { parseColor, sanitize } from "@/lib/utils";
 import {
   SupportCategoryDeleteByNameSchema,
   SupportCreateEventCategorySchema,
@@ -80,7 +80,7 @@ export const categoryRouter = router({
       where: {
         supportId_name: {
           supportId: ctx.support.id,
-          name: name,
+          name: sanitize(name),
         },
       },
     });
@@ -93,7 +93,7 @@ export const categoryRouter = router({
     const { color, name, emoji } = input;
     const eventCategory = await db.eventCategory.create({
       data: {
-        name: name.toLowerCase(),
+        name: sanitize(name.toLowerCase()),
         color: parseColor(color),
         emoji,
         supportId: support.id,
@@ -142,10 +142,10 @@ export const categoryRouter = router({
   getEventsByCategoryName: privateProcedure.query(async ({ c, ctx }) => {
     const params = c.req.query();
     const input = SupportEventsByCategoryNameSchema.parse({
-      name: params.name,
-      page: params.page,
-      limit: params.limit,
-      timeRange: params.timeRange,
+      name: sanitize(params.name),
+      page: sanitize(params.page),
+      limit: sanitize(params.limit),
+      timeRange: sanitize(params.timeRange),
     });
     const { name, page, limit, timeRange } = input;
 

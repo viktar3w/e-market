@@ -11,7 +11,7 @@ import OrderEmail from '@/components/shared/emails/OrderEmail';
 import { db } from '@/db';
 import { CART_COOKIE_KEY } from '@/lib/constants';
 import { sendEmail } from '@/lib/email';
-import { stripe } from '@/lib/stripe/stripe';
+import { createProductSession, stripe } from '@/lib/stripe/stripe';
 import { CartState } from '@/lib/types/cart';
 import { OrderState } from '@/lib/types/checkout';
 import {
@@ -130,17 +130,7 @@ const POST = async (req: NextRequest) => {
       quantity: 1,
     });
   }
-  const stripeSession = await stripe.checkout.sessions.create({
-    success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout/success?token=${token}`,
-    cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/checkout/error?token=${token}`,
-    payment_method_types: ['card'],
-    mode: 'payment',
-    billing_address_collection: 'required',
-    metadata: {
-      token: order.token,
-    },
-    line_items: lineItems,
-  });
+  const stripeSession = await createProductSession(token, lineItems);
   await db.cart.update({
     where: {
       id: cartInfo.id,
@@ -151,7 +141,7 @@ const POST = async (req: NextRequest) => {
   });
   cookies().delete(CART_COOKIE_KEY);
   try {
-    sendEmail({
+    await sendEmail({
       to: cartInfo.shippingAddress.email,
       subject: 'e-Market: Your order was created',
       from: 'v.starovoitou@trial-3z0vklo17n7g7qrx.mlsender.net',

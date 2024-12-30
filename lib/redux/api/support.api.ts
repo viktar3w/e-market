@@ -113,6 +113,14 @@ export const supportApi = createApi({
       }),
       providesTags: [{ type: 'Support_Project', id: 'LIST' }],
     }),
+    setTelegramID: builder.mutation<ResultResponse, { telegramId: string }>({
+      query: (body) => ({
+        url: 'project/setTelegramID',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: [{ type: 'Support_Project', id: 'LIST' }],
+    }),
   }),
 });
 
@@ -127,4 +135,5 @@ export const {
   useGetEventsByCategoryNameQuery,
   useGetUserPlanQuery,
   useGetUsageQuery,
+  useSetTelegramIDMutation,
 } = supportApi;

@@ -1,16 +1,11 @@
-"use server";
+'use server';
 
-import { db } from "@/db";
-import { User } from "@prisma/client";
-import DOMPurify from "isomorphic-dompurify";
+import { User } from '@prisma/client';
+import DOMPurify from 'isomorphic-dompurify';
 
-export const createUser = async ({
-  id,
-  email,
-  firstname,
-  lastname,
-  image,
-}: User) => {
+import { db } from '@/db';
+
+export const createUser = async ({ id, email, firstname, lastname, image }: User) => {
   try {
     const user = await db.user.findUnique({
       where: {
@@ -26,11 +21,11 @@ export const createUser = async ({
         email: DOMPurify.sanitize(email),
         firstname: DOMPurify.sanitize(firstname),
         lastname: DOMPurify.sanitize(lastname),
-        image: DOMPurify.sanitize(image || ""),
+        image: DOMPurify.sanitize(image || ''),
       },
     });
   } catch (err: any) {
-    console.log("[ERROR] createUser: ", err);
+    console.log('[ERROR] createUser: ', err);
     return null;
   }
 };

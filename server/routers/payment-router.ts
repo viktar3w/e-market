@@ -1,4 +1,4 @@
-import { createCheckoutSession } from '@/lib/stripe/stripe';
+import { createSupportSession } from '@/lib/stripe/stripe';
 
 import { router } from '../__internals/router';
 import { privateProcedure } from '../procedures';
@@ -8,12 +8,12 @@ export const paymentRouter = router({
     const { support } = ctx;
     let session;
     try {
-      session = await createCheckoutSession({
+      session = await createSupportSession({
         userEmail: support.user.email,
-        userId: support.user.id,
+        supportId: support.id,
       });
     } catch (e: any) {
-      console.log("[ERROR] ", e.message)
+      console.log('[ERROR] ', e.message);
     }
 
     return c.json({ url: session?.url });

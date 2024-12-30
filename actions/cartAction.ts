@@ -1,8 +1,10 @@
-import { db } from "@/db";
-import { Cart, CartStatus } from "@prisma/client";
-import { CART_COOKIE_KEY } from "@/lib/constants";
-import { cookies } from "next/headers";
-import { auth } from "@clerk/nextjs/server";
+import { cookies } from 'next/headers';
+
+import { auth } from '@clerk/nextjs/server';
+import { Cart, CartStatus } from '@prisma/client';
+
+import { db } from '@/db';
+import { CART_COOKIE_KEY } from '@/lib/constants';
 
 export const cartAction = async (cart: Cart) => {
   const items = await db.cartItem.findMany({
@@ -31,7 +33,7 @@ export const cartAction = async (cart: Cart) => {
 export const getCart = async () => {
   const id = cookies().get(CART_COOKIE_KEY)?.value;
   if (!id) {
-    throw new Error("Something was wrong! Please try again");
+    throw new Error('Something was wrong! Please try again');
   }
   const cart = await db.cart.findUnique({
     where: { id, status: CartStatus.ACTIVE },
@@ -41,12 +43,9 @@ export const getCart = async () => {
     throw new Error("We can't find cart");
   }
   const { userId } = auth();
-  if (
-    (!userId && !!cart?.userId) ||
-    (!!userId && !!cart?.userId && userId !== cart.userId)
-  ) {
+  if ((!userId && !!cart?.userId) || (!!userId && !!cart?.userId && userId !== cart.userId)) {
     cookies().delete(CART_COOKIE_KEY);
-    throw new Error("Customer was logout");
+    throw new Error('Customer was logout');
   }
   return cart;
 };
@@ -70,5 +69,5 @@ export const getCartToken = async (userId?: string): Promise<string> => {
   } catch (e: any) {
     console.log("[ERROR] can't create cart: ", e.message);
   }
-  return "";
+  return '';
 };
