@@ -1,6 +1,5 @@
 'use client';
 
-import { useQuery } from '@apollo/client';
 import { Suspense, useMemo } from 'react';
 
 import BoxWrapper from '@/components/shared/common/BoxWrapper';

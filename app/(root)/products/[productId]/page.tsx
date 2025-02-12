@@ -1,7 +1,14 @@
-import { notFound } from "next/navigation";
-import { db } from "@/db";
-import ProductForm from "@/components/shared/products/ProductForm";
-import { CategoryProductParent } from "@/lib/types/product";
+import { notFound } from 'next/navigation';
+
+import { QueryOptions } from '@apollo/client';
+
+import ProductForm from '@/components/shared/products/ProductForm';
+import {
+  GetProductDocument,
+  GetProductQuery,
+  GetProductQueryVariables,
+} from '@/documents/generates/hooks/apollo';
+import { client } from '@/lib/apollo/client';
 
 type PageProps = {
   params: {
@@ -10,30 +17,23 @@ type PageProps = {
 };
 const Page = async ({ params }: PageProps) => {
   const { productId } = params;
-  if (!productId) {
+  const { data, loading, error } = await client.query({
+    ...({
+      variables: {
+        filter: {
+          ids: [productId],
+        },
+      },
+    } as QueryOptions<GetProductQueryVariables, GetProductQuery>),
+    query: GetProductDocument,
+  });
+  if (loading) {
+    return <></>;
+  }
+  if (!!error || !data?.products?.items?.[0]) {
     return notFound();
   }
-  let product: CategoryProductParent
-  try {
-    // @ts-ignore
-    product = await db.product.findUnique({
-      where: {
-        id: productId,
-      },
-      include: {
-        variants: true,
-        components: true,
-        categories: true,
-      },
-    });
-  } catch (e) {
-    console.log("[ERROR]: ", e)
-  }
-  // @ts-ignore
-  if (!product) {
-    return notFound();
-  }
-  return <ProductForm product={product} className='mt-20' />;
+  return <ProductForm product={data?.products?.items?.[0]} className="mt-20" />;
 };
 
 export default Page;

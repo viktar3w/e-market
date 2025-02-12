@@ -1,26 +1,20 @@
-"use client";
-import { DeliveryForm as DeliveryFormType } from "@/lib/types/user";
-import { useCheckoutDelivery } from "@/hooks/useCheckoutDelivery";
-import BoxWrapper from "@/components/shared/common/BoxWrapper";
-import { cn } from "@/lib/utils";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  APIProvider,
-} from '@vis.gl/react-google-maps';
-import PlaceAutocomplete from "@/components/shared/Map/PlaceAutocomplete";
+'use client';
+
+import { APIProvider } from '@vis.gl/react-google-maps';
+
+import BoxWrapper from '@/components/shared/common/BoxWrapper';
+import PlaceAutocomplete from '@/components/shared/Map/PlaceAutocomplete';
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useCheckoutDelivery } from '@/hooks/useCheckoutDelivery';
+import { DeliveryForm as DeliveryFormType } from '@/lib/types/user';
+import { cn } from '@/lib/utils';
 
 type DeliveryFormProps = {
   className?: string;
   disabled?: boolean;
+  isAddress?: boolean;
 } & DeliveryFormType;
 const DeliveryForm = ({
   className,
@@ -34,6 +28,7 @@ const DeliveryForm = ({
   phone,
   email,
   disabled = true,
+  isAddress = false,
 }: DeliveryFormProps) => {
   const { form, onSubmit, loading, setAddressAutocomplete } = useCheckoutDelivery({
     firstname,
@@ -45,31 +40,23 @@ const DeliveryForm = ({
     postcode,
     phone,
     email,
+    isAddress,
   });
   return (
     <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!}>
-      <BoxWrapper className={cn("flex flex-col gap-10 items-center justify-center", className)}>
+      <BoxWrapper className={cn('flex flex-col gap-10 items-center justify-center', className)}>
         <PlaceAutocomplete onPlaceSelect={setAddressAutocomplete} />
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-10 items-center justify-center"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-10 items-center justify-center">
             <div className="grid grid-cols-2 gap-5">
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem className="flex w-full flex-col gap-3">
-                    <FormLabel className="text-base-semibold text-light-2">
-                      Email
-                    </FormLabel>
+                    <FormLabel className="text-base-semibold text-light-2">Email</FormLabel>
                     <FormControl>
-                      <Input
-                        type="text"
-                        className="account-form_input no-focuse"
-                        {...field}
-                      />
+                      <Input type="text" className="account-form_input no-focuse" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -80,15 +67,9 @@ const DeliveryForm = ({
                 name="firstname"
                 render={({ field }) => (
                   <FormItem className="flex w-full flex-col gap-3">
-                    <FormLabel className="text-base-semibold text-light-2">
-                      Firstname
-                    </FormLabel>
+                    <FormLabel className="text-base-semibold text-light-2">Firstname</FormLabel>
                     <FormControl>
-                      <Input
-                        type="text"
-                        className="account-form_input no-focuse"
-                        {...field}
-                      />
+                      <Input type="text" className="account-form_input no-focuse" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -99,15 +80,9 @@ const DeliveryForm = ({
                 name="lastname"
                 render={({ field }) => (
                   <FormItem className="flex w-full flex-col gap-3">
-                    <FormLabel className="text-base-semibold text-light-2">
-                      Lastname
-                    </FormLabel>
+                    <FormLabel className="text-base-semibold text-light-2">Lastname</FormLabel>
                     <FormControl>
-                      <Input
-                        type="text"
-                        className="account-form_input no-focuse"
-                        {...field}
-                      />
+                      <Input type="text" className="account-form_input no-focuse" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -118,15 +93,9 @@ const DeliveryForm = ({
                 name="phone"
                 render={({ field }) => (
                   <FormItem className="flex w-full flex-col gap-3">
-                    <FormLabel className="text-base-semibold text-light-2">
-                      Phone
-                    </FormLabel>
+                    <FormLabel className="text-base-semibold text-light-2">Phone</FormLabel>
                     <FormControl>
-                      <Input
-                        type="text"
-                        className="account-form_input no-focuse"
-                        {...field}
-                      />
+                      <Input type="text" className="account-form_input no-focuse" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -137,15 +106,9 @@ const DeliveryForm = ({
                 name="country"
                 render={({ field }) => (
                   <FormItem className="flex w-full flex-col gap-3">
-                    <FormLabel className="text-base-semibold text-light-2">
-                      Country
-                    </FormLabel>
+                    <FormLabel className="text-base-semibold text-light-2">Country</FormLabel>
                     <FormControl>
-                      <Input
-                        type="text"
-                        className="account-form_input no-focuse"
-                        {...field}
-                      />
+                      <Input type="text" className="account-form_input no-focuse" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -156,15 +119,9 @@ const DeliveryForm = ({
                 name="city"
                 render={({ field }) => (
                   <FormItem className="flex w-full flex-col gap-3">
-                    <FormLabel className="text-base-semibold text-light-2">
-                      City
-                    </FormLabel>
+                    <FormLabel className="text-base-semibold text-light-2">City</FormLabel>
                     <FormControl>
-                      <Input
-                        type="text"
-                        className="account-form_input no-focuse"
-                        {...field}
-                      />
+                      <Input type="text" className="account-form_input no-focuse" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -175,15 +132,9 @@ const DeliveryForm = ({
                 name="state"
                 render={({ field }) => (
                   <FormItem className="flex w-full flex-col gap-3">
-                    <FormLabel className="text-base-semibold text-light-2">
-                      State
-                    </FormLabel>
+                    <FormLabel className="text-base-semibold text-light-2">State</FormLabel>
                     <FormControl>
-                      <Input
-                        type="text"
-                        className="account-form_input no-focuse"
-                        {...field}
-                      />
+                      <Input type="text" className="account-form_input no-focuse" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -194,15 +145,9 @@ const DeliveryForm = ({
                 name="street"
                 render={({ field }) => (
                   <FormItem className="flex w-full flex-col gap-3">
-                    <FormLabel className="text-base-semibold text-light-2">
-                      Address
-                    </FormLabel>
+                    <FormLabel className="text-base-semibold text-light-2">Address</FormLabel>
                     <FormControl>
-                      <Input
-                        type="text"
-                        className="account-form_input no-focuse"
-                        {...field}
-                      />
+                      <Input type="text" className="account-form_input no-focuse" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -213,26 +158,16 @@ const DeliveryForm = ({
                 name="postcode"
                 render={({ field }) => (
                   <FormItem className="flex w-full flex-col gap-3">
-                    <FormLabel className="text-base-semibold text-light-2">
-                      Postcode
-                    </FormLabel>
+                    <FormLabel className="text-base-semibold text-light-2">Postcode</FormLabel>
                     <FormControl>
-                      <Input
-                        type="text"
-                        className="account-form_input no-focuse"
-                        {...field}
-                      />
+                      <Input type="text" className="account-form_input no-focuse" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            <Button
-              type="submit"
-              loading={loading}
-              disabled={loading || disabled}
-            >
+            <Button type="submit" loading={loading} disabled={loading || disabled}>
               Submit
             </Button>
           </form>

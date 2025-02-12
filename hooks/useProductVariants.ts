@@ -1,23 +1,20 @@
-"use client";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { DEFAULT_EMPTY_PRODUCT_IMAGE, GET_ID_KEY } from "@/lib/constants";
-import { CategoryProductParent, VariantItem } from "@/lib/types/product";
-import { reduceProductVariants } from "@/lib/utils";
+'use client';
+
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+
+import { useCallback, useEffect, useState } from 'react';
+
+import { DEFAULT_EMPTY_PRODUCT_IMAGE, GET_ID_KEY } from '@/lib/constants';
+import { CategoryProductParent, VariantItem } from '@/lib/types/product';
+import { reduceProductVariants } from '@/lib/utils';
 
 export const useProductVariants = (product: CategoryProductParent) => {
-  const {push} = useRouter()
+  const { push } = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const [mainImage, setMainImage] = useState<string>(
-    product?.image || DEFAULT_EMPTY_PRODUCT_IMAGE,
-  );
-  const [selectedOptions, setSelectedOptions] = useState<Record<string, any>>(
-    {},
-  );
-  const [groupedVariants, setGroupedVariants] = useState<
-    Record<string, Record<string, VariantItem[]>>
-  >({});
+  const [mainImage, setMainImage] = useState<string>(product?.image || DEFAULT_EMPTY_PRODUCT_IMAGE);
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, any>>({});
+  const [groupedVariants, setGroupedVariants] = useState<Record<string, Record<string, VariantItem[]>>>({});
   const [activeVariant, setActiveVariant] = useState<VariantItem | null>(null);
 
   useEffect(() => {
@@ -29,12 +26,10 @@ export const useProductVariants = (product: CategoryProductParent) => {
     if (!id || id !== activeVariant.id) {
       const newSearchParams = new URLSearchParams(window.location.search);
       newSearchParams.set(GET_ID_KEY, activeVariant.id);
-      push(`?${newSearchParams.toString()}`)
+      push(`?${newSearchParams.toString()}`);
     }
 
-    setMainImage(
-      activeVariant?.image || product?.image || DEFAULT_EMPTY_PRODUCT_IMAGE,
-    );
+    setMainImage(activeVariant?.image || product?.image || DEFAULT_EMPTY_PRODUCT_IMAGE);
   }, [activeVariant, pathname, product?.image, push, searchParams]);
 
   useEffect(() => {
@@ -45,10 +40,7 @@ export const useProductVariants = (product: CategoryProductParent) => {
       setActiveVariant(product.variants[0]);
       return;
     }
-    const variants = product.variants.reduce(
-      reduceProductVariants,
-      {} as Record<string, Record<string, any>>,
-    );
+    const variants = product.variants.reduce(reduceProductVariants, {} as Record<string, Record<string, any>>);
     const id = searchParams.get(GET_ID_KEY);
     if (!!id) {
       const activeVariant = product.variants.find((v) => v.id === id);
@@ -69,10 +61,7 @@ export const useProductVariants = (product: CategoryProductParent) => {
               if (currentIndex === 0) {
                 abject[key] = variants[key];
               } else {
-                const options =
-                  abject[keys[currentIndex - 1]][
-                    String(activeVariant.data[keys[currentIndex - 1]])
-                  ];
+                const options = abject[keys[currentIndex - 1]][String(activeVariant.data[keys[currentIndex - 1]])];
                 abject[key] = options.reduce(
                   (acc: Record<string, VariantItem[]>, item: VariantItem) => {
                     const value = String(item.data[key]);
@@ -95,8 +84,7 @@ export const useProductVariants = (product: CategoryProductParent) => {
       .slice(0, 1)
       .reduce(
         (object, key, currentIndex) => {
-          object[key] =
-            currentIndex === 0 && !!variants[key] ? variants[key] : {};
+          object[key] = currentIndex === 0 && !!variants[key] ? variants[key] : {};
           return object;
         },
         {} as Record<string, Record<string, any>>,
@@ -120,11 +108,7 @@ export const useProductVariants = (product: CategoryProductParent) => {
       },
       {} as Record<string, Record<string, any>> | VariantItem[],
     );
-    if (
-      !Array.isArray(variants) ||
-      variants.length !== 1 ||
-      !variants?.[0]?.data
-    ) {
+    if (!Array.isArray(variants) || variants.length !== 1 || !variants?.[0]?.data) {
       setActiveVariant(null);
       return;
     }

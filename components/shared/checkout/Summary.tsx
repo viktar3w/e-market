@@ -1,11 +1,13 @@
 "use client";
-import { CartState } from "@/lib/types/cart";
-import { cn, formatPrice } from "@/lib/utils";
-import { memo } from "react";
-import SummaryItem from "@/components/shared/checkout/SummaryItem";
+
 import { ArrowRight, Package, Percent, Truck } from "lucide-react";
+import { memo } from "react";
+
+import SummaryItem from "@/components/shared/checkout/SummaryItem";
 import { Button } from "@/components/ui/button";
 import { useCheckoutSummary } from "@/hooks/useCheckoutSummary";
+import { CartState } from "@/lib/types/cart";
+import { cn, formatPrice } from "@/lib/utils";
 
 type SummaryProps = {
   className?: string;

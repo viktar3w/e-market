@@ -70,7 +70,7 @@ const CheckoutWrapperBox = ({ data, isLoading }: { data?: CartState; isLoading: 
                 isOpenByDefault={currentStep >= CheckoutStep.TWO}
               >
                 {!!data?.shippingAddress ? (
-                  <DeliveryForm disabled={isShippingDisabled} {...(data.shippingAddress as DeliveryFormType)} />
+                  <DeliveryForm isAddress={true} disabled={isShippingDisabled} {...(data.shippingAddress as DeliveryFormType)} />
                 ) : (
                   <DeliveryForm
                     email={data?.email}

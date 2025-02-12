@@ -1,0 +1,12 @@
+query getProductByName($filter: ProductFilter) {
+  products(filter: $filter) {
+    items {
+      id
+      available
+      image
+      name
+      new
+      type
+    }
+  }
+}

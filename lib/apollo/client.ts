@@ -2,7 +2,7 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { ASTNode, stripIgnoredCharacters } from 'graphql';
 
 export const link = createHttpLink({
-  uri: '/graphql',
+  uri: `${process.env.NEXT_PUBLIC_SERVER_URL}/graphql`,
   useGETForQueries: true,
   print(ast: ASTNode, originalPrint: (ast: ASTNode) => string) {
     const query = originalPrint(ast);
