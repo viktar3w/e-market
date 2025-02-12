@@ -1,10 +1,13 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useToast } from '@/components/ui/use-toast';
+import { CART_COOKIE_KEY } from '@/lib/constants';
 import { usePlaceOrderMutation } from '@/lib/redux/api/checkout.api';
+import { removeCookie } from '@/lib/services/server';
 import { CartState } from '@/lib/types/cart';
 
 export const useCheckoutSummary = (cart: CartState) => {
@@ -43,9 +46,9 @@ export const useCheckoutSummary = (cart: CartState) => {
       });
     }
     if (!!data?.url) {
-      push(data.url);
+      removeCookie(CART_COOKIE_KEY).then(() => push(data.url));
     }
-  }, [isSuccess, toast, data]);
+  }, [isSuccess, toast, data, push]);
   return {
     onSubmit,
     taxes,

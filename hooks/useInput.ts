@@ -1,5 +1,5 @@
-"use client";
-import { ChangeEvent, useState } from "react";
+'use client';
+import { ChangeEvent, useState } from 'react';
 
 type InputBindHook = {
   value: string;
@@ -9,7 +9,7 @@ type InputHook = {
   bind: InputBindHook;
   setValue: (value: string) => void;
 };
-export const useInput = (initialValue = ""): InputHook => {
+export const useInput = (initialValue = ''): InputHook => {
   const [value, setValue] = useState(initialValue);
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);

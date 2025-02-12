@@ -1,4 +1,5 @@
 "use client";
+
 import { ArrowRight, Package, Percent, Truck } from "lucide-react";
 import { memo } from "react";
 

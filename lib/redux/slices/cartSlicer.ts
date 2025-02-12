@@ -1,3 +1,4 @@
+import { CartStatus } from '@prisma/client';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { CART_LOCALSTORAGE } from '@/lib/constants';
@@ -11,6 +12,7 @@ type CartSlicerType = {
     cartItems: CartItemState[];
     qty: number;
     loading: boolean;
+    status: CartStatus;
   };
 };
 
@@ -20,6 +22,7 @@ export const initialState: CartSlicerType = {
     cartItems: [],
     qty: 0,
     loading: false,
+    status: CartStatus.ACTIVE,
   },
 };
 const cartSlicer = createSlice({
@@ -32,11 +35,15 @@ const cartSlicer = createSlice({
         state.cart.loading = true;
       })
       .addMatcher(cartApi.endpoints.getCart.matchRejected, (state) => {
-        state.cart = initialState.cart;
+        state.cart = {
+          ...initialState.cart,
+          status: CartStatus.NOT_ACTIVE,
+        };
         localStorage.setItem(CART_LOCALSTORAGE, JSON.stringify(state.cart));
       })
       .addMatcher(cartApi.endpoints.getCart.matchFulfilled, (state, action) => {
         state.cart.cartItems = action?.payload?.cartItems || [];
+        state.cart.status = action?.payload?.status || CartStatus.ACTIVE;
         state.cart.totalAmount = action?.payload?.totalAmount || 0;
         state.cart.qty = action?.payload?.qty || 0;
         state.cart.loading = false;
