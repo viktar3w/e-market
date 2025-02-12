@@ -1,36 +1,39 @@
-"use client";
-import { useEffect, useMemo, useState } from "react";
+'use client';
 
-import CartDrawerItemCheckout from "@/components/shared/checkout/CartDrawerItemCheckout";
-import CheckoutSkeleton from "@/components/shared/checkout/CheckoutSkeleton";
-import DeliveryForm from "@/components/shared/checkout/DeliveryForm";
-import PersonalDataForm from "@/components/shared/checkout/PersonalDataForm";
-import ProgressBar from "@/components/shared/checkout/ProgressBar";
-import Summary from "@/components/shared/checkout/Summary";
-import Accordion from "@/components/shared/common/Accordion";
-import BoxWrapper from "@/components/shared/common/BoxWrapper";
-import Title from "@/components/shared/common/Title";
-import WhiteBlock from "@/components/shared/common/WhiteBlock";
-import { CheckoutStep } from "@/lib/enums/checkout";
-import { useGetCartQuery } from "@/lib/redux/api/cart.api";
-import { DeliveryForm as DeliveryFormType } from "@/lib/types/user";
+import { useEffect, useMemo, useState } from 'react';
+
+import CartDrawerItemCheckout from '@/components/shared/checkout/CartDrawerItemCheckout';
+import CheckoutSkeleton from '@/components/shared/checkout/CheckoutSkeleton';
+import DeliveryForm from '@/components/shared/checkout/DeliveryForm';
+import PersonalDataForm from '@/components/shared/checkout/PersonalDataForm';
+import ProgressBar from '@/components/shared/checkout/ProgressBar';
+import Summary from '@/components/shared/checkout/Summary';
+import Accordion from '@/components/shared/common/Accordion';
+import BoxWrapper from '@/components/shared/common/BoxWrapper';
+import Title from '@/components/shared/common/Title';
+import WhiteBlock from '@/components/shared/common/WhiteBlock';
+import { CheckoutStep } from '@/lib/enums/checkout';
+import { useGetCartQuery } from '@/lib/redux/api/cart.api';
+import { CartState } from '@/lib/types/cart';
+import { DeliveryForm as DeliveryFormType } from '@/lib/types/user';
 const CheckoutWrapper = () => {
-  const { data, isLoading } = useGetCartQuery();
+  const { data, isLoading, error } = useGetCartQuery();
+  if (!!error) {
+    return <></>;
+  }
+  return <CheckoutWrapperBox data={data} isLoading={isLoading} />;
+};
+
+const CheckoutWrapperBox = ({ data, isLoading }: { data?: CartState; isLoading: boolean }) => {
   const [isShippingDisabled, setIsShippingDisabled] = useState<boolean>(true);
-  const [isPlaceOrderDisabled, setIsPlaceOrderDisabled] =
-    useState<boolean>(true);
+  const [isPlaceOrderDisabled, setIsPlaceOrderDisabled] = useState<boolean>(true);
   useEffect(() => {
-    const isShippingDisabled =
-      !data?.phone || !data?.email || !data?.firstname || !data?.lastname;
+    const isShippingDisabled = !data?.phone || !data?.email || !data?.firstname || !data?.lastname;
     setIsShippingDisabled(isShippingDisabled);
     setIsPlaceOrderDisabled(isShippingDisabled || !data?.shippingAddress);
   }, [data]);
   const currentStep = useMemo(() => {
-    return !isPlaceOrderDisabled
-      ? CheckoutStep.THREE
-      : !isShippingDisabled
-        ? CheckoutStep.TWO
-        : CheckoutStep.ONE;
+    return !isPlaceOrderDisabled ? CheckoutStep.THREE : !isShippingDisabled ? CheckoutStep.TWO : CheckoutStep.ONE;
   }, [isPlaceOrderDisabled, isShippingDisabled]);
   return (
     <BoxWrapper className="pt-5">
@@ -45,12 +48,7 @@ const CheckoutWrapper = () => {
               <WhiteBlock title="1. Cart Data">
                 <div className="flex flex-col gap-5">
                   {data?.cartItems.map((item) => (
-                    <CartDrawerItemCheckout
-                      key={item.id}
-                      item={item}
-                      loading={isLoading}
-                      className="mb-2"
-                    />
+                    <CartDrawerItemCheckout key={item.id} item={item} loading={isLoading} className="mb-2" />
                   ))}
                 </div>
               </WhiteBlock>
@@ -72,10 +70,7 @@ const CheckoutWrapper = () => {
                 isOpenByDefault={currentStep >= CheckoutStep.TWO}
               >
                 {!!data?.shippingAddress ? (
-                  <DeliveryForm
-                    disabled={isShippingDisabled}
-                    {...(data.shippingAddress as DeliveryFormType)}
-                  />
+                  <DeliveryForm disabled={isShippingDisabled} {...(data.shippingAddress as DeliveryFormType)} />
                 ) : (
                   <DeliveryForm
                     email={data?.email}

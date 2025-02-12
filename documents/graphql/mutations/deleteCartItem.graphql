@@ -1,0 +1,7 @@
+mutation deleteCartItem($input: DeleteCartItemInput!) {
+    cart {
+        deleteItem(input: $input) {
+            success
+        }
+    }
+}

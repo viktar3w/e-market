@@ -1,0 +1,46 @@
+query getCart {
+  cart {
+    id
+    cartItems {
+      id
+      name
+      productItem {
+        components {
+          id
+          image
+          name
+          price
+        }
+        data
+        id
+        variant {
+          data
+          id
+          image
+          price
+        }
+      }
+      qty
+      totalAmount
+    }
+    email
+    firstname
+    lastname
+    phone
+    qty
+    shippingAddress {
+      city
+      country
+      email
+      firstname
+      id
+      lastname
+      phone
+      postcode
+      state
+      street
+    }
+    status
+    totalAmount
+  }
+}

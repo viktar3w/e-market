@@ -1,8 +1,12 @@
+import { ReadonlyURLSearchParams } from 'next/navigation';
+
 import { Component, Prisma } from '@prisma/client';
 import { type ClassValue, clsx } from 'clsx';
 import qs from 'qs';
 import { twMerge } from 'tailwind-merge';
+import { boolean } from 'zod';
 
+import { GetCategoriesQueryVariables } from '@/documents/generates/hooks/apollo';
 import { DEFAULT_EMPTY_PRODUCT_IMAGE, DEFAULT_PRODUCT_NUMBER_PAGE, DEFAULT_PRODUCT_SIZE } from '@/lib/constants';
 import { CategoryParent, VariantItem } from '@/lib/types/product';
 
@@ -33,7 +37,7 @@ export const reduceProductVariants = (acc: Record<string, Record<string, any>>, 
 };
 
 export const getMinimumPrice = (variants: VariantItem[]) => {
-  return variants?.sort((a, b) => a.price - b.price)?.[0]?.price || 0;
+  return variants.filter(Boolean).sort((a, b) => a?.price - b?.price)?.[0]?.price || 0;
 };
 
 export const getProductDetails = (
@@ -181,4 +185,50 @@ export const parseColor = (color: string) => {
 
 export const sanitize = (html: string) => {
   return html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+};
+
+export const prepareCategoryFilters = (components: ReadonlyURLSearchParams): GetCategoriesQueryVariables => {
+  const filters: GetCategoriesQueryVariables = {
+    categoryPage: Number(components.get('number_page') || DEFAULT_PRODUCT_NUMBER_PAGE),
+    categoryLimit: Number(components.get('limit') || DEFAULT_PRODUCT_SIZE),
+    categoryFilter: {},
+    productFilter: {},
+    productLimit: Number(components.get('pLimit') || DEFAULT_PRODUCT_SIZE),
+    productPage: Number(components.get('pPage') || DEFAULT_PRODUCT_NUMBER_PAGE),
+  };
+  if (!!components.get('query')) {
+    filters.categoryFilter = { query: components.get('query') as string };
+  }
+  if (!!components.get('available')) {
+    filters.productFilter = {
+      ...filters.productFilter,
+      available: String(components.get('available')).toLowerCase() === 'true',
+    };
+  }
+  if (!!components.get('new')) {
+    filters.productFilter = { ...filters.productFilter, new: String(components.get('new')).toLowerCase() === 'true' };
+  }
+  if (!!components.get('components')) {
+    if (typeof components.get('components') === 'string') {
+      filters.productFilter = {
+        ...filters.productFilter,
+        components: String(components.get('components')).split(','),
+      };
+    }
+  }
+  const minPrice = !!components.get('minPrice') ? Number(components.get('minPrice')) : undefined;
+  if (!!minPrice) {
+    filters.productFilter = {
+      ...filters.productFilter,
+      minPrice: minPrice,
+    };
+  }
+  const maxPrice = !!components.get('maxPrice') ? Number(components.get('maxPrice')) : undefined;
+  if (!!maxPrice) {
+    filters.productFilter = {
+      ...filters.productFilter,
+      maxPrice: maxPrice,
+    };
+  }
+  return filters;
 };

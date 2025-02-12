@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
-import { db } from "@/db";
-import { DEFAULT_COMPONENT_SIZE } from "@/lib/constants";
+import { db } from '@/db';
+import { DEFAULT_COMPONENT_SIZE } from '@/lib/constants';
 
 export const GET = async () => {
   const components = await db.component.findMany({

@@ -26,7 +26,7 @@ export const CheckoutDeliveryValidation = z.object({
   country: z.string().min(3).max(50),
   city: z.string().min(3).max(50),
   state: z.string().max(50),
-  street: z.string().max(200),
+  street: z.string().min(5).max(200),
   postcode: z.string().min(3).max(15),
 });
 

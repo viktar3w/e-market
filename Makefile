@@ -12,3 +12,5 @@ db-seed:
 	@npx prisma db seed
 20:
 	@nvm use 20
+gen:
+	@npm run codegen

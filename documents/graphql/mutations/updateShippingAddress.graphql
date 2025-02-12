@@ -1,0 +1,7 @@
+mutation updateShippingAddress($input: ShippingAddressInput!) {
+    cart {
+        updateShippingAddress(input: $input) {
+            success
+        }
+    }
+}

@@ -1,30 +1,31 @@
-"use client";
-import { useSearchParams } from "next/navigation";
+'use client';
 
-import { Suspense } from "react";
+import { useQuery } from '@apollo/client';
+import { Suspense, useMemo } from 'react';
 
-import BoxWrapper from "@/components/shared/common/BoxWrapper";
-import Title from "@/components/shared/common/Title";
-import TopBar from "@/components/shared/common/TopBar";
-import DefaultFilter from "@/components/shared/filters/DefaultFilter";
-import ProductCartSkeleton from "@/components/shared/products/ProductCartSkeleton";
-import ProductGroupList from "@/components/shared/products/ProductGroupList";
-import { useCategories } from "@/hooks/useCategories";
+import BoxWrapper from '@/components/shared/common/BoxWrapper';
+import Title from '@/components/shared/common/Title';
+import TopBar from '@/components/shared/common/TopBar';
+import DefaultFilter from '@/components/shared/filters/DefaultFilter';
+import ProductCartSkeleton from '@/components/shared/products/ProductCartSkeleton';
+import ProductGroupList from '@/components/shared/products/ProductGroupList';
+import { useCategories } from '@/hooks/useCategories';
+import { CategoryProductParent } from '@/lib/types/product';
+import { ItemVariation } from '@/lib/types/types';
 
 const HomeWrapper = () => {
-  const searchParams = useSearchParams();
-  const { categories } = useCategories(searchParams.toString());
+  const { categories } = useCategories();
+  const topBarItems = useMemo(() => {
+    // @ts-ignore
+    return categories.map((c) => ({ text: c.name, value: c.id }) as ItemVariation<string>);
+  }, [categories]);
   return (
     <>
       <BoxWrapper className="mt-10">
         <Title text="All Categories" size="lg" className="font-extrabold" />
       </BoxWrapper>
       <Suspense>
-        <TopBar
-          items={categories
-            .filter((c) => c.products.length > 0)
-            .map((c) => ({ text: c.name, value: c.id }))}
-        />
+        <TopBar items={topBarItems} />
       </Suspense>
       <BoxWrapper className="mt-10 pb-14">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-10">
@@ -41,12 +42,12 @@ const HomeWrapper = () => {
                 ) : (
                   categories.map(
                     (category) =>
-                      category.products.length > 0 && (
+                      !!category && (
                         <ProductGroupList
                           key={category.id}
-                          title={category.name}
+                          title={category?.name ?? ''}
                           categoryId={category.id}
-                          products={category.products}
+                          products={(category?.products?.items || []) as CategoryProductParent[]}
                         />
                       ),
                   )
