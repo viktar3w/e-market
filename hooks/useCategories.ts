@@ -1,38 +1,25 @@
-"use client";
-import { useEffect, useState } from "react";
-import { API } from "@/lib/services/api-client";
-import { CategoryParent } from "@/lib/types/product";
+'use client';
+import { useSearchParams } from 'next/navigation';
 
-export const useCategories = (query: string = "") => {
-  const [categories, setCategories] = useState<CategoryParent[]>([]);
-  const [error, setError] = useState<any | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+import { useEffect, useMemo } from 'react';
+
+import { useGetCategoriesLazyQuery } from '@/documents/generates/hooks/apollo';
+import { prepareCategoryFilters } from '@/lib/utils';
+
+export const useCategories = () => {
+  const searchParams = useSearchParams();
+  const [getCategories, { data, error, loading }] = useGetCategoriesLazyQuery();
   useEffect(() => {
-    setLoading(true);
-    try {
-      API.categories
-        .search(query)
-        .then((categories) => {
-          setCategories(categories.map((c) => ({
-            products: [],
-            ...c,
-          })));
-          setLoading(false);
-        })
-        .catch((e) => {
-          setError(e);
-          console.log("[ERROR] useCategories: ", "something was wrong");
-          setLoading(false);
-        });
-    } catch (e) {
-      setError(e);
-      console.log("[ERROR] useCategories: ", "something was wrong");
-      setLoading(false);
+    const variables = prepareCategoryFilters(searchParams);
+    if (!loading) {
+      getCategories?.({ variables });
     }
-  }, [query]);
-  return {
-    categories,
-    error,
-    loading,
-  };
+  }, [searchParams, getCategories, loading]);
+  return useMemo(() => {
+    return {
+      error,
+      loading,
+      categories: (data?.categories?.items || []).filter((c) => !!c?.products?.items && c.products.items.length > 0),
+    };
+  }, [data]);
 };

@@ -1,0 +1,8 @@
+query getComponents($limit: Int = 10, $numberPage: Int = 1) {
+  components(limit: $limit, numberPage: $numberPage) {
+    id
+    image
+    name
+    price
+  }
+}

@@ -1,0 +1,43 @@
+query getCategories(
+  $categoryFilter: CategoryFilter
+  $categoryLimit: Int = 10
+  $categoryPage: Int = 1
+  $productFilter: ProductFilter
+  $productLimit: Int = 10
+  $productPage: Int = 1
+) {
+  categories(filter: $categoryFilter, limit: $categoryLimit, number_page: $categoryPage) {
+    items {
+      id
+      name
+      products(filter: $productFilter, limit: $productLimit, number_page: $productPage) {
+        items {
+          available
+          components {
+            id
+            image
+            name
+            price
+          }
+          id
+          image
+          name
+          new
+          type
+          variants {
+            data
+            id
+            image
+            price
+          }
+        }
+      }
+    }
+    page_info {
+        total_pages
+        current_page
+        total_pages
+    }
+    total_count
+  }
+}

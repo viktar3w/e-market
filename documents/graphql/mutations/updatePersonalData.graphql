@@ -1,0 +1,7 @@
+mutation updatePersonalData($input: UpdatePersonalDataInput!) {
+    cart {
+        updatePersonalData(input: $input) {
+            success
+        }
+    }
+}

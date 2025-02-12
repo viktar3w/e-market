@@ -55,6 +55,7 @@ const ProductGroupList = ({
             name={product.name}
             price={getMinimumPrice(product.variants)}
             image={product.image || DEFAULT_EMPTY_PRODUCT_IMAGE}
+            variants={product.variants}
           />
         ))}
       </div>

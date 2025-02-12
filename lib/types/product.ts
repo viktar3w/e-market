@@ -10,7 +10,7 @@ export type ProductItemType = {
 export type ProductVariantItem = {
   price: number;
   id: string;
-};
+} & Variant;
 
 export type CategoryParent = {
   products: CategoryProductParent[];

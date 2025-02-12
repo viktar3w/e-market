@@ -1,39 +1,22 @@
-"use client";
-import { useEffect, useState } from "react";
-import { API } from "@/lib/services/api-client";
-import { Component } from "@prisma/client";
-import { useSet } from "react-use";
+'use client';
+
+import { useMemo } from 'react';
+import { useSet } from 'react-use';
+
+import { useGetComponentsQuery } from '@/documents/generates/hooks/apollo';
 
 export const useComponents = (ids: string[]) => {
-  const [error, setError] = useState<any | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [components, setComponents] = useState<Component[]>([]);
+  const { data, loading, error } = useGetComponentsQuery({
+    variables: {},
+  });
   const [selectedIds, { toggle }] = useSet(new Set<string>(ids));
-  useEffect(() => {
-    setLoading(true);
-    try {
-      API.components
-        .search("")
-        .then((components) => {
-          setComponents(components);
-          setLoading(false);
-        })
-        .catch((e) => {
-          setError(e);
-          console.log("[ERROR] useComponents: Something was wrong");
-          setLoading(false);
-        });
-    } catch (e) {
-      setError(e);
-      console.log("[ERROR] useComponents: Something was wrong");
-      setLoading(true);
-    }
-  }, []);
-  return {
-    addId: toggle,
-    selectedIds,
-    error,
-    loading,
-    components,
-  };
+  return useMemo(() => {
+    return {
+      addId: toggle,
+      selectedIds,
+      error,
+      loading,
+      components: data?.components?.filter((component) => !!component) || [],
+    };
+  }, [toggle, selectedIds, error, loading, data]);
 };

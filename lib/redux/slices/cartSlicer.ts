@@ -1,8 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "@/lib/redux/store";
-import { cartApi } from "@/lib/redux/api/cart.api";
-import { CartItemState } from "@/lib/types/cart";
-import { CART_LOCALSTORAGE } from "@/lib/constants";
+import { createSlice } from '@reduxjs/toolkit';
+
+import { CART_LOCALSTORAGE } from '@/lib/constants';
+import { cartApi } from '@/lib/redux/api/cart.api';
+import { RootState } from '@/lib/redux/store';
+import { CartItemState } from '@/lib/types/cart';
 
 type CartSlicerType = {
   cart: {
@@ -22,23 +23,24 @@ export const initialState: CartSlicerType = {
   },
 };
 const cartSlicer = createSlice({
-  name: "cart",
+  name: 'cart',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addMatcher(cartApi.endpoints.getCart.matchPending, (state, action) => {
+      .addMatcher(cartApi.endpoints.getCart.matchPending, (state) => {
         state.cart.loading = true;
       })
       .addMatcher(cartApi.endpoints.getCart.matchRejected, (state) => {
-        state.cart.loading = false;
+        state.cart = initialState.cart;
+        localStorage.setItem(CART_LOCALSTORAGE, JSON.stringify(state.cart));
       })
       .addMatcher(cartApi.endpoints.getCart.matchFulfilled, (state, action) => {
-        state.cart.cartItems = action.payload.cartItems || [];
-        state.cart.totalAmount = action.payload.totalAmount || 0;
-        state.cart.qty = action.payload.qty || 0;
+        state.cart.cartItems = action?.payload?.cartItems || [];
+        state.cart.totalAmount = action?.payload?.totalAmount || 0;
+        state.cart.qty = action?.payload?.qty || 0;
         state.cart.loading = false;
-        localStorage.setItem(CART_LOCALSTORAGE, JSON.stringify(action.payload));
+        localStorage.setItem(CART_LOCALSTORAGE, JSON.stringify(state.cart));
       });
   },
 });
