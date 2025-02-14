@@ -4,7 +4,6 @@ import { Component, Prisma } from '@prisma/client';
 import { type ClassValue, clsx } from 'clsx';
 import qs from 'qs';
 import { twMerge } from 'tailwind-merge';
-import { boolean } from 'zod';
 
 import { GetCategoriesQueryVariables } from '@/documents/generates/hooks/apollo';
 import { DEFAULT_EMPTY_PRODUCT_IMAGE, DEFAULT_PRODUCT_NUMBER_PAGE, DEFAULT_PRODUCT_SIZE } from '@/lib/constants';
@@ -195,6 +194,7 @@ export const prepareCategoryFilters = (components: ReadonlyURLSearchParams): Get
     productFilter: {},
     productLimit: Number(components.get('pLimit') || DEFAULT_PRODUCT_SIZE),
     productPage: Number(components.get('pPage') || DEFAULT_PRODUCT_NUMBER_PAGE),
+    productSort: {},
   };
   if (!!components.get('query')) {
     filters.categoryFilter = { query: components.get('query') as string };
@@ -229,6 +229,14 @@ export const prepareCategoryFilters = (components: ReadonlyURLSearchParams): Get
       ...filters.productFilter,
       maxPrice: maxPrice,
     };
+  }
+  if (!!components.get('sort')) {
+    const sort = components.get('sort')!.split('_');
+    if (sort.length === 2) {
+      filters.productSort = {
+        [sort[0]]: sort[1],
+      };
+    }
   }
   return filters;
 };

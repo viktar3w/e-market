@@ -55,7 +55,7 @@ const CreateEventCategoryModal = ({ containerClassName, children }: CreateEventC
       });
       setIsOpen(false);
     }
-  }, [toast, isSuccess]);
+  }, [toast, isSuccess, form]);
   return (
     <>
       <div className={containerClassName} onClick={() => setIsOpen(true)}>
