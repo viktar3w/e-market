@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -12,34 +12,14 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { SORT_KEY } from '@/lib/constants';
+import { SortItem } from '@/lib/types/types';
 
 type SortPopupProps = {
   className?: string;
+  items: SortItem[];
 };
-const SORT_KEY = 'sort';
-const items = [
-  {
-    value: 'price_asc',
-    label: 'Price',
-    icon: ArrowUp,
-  },
-  {
-    value: 'price_desc',
-    label: 'Price',
-    icon: ArrowDown,
-  },
-  {
-    value: 'new_asc',
-    label: 'New',
-    icon: ArrowUp,
-  },
-  {
-    value: 'new_desc',
-    label: 'New',
-    icon: ArrowDown,
-  },
-];
-const SortPopup = ({ className }: SortPopupProps) => {
+const SortPopup = ({ className, items }: SortPopupProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
