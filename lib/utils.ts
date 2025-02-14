@@ -6,7 +6,12 @@ import qs from 'qs';
 import { twMerge } from 'tailwind-merge';
 
 import { GetCategoriesQueryVariables } from '@/documents/generates/hooks/apollo';
-import { DEFAULT_EMPTY_PRODUCT_IMAGE, DEFAULT_PRODUCT_NUMBER_PAGE, DEFAULT_PRODUCT_SIZE } from '@/lib/constants';
+import {
+  DEFAULT_EMPTY_PRODUCT_IMAGE,
+  DEFAULT_PRODUCT_NUMBER_PAGE,
+  DEFAULT_PRODUCT_SIZE,
+  SORT_KEY,
+} from '@/lib/constants';
 import { CategoryParent, VariantItem } from '@/lib/types/product';
 
 import ProductWhereInput = Prisma.ProductWhereInput;
@@ -230,8 +235,8 @@ export const prepareCategoryFilters = (components: ReadonlyURLSearchParams): Get
       maxPrice: maxPrice,
     };
   }
-  if (!!components.get('sort')) {
-    const sort = components.get('sort')!.split('_');
+  if (!!components.get(SORT_KEY)) {
+    const sort = components.get(SORT_KEY)!.split('_');
     if (sort.length === 2) {
       filters.productSort = {
         [sort[0]]: sort[1],
