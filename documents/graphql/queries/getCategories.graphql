@@ -5,12 +5,13 @@ query getCategories(
   $productFilter: ProductFilter
   $productLimit: Int = 10
   $productPage: Int = 1
+  $productSort: ProductSort = {}
 ) {
   categories(filter: $categoryFilter, limit: $categoryLimit, number_page: $categoryPage) {
     items {
       id
       name
-      products(filter: $productFilter, limit: $productLimit, number_page: $productPage) {
+      products(filter: $productFilter, limit: $productLimit, number_page: $productPage, sort: $productSort) {
         items {
           available
           components {
