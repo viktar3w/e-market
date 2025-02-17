@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run codegen && next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate && npm run codegen",
+    "postinstall": "prisma generate",
     "codegen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
