@@ -28,7 +28,7 @@ const DefaultHeader = ({ className }: DefaultHeaderProps) => {
               <h1 className="text-xl md:text-2xl uppercase font-black">
                 eMarket
               </h1>
-              <p className="text-xs md:text-sm text-gray-400 leading-3">
+              <p className="text-xs md:text-sm text-gray-600 leading-3">
                 you can find everything
               </p>
             </div>

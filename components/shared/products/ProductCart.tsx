@@ -29,7 +29,7 @@ const ProductCart = ({ className, id, name, price, image, variants }: ProductCar
         </div>
         <Title text={name} className="mt-4 text-sm text-gray-700" size="sm" />
         {!!variants && (
-          <div className="text-sm text-gray-400">
+          <div className="text-sm text-gray-600">
             {variants?.map((variant) => (
               <div className="" key={variant.id}>
                 {Object.keys(variant?.data || {})

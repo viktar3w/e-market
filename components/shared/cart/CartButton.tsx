@@ -29,6 +29,7 @@ const CartButton = ({ className }: CartButtonProps) => {
           className={cn("group relative px-2 py-1 md:px-4 md:py-2", {
             "w-[85px] md:w-[105px]": isLoading,
           })}
+          title='Cart'
         >
           {items.length > 0 ? (
             <>
