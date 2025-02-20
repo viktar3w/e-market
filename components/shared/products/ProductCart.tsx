@@ -10,8 +10,10 @@ import { formatPrice } from '@/lib/utils';
 
 type ProductCartProps = {
   className?: string;
+  priority?: boolean | undefined;
+  loading?: "eager" | "lazy" | undefined;
 } & ProductItemType;
-const ProductCart = ({ className, id, name, price, image, variants }: ProductCartProps) => {
+const ProductCart = ({ className, id, name, price, image, variants, priority, loading }: ProductCartProps) => {
   return (
     <div className={className}>
       <Link href={`/products/${id}`} className="group">
@@ -23,7 +25,8 @@ const ProductCart = ({ className, id, name, price, image, variants }: ProductCar
             height={100}
             className="h-full w-full object-cover object-center group-hover:opacity-75"
             quality={80}
-            loading="lazy"
+            loading={loading}
+            priority={priority}
             overrideSrc="/default_product_img.png"
           />
         </div>

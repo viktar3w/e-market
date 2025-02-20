@@ -1,9 +1,11 @@
 "use client";
+
+import { useEffect, useRef } from "react";
+import { useIntersection } from "react-use";
+
 import ProductCart from "@/components/shared/products/ProductCart";
 import { cn, getMinimumPrice } from "@/lib/utils";
 import Title from "@/components/shared/common/Title";
-import { useEffect, useRef } from "react";
-import { useIntersection } from "react-use";
 import { useAppDispatch } from "@/hooks/redux";
 import { actions } from "@/lib/redux/slices/categorySlicer";
 import { CategoryProductParent } from "@/lib/types/product";
@@ -47,8 +49,13 @@ const ProductGroupList = ({
       {!!title && (
         <Title text={title} size="lg" className="font-extrabold mb-5" />
       )}
-      <div className={cn("grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8", listClassName)}>
-        {products.map((product) => (
+      <div
+        className={cn(
+          "grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8",
+          listClassName,
+        )}
+      >
+        {products.map((product, index) => (
           <ProductCart
             key={product.id}
             id={product.id}
@@ -56,6 +63,8 @@ const ProductGroupList = ({
             price={getMinimumPrice(product.variants)}
             image={product.image || DEFAULT_EMPTY_PRODUCT_IMAGE}
             variants={product.variants}
+            priority={index === 0}
+            loading={index === 0 ? undefined : "lazy"}
           />
         ))}
       </div>
