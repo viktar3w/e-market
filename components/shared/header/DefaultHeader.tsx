@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils";
 import BoxWrapper from "@/components/shared/common/BoxWrapper";
 import Image from "next/image";
 import Auth from "@/components/auth/Clerk";
-import Link from "next/link";
 import HeaderSearch from "@/components/shared/filters/HeaderSearch";
 import CartButton from "@/components/shared/cart/CartButton";
 
@@ -15,7 +14,7 @@ const DefaultHeader = ({ className }: DefaultHeaderProps) => {
   return (
     <header className={cn("border border-b", className)}>
       <BoxWrapper className="flex flex-col md:flex-row items-center justify-between py-4 md:py-8">
-        <Link href="/">
+        <a href="/">
           <div className="flex items-center gap-2 md:gap-4">
             <Image
               src="/logo.svg"
@@ -25,7 +24,7 @@ const DefaultHeader = ({ className }: DefaultHeaderProps) => {
               className="w-auto h-auto"
             />
             <div className="hidden sm:block">
-              <h1 className="text-xl md:text-2xl uppercase font-black">
+              <h1 className="text-xl md:text-2xl font-black">
                 eMarket
               </h1>
               <p className="text-xs md:text-sm text-gray-600 leading-3">
@@ -33,7 +32,7 @@ const DefaultHeader = ({ className }: DefaultHeaderProps) => {
               </p>
             </div>
           </div>
-        </Link>
+        </a>
         <div className="w-full mt-4 md:mt-0 md:mx-10 md:flex-1">
           <HeaderSearch />
         </div>

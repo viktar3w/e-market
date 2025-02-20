@@ -11,6 +11,7 @@ const DashboardEmptyState = ({}: DashboardEmptyStateProps) => {
   return (
     <Card className="flex flex-col items-center justify-center rounded-2xl flex-1 text-center p-6">
       <div className="flex justify-center w-full">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/support/brand-asset-wave.png"
           alt="no categories"

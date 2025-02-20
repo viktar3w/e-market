@@ -48,7 +48,7 @@ const ChooseProductForm = ({
           }
           type={product.type}
         />
-        <div className="bg-[#FCFCFC] p-7 max-md:m-auto">
+        <div className="bg-[#FCFCFC] p-7 max-md:m-auto min-w-[300px]">
           <Title
             text={product.name}
             size="md"

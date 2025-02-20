@@ -1,7 +1,10 @@
 import { ReactNode } from "react";
+import { Analytics } from "@vercel/analytics/react";
+
 import DefaultHeader from "@/components/shared/header/DefaultHeader";
 import { Toaster } from "@/components/ui/toaster";
 import { Metadata } from "next";
+import DefaultFooter from "@/components/shared/footer/DefaultFooter";
 
 export const metadata: Metadata = {
   title: "eMarket. This is Your best Market",
@@ -22,6 +25,8 @@ export default function RootLayout({
     <>
       <DefaultHeader />
       <main className="min-h-screen">{children}</main>
+      <DefaultFooter />
+      <Analytics />
       <Toaster />
     </>
   );

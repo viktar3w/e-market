@@ -49,9 +49,7 @@ export const useHomeFilters = () => {
     if (isNew !== undefined) {
       filters.new = isNew;
     }
-    if (Array.from(selectedIds).length > 0) {
-      filters.components = Array.from(selectedIds);
-    }
+    filters.components = Array.from(selectedIds);
     if (minPrice !== MIN_PRICE) {
       filters.minPrice = minPrice;
     }
@@ -74,6 +72,8 @@ export const useHomeFilters = () => {
         push(`?${query}`, {
           scroll: false,
         });
+    } else {
+      push('/')
     }
   }, [params, push]);
 

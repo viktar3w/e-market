@@ -1,22 +1,23 @@
-'use client';
+"use client";
 
-import { Suspense, useMemo } from 'react';
+import { Suspense, useMemo } from "react";
 
-import BoxWrapper from '@/components/shared/common/BoxWrapper';
-import Title from '@/components/shared/common/Title';
-import TopBar from '@/components/shared/common/TopBar';
-import DefaultFilter from '@/components/shared/filters/DefaultFilter';
-import ProductCartSkeleton from '@/components/shared/products/ProductCartSkeleton';
-import ProductGroupList from '@/components/shared/products/ProductGroupList';
-import { useCategories } from '@/hooks/useCategories';
-import { CategoryProductParent } from '@/lib/types/product';
-import { ItemVariation } from '@/lib/types/types';
+import BoxWrapper from "@/components/shared/common/BoxWrapper";
+import Title from "@/components/shared/common/Title";
+import TopBar from "@/components/shared/common/TopBar";
+import DefaultFilter from "@/components/shared/filters/DefaultFilter";
+import ProductCartSkeleton from "@/components/shared/products/ProductCartSkeleton";
+import ProductGroupList from "@/components/shared/products/ProductGroupList";
+import { useCategories } from "@/hooks/useCategories";
+import { CategoryProductParent } from "@/lib/types/product";
+import { ItemVariation } from "@/lib/types/types";
 
 const HomeWrapper = () => {
   const { categories } = useCategories();
   const topBarItems = useMemo(() => {
-    // @ts-ignore
-    return categories.map((c) => ({ text: c.name, value: c.id }) as ItemVariation<string>);
+    return categories.map(
+      (c) => ({ text: c?.name, value: c?.id }) as ItemVariation<string>,
+    );
   }, [categories]);
   return (
     <>
@@ -44,9 +45,12 @@ const HomeWrapper = () => {
                       !!category && (
                         <ProductGroupList
                           key={category.id}
-                          title={category?.name ?? ''}
+                          title={category?.name ?? ""}
                           categoryId={category.id}
-                          products={(category?.products?.items || []) as CategoryProductParent[]}
+                          products={
+                            (category?.products?.items ||
+                              []) as CategoryProductParent[]
+                          }
                         />
                       ),
                   )

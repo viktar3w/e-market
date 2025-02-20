@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo } from "react";
 import { useSet } from 'react-use';
 
 import { useGetComponentsQuery } from '@/documents/generates/hooks/apollo';

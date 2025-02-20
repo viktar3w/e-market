@@ -7,6 +7,7 @@ type CartItemDetailImgProps = {
 };
 const CartItemDetailImg = ({ className, src, alt }: CartItemDetailImgProps) => {
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={alt} className={cn("w-[60px] h-[60px]", className)} />
   );
 };
