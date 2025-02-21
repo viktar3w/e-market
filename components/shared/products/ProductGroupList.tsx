@@ -55,7 +55,7 @@ const ProductGroupList = ({
           listClassName,
         )}
       >
-        {products.map((product, index) => (
+        {products.map((product) => (
           <ProductCart
             key={product.id}
             id={product.id}
@@ -63,8 +63,6 @@ const ProductGroupList = ({
             price={getMinimumPrice(product.variants)}
             image={product.image || DEFAULT_EMPTY_PRODUCT_IMAGE}
             variants={product.variants}
-            priority={index === 0}
-            loading={index === 0 ? undefined : "lazy"}
           />
         ))}
       </div>

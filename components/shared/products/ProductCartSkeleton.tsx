@@ -14,7 +14,7 @@ const ProductCartSkeleton = ({ className }: ProductCartSkeletonProps) => {
           .map((_, index) => (
             <Skeleton
               key={index}
-              className="mb-5 rounded-lg h-[260px] w-[260px]"
+              className="mb-5 rounded-lg w-[200px] h-[260px] max-sm:w-[260px]"
             />
           ))}
       </div>

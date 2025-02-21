@@ -14,7 +14,7 @@ self.addEventListener("fetch", (event) => {
     fetch(event.request).catch(() =>
       caches
         .match(event.request)
-        .then((cachedResponse) => cachedResponse || caches.match(OFFLINE_URL)),
+        .then((cachedResponse) => cachedResponse),
     ),
   );
 });
