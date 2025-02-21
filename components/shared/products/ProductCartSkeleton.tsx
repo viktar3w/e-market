@@ -7,8 +7,8 @@ type ProductCartSkeletonProps = {
 const ProductCartSkeleton = ({ className }: ProductCartSkeletonProps) => {
   return (
     <div className={cn("group", className)}>
-      <Skeleton className="mb-5 h-12 rounded-[8px] w-[50%]" />
-      <div className="grid grid-cols-3 gap-[50px]">
+      <Skeleton className="mb-5 h-12 rounded-[8px] w-[50%] max-sm:text-center max-sm:m-auto max-sm:mb-[3rem]" />
+      <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8 justify-items-center">
         {...Array(6)
           .fill(0)
           .map((_, index) => (
