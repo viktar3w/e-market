@@ -29,7 +29,7 @@ export const cartAction = async (cart: Cart) => {
 };
 
 export const getCart = async () => {
-  const id = cookies().get(CART_COOKIE_KEY)?.value;
+  const id = (await cookies()).get(CART_COOKIE_KEY)?.value;
   if (!id) {
     throw new Error("Something was wrong! Please try again");
   }
@@ -37,7 +37,7 @@ export const getCart = async () => {
     where: { id, status: CartStatus.ACTIVE },
   });
   if (!cart) {
-    cookies().delete(CART_COOKIE_KEY);
+    (await cookies()).delete(CART_COOKIE_KEY);
     throw new Error("We can't find cart");
   }
   const { userId } = auth();
@@ -45,7 +45,7 @@ export const getCart = async () => {
     (!userId && !!cart?.userId) ||
     (!!userId && !!cart?.userId && userId !== cart.userId)
   ) {
-    cookies().delete(CART_COOKIE_KEY);
+    (await cookies()).delete(CART_COOKIE_KEY);
     throw new Error("Customer was logout");
   }
   return cart;

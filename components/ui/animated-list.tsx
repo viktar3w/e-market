@@ -4,7 +4,6 @@ import React, {
   ReactElement,
   ReactNode,
   useEffect,
-  useMemo,
   useState,
 } from "react"
 import { AnimatePresence, motion } from "framer-motion"
@@ -33,16 +32,16 @@ export const AnimatedList = React.memo(
     }, [childrenArray, delay, messages.length])
 
     return (
-      <div className={`flex flex-col-reverse items-center gap-4 ${className}`}>
+      (<div className={`flex flex-col-reverse items-center gap-4 ${className}`}>
         <AnimatePresence>
           {messages.map((item) => (
-            <AnimatedListItem key={(item as ReactElement).key}>
+            <AnimatedListItem key={(item as ReactElement<any>).key}>
               {item}
             </AnimatedListItem>
           ))}
         </AnimatePresence>
-      </div>
-    )
+      </div>)
+    );
   }
 )
 

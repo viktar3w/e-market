@@ -14,6 +14,7 @@ const DefaultHeader = ({ className }: DefaultHeaderProps) => {
   return (
     <header className={cn("border border-b", className)}>
       <BoxWrapper className="flex flex-col md:flex-row items-center justify-between py-4 md:py-8">
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/">
           <div className="flex items-center gap-2 md:gap-4">
             <Image

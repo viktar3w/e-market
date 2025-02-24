@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { UserJSON } from "@clerk/backend";
 import { CartStatus, Prisma, UserType } from "@prisma/client";
-import { cookies } from "next/headers";
+import { cookies, type UnsafeUnwrappedCookies } from "next/headers";
 import { CART_COOKIE_KEY } from "@/lib/constants";
 import { areArraysEqual } from "@/lib/utils";
 import { CartItemState, CartState } from "@/lib/types/cart";
@@ -172,8 +172,8 @@ export const handleCartWithoutItems = async (
 ) => {
   let data: Prisma.CartUncheckedUpdateInput = { userId: user.id };
   if (user.carts.length > 0) {
-    cookies().delete(CART_COOKIE_KEY);
-    cookies().set(CART_COOKIE_KEY, user.carts.find((cart) => !!cart.id)!.id, {
+    (await cookies()).delete(CART_COOKIE_KEY);
+    (await cookies()).set(CART_COOKIE_KEY, user.carts.find((cart) => !!cart.id)!.id, {
       path: "/",
       httpOnly: true,
     });
@@ -186,5 +186,5 @@ export const handleCartWithoutItems = async (
 };
 
 export const deleteCartIdWebhook = () => {
-  cookies().delete(CART_COOKIE_KEY);
+  (cookies() as unknown as UnsafeUnwrappedCookies).delete(CART_COOKIE_KEY);
 };

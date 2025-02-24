@@ -3,11 +3,12 @@ import { db } from "@/db";
 import CheckoutSuccess from "@/components/shared/checkout/CheckoutSuccess";
 import { OrderState } from "@/lib/types/checkout";
 
-const Page = async ({
-  searchParams,
-}: {
-  searchParams?: { token?: string };
-}) => {
+const Page = async (
+  props: {
+    searchParams?: Promise<{ token?: string }>;
+  }
+) => {
+  const searchParams = await props.searchParams;
   const token = searchParams?.token;
   if (!token) {
     redirect("/");

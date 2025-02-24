@@ -13,15 +13,13 @@ import { client } from "@/lib/apollo/client";
 import { CategoryProductParent } from "@/lib/types/product";
 
 type PageProps = {
-  params: {
+  params: Promise<{
     productId: string;
-  };
+  }>;
 };
 
-export const generateMetadata = async (
-  { params }: PageProps,
-  parent: ResolvingMetadata,
-): Promise<Metadata> => {
+export const generateMetadata = async (props: PageProps, parent: ResolvingMetadata): Promise<Metadata> => {
+  const params = await props.params;
   const { data } = await client.query({
     ...({
       variables: {
@@ -48,7 +46,8 @@ export const generateMetadata = async (
   };
 };
 
-const Page = async ({ params }: PageProps) => {
+const Page = async (props: PageProps) => {
+  const params = await props.params;
   const { productId } = params;
   const { data, loading, error } = await client.query({
     ...({

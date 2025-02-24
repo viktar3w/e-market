@@ -6,12 +6,13 @@ import DashboardWrapper from "@/components/shared/support/dashbord/DashboardWrap
 import CategoryPageContent from "@/components/shared/support/dashbord/category/CategoryPageContent";
 
 type PageProps = {
-  params: {
+  params: Promise<{
     name?: string | string[];
-  };
+  }>;
 };
 
-const Page = async ({ params }: PageProps) => {
+const Page = async (props: PageProps) => {
+  const params = await props.params;
   if (typeof params?.name !== "string") {
     return notFound();
   }

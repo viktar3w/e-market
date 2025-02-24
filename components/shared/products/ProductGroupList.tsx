@@ -27,6 +27,7 @@ const ProductGroupList = ({
   className,
 }: ProductGroupListProps) => {
   const intRef = useRef<HTMLDivElement | null>(null);
+  // @ts-ignore
   const intersection = useIntersection(intRef, {
     threshold: 0.4,
   });
