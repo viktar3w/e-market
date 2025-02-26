@@ -186,5 +186,5 @@ export const handleCartWithoutItems = async (
 };
 
 export const deleteCartIdWebhook = () => {
-  (cookies() as unknown as UnsafeUnwrappedCookies).delete(CART_COOKIE_KEY);
+  ((cookies() as unknown as UnsafeUnwrappedCookies) as unknown as UnsafeUnwrappedCookies).delete(CART_COOKIE_KEY);
 };
