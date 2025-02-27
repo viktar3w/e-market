@@ -40,7 +40,7 @@ export const getCart = async () => {
     (await cookies()).delete(CART_COOKIE_KEY);
     throw new Error("We can't find cart");
   }
-  const { userId } = auth();
+  const { userId } = await auth();
   if (
     (!userId && !!cart?.userId) ||
     (!!userId && !!cart?.userId && userId !== cart.userId)

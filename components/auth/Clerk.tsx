@@ -12,7 +12,6 @@ import { SIGN_OUT_KEY } from "@/lib/constants";
 import {
   ArrowRight,
   LogOut,
-  MessageCircleQuestion,
   UserRoundSearch,
 } from "lucide-react";
 import Link from "next/link";
@@ -22,7 +21,6 @@ const Auth = () => {
   const { signOut } = useClerk();
   const path = usePathname()
   const [getCartQuery] = useLazyGetCartQuery();
-
   return (
     <div>
       <SignedOut>

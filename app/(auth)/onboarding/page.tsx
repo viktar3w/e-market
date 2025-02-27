@@ -4,7 +4,7 @@ import { db } from "@/db";
 import Onboarding from "@/components/shared/customers/Onboarding";
 
 const Page = async () => {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) {
     return notFound();
   }
