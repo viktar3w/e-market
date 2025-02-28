@@ -6,10 +6,10 @@ import { NextResponse } from "next/server";
 const isProtectedRoute = createRouteMatcher(["/onboarding(.*)"]);
 export default clerkMiddleware(async (auth, request) => {
   const res = NextResponse.next();
-  if (isProtectedRoute(request)) {
-    auth().protect();
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId && isProtectedRoute(request)) {
+    return redirectToSignIn();
   }
-  const { userId } = auth();
   const cartId = request.cookies.get(CART_COOKIE_KEY)?.value;
   if (!cartId) {
     const token = await getCartToken(userId || undefined);

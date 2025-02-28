@@ -3,47 +3,43 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, ShoppingCart } from "lucide-react";
 import CartDrawer from "@/components/shared/cart/CartDrawer";
 import { cn, formatPrice } from "@/lib/utils";
-import { useGetCartQuery } from "@/lib/redux/api/cart.api";
 import { useEffect, useState } from "react";
 import { CartItemState } from "@/lib/types/cart";
 import { useAppSelector } from "@/hooks/redux";
 import { selectCart } from "@/lib/redux/slices/cartSlicer";
+import { useGetCartQuery } from "@/lib/redux/api/cart.api";
 
 type CartButtonProps = {
   className?: string;
 };
 const CartButton = ({ className }: CartButtonProps) => {
+  useGetCartQuery();
   const { cart } = useAppSelector(selectCart);
-  const { data, isLoading } = useGetCartQuery();
   const [items, setItems] = useState<CartItemState[]>([]);
   useEffect(() => {
-    setItems(data?.cartItems || []);
+    setItems(cart?.cartItems || []);
     return () => setItems([]);
-  }, [data?.cartItems]);
+  }, [cart]);
   return (
     <div className={cn("flex items-center gap-2 md:gap-3", className)}>
       <CartDrawer>
         <Button
-          loading={isLoading || cart.loading}
+          loading={cart.loading}
           variant="outline"
           className={cn("group relative px-2 py-1 md:px-4 md:py-2", {
-            "w-[85px] md:w-[105px]": isLoading,
+            "w-[85px] md:w-[105px]": cart.loading,
           })}
-          title='Cart'
+          title="Cart"
         >
           {items.length > 0 ? (
             <>
               <strong className="text-xs md:text-base">
-                {formatPrice(data?.totalAmount || 0)}
+                {formatPrice(cart?.totalAmount || 0)}
               </strong>
               <span className="h-full bg-black/30 mx-2 md:mx-3 w-[1px]" />
               <div className="flex items-center gap-1 transition duration-300 group-hover:opacity-0">
-                <ShoppingCart
-                  size={14}
-                  className="relative"
-                  strokeWidth={2}
-                />
-                <strong className="text-xs md:text-base">{data?.qty}</strong>
+                <ShoppingCart size={14} className="relative" strokeWidth={2} />
+                <strong className="text-xs md:text-base">{cart?.qty}</strong>
               </div>
               <ArrowRight
                 size={18}

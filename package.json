@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.12.7",
-    "@clerk/nextjs": "^5.3.1",
+    "@clerk/nextjs": "^6.12.1",
     "@graphql-codegen/cli": "^5.0.3",
     "@graphql-codegen/schema-ast": "^4.1.0",
     "@graphql-codegen/typescript": "^4.1.2",

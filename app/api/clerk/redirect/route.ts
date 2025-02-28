@@ -30,7 +30,7 @@ export const GET = async (req: NextRequest) => {
     return NextResponse.redirect(redirectPath);
   }
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     if (!userId) {
       throw new Error("Customer isn't authorized");
     }
