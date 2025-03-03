@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import { Component } from "@prisma/client";
 import { cn, formatPrice, getImage } from "@/lib/utils";

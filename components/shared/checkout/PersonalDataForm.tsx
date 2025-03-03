@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Form,
   FormControl,
@@ -13,6 +14,8 @@ import BoxWrapper from "@/components/shared/common/BoxWrapper";
 import { CustomerForm } from "@/lib/types/user";
 import { useCheckoutPersonalData } from "@/hooks/useCheckoutPersonalData";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/hooks/useTranslation";
+
 type PersonalDataFormProps = {
   className?: string;
 } & CustomerForm;
@@ -29,6 +32,7 @@ const PersonalDataForm = ({
     lastname,
     phone,
   });
+  const $t = useTranslation();
   return (
     <BoxWrapper className={cn("", className)}>
       <Form {...form}>
@@ -43,7 +47,7 @@ const PersonalDataForm = ({
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col gap-3">
                   <FormLabel className="text-base-semibold text-light-2">
-                    Email
+                    {$t('Email')}
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -62,7 +66,7 @@ const PersonalDataForm = ({
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col gap-3">
                   <FormLabel className="text-base-semibold text-light-2">
-                    Firstname
+                    {$t('Firstname')}
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -81,7 +85,7 @@ const PersonalDataForm = ({
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col gap-3">
                   <FormLabel className="text-base-semibold text-light-2">
-                    Lastname
+                    {$t('Lastname')}
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -100,7 +104,7 @@ const PersonalDataForm = ({
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col gap-3">
                   <FormLabel className="text-base-semibold text-light-2">
-                    Phone
+                    {$t('Phone')}
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -115,7 +119,7 @@ const PersonalDataForm = ({
             />
           </div>
           <Button type="submit" loading={loading} disabled={loading}>
-            Submit
+            {$t('Submit')}
           </Button>
         </form>
       </Form>

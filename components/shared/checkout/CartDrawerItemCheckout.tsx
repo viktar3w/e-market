@@ -1,4 +1,5 @@
 "use client";
+
 import { cn } from "@/lib/utils";
 import CartItemDetailImg from "@/components/shared/cart/CartItemDetailImg";
 import CartItemInfo from "@/components/shared/cart/CartItemInfo";
@@ -12,6 +13,7 @@ import {
 import { CartItemState } from "@/lib/types/cart";
 import { useCallback, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type CartDrawerItemProps = {
   item: CartItemState;
@@ -23,6 +25,7 @@ const CartDrawerItemCheckout = ({
   item,
   loading = false,
 }: CartDrawerItemProps) => {
+  const $t = useTranslation();
   const { toast } = useToast();
   const [updateCartItem, { isLoading, isError, isSuccess }] =
     useUpdateCartItemMutation();
@@ -37,7 +40,7 @@ const CartDrawerItemCheckout = ({
   useEffect(() => {
     if (isError) {
       toast?.({
-        description: "We can't add qty now",
+        description: $t("We can't add qty now"),
         variant: "destructive",
       });
     }
@@ -45,7 +48,7 @@ const CartDrawerItemCheckout = ({
   useEffect(() => {
     if (isSuccess) {
       toast?.({
-        description: "Qty was added",
+        description: $t("Qty was added"),
         variant: "success",
       });
     }
@@ -53,7 +56,7 @@ const CartDrawerItemCheckout = ({
   useEffect(() => {
     if (isErrorDeleting) {
       toast?.({
-        description: "We can't delete this item",
+        description: $t("We can't delete this item"),
         variant: "destructive",
       });
     }
@@ -61,7 +64,7 @@ const CartDrawerItemCheckout = ({
   useEffect(() => {
     if (isSuccessDeleting) {
       toast?.({
-        description: "Item was deleted",
+        description: $t("Item was deleted"),
         variant: "success",
       });
     }

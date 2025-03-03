@@ -14,12 +14,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SORT_KEY } from "@/lib/constants";
 import { SortItem } from "@/lib/types/types";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type SortPopupProps = {
   className?: string;
   items: SortItem[];
 };
 const SortPopup = ({ className, items }: SortPopupProps) => {
+  const $t = useTranslation();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
@@ -50,7 +52,7 @@ const SortPopup = ({ className, items }: SortPopupProps) => {
       <DropdownMenuTrigger asChild className={className}>
         <Button variant="outline">
           <ArrowUpDown size={16} />
-          <strong>Sort:</strong>
+          <strong>{$t('Sort:')}</strong>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

@@ -1,5 +1,4 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import WhiteBlock from "@/components/shared/common/WhiteBlock";
 
 const CheckoutSkeleton = () => {
   return (

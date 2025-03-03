@@ -8,5 +8,9 @@ export default getRequestConfig(async () => {
   return {
     locale,
     messages: (await import(`../documents/translates/${locale}.json`)).default,
+    onError() {},
+    getMessageFallback({ key }) {
+      return key;
+    },
   };
 });

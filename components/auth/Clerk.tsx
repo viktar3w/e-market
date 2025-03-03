@@ -1,4 +1,5 @@
 "use client";
+
 import {
   SignedIn,
   SignedOut,
@@ -6,21 +7,20 @@ import {
   UserButton,
   useClerk,
 } from "@clerk/nextjs";
+
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useLazyGetCartQuery } from "@/lib/redux/api/cart.api";
 import { SIGN_OUT_KEY } from "@/lib/constants";
-import {
-  ArrowRight,
-  LogOut,
-  UserRoundSearch,
-} from "lucide-react";
+import { ArrowRight, LogOut, UserRoundSearch } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const Auth = () => {
   const { signOut } = useClerk();
-  const path = usePathname()
+  const path = usePathname();
   const [getCartQuery] = useLazyGetCartQuery();
+  const $t = useTranslation();
   return (
     <div>
       <SignedOut>
@@ -30,7 +30,10 @@ const Auth = () => {
               className={buttonVariants({
                 size: "sm",
                 className: "flex items-center gap-1",
-              })}>Sign In</Button>
+              })}
+            >
+              {$t("Sign In")}
+            </Button>
           </SignInButton>
           {path !== "/support" && (
             <Link
@@ -38,10 +41,10 @@ const Auth = () => {
               className={buttonVariants({
                 size: "sm",
                 className: "flex items-center gap-1",
-                variant: "link"
+                variant: "link",
               })}
             >
-              Support <ArrowRight className="ml-1.5 size-4" />
+              {$t("Support")} <ArrowRight className="ml-1.5 size-4" />
             </Link>
           )}
         </div>
@@ -56,7 +59,7 @@ const Auth = () => {
         >
           <UserButton.MenuItems>
             <UserButton.Action
-              label="Sign Out"
+              label={$t("Sign Out")}
               labelIcon={<LogOut className="w-4 h-4" />}
               onClick={() => {
                 signOut(
@@ -72,7 +75,7 @@ const Auth = () => {
           </UserButton.MenuItems>
           <UserButton.UserProfileLink
             url="/support/dashboard"
-            label="Support Dashboard"
+            label={$t("Support Dashboard")}
             labelIcon={<UserRoundSearch className="w-4 h-4" />}
           />
         </UserButton>

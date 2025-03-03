@@ -1,11 +1,11 @@
 "use client";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import ProductForm from "@/components/shared/products/ProductForm";
 import { CategoryProductParent } from "@/lib/types/product";
 import { DialogBody } from "next/dist/client/components/react-dev-overlay/internal/components/Dialog";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type ChooseProductModalProps = {
   className?: string;
@@ -18,7 +18,7 @@ const ChooseProductModal = ({
   open,
 }: ChooseProductModalProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(!!open);
-  const [currentPath] = useState<string>('/')
+  const [currentPath] = useState<string>("/");
   const router = useRouter();
   return (
     <Dialog

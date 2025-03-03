@@ -3,11 +3,13 @@ import { Body } from "@react-email/body";
 import { OrderState } from "@/lib/types/checkout";
 import { formatPrice } from "@/lib/utils";
 import { CartState } from "@/lib/types/cart";
+import { useTranslation } from "@/hooks/useTranslation";
 type OrderEmailProps = {
   order: OrderState;
   cart: CartState;
 };
 const OrderEmail = ({ order, cart }: OrderEmailProps) => {
+  const $t = useTranslation();
   return (
     <Html lang="en">
       <Body
@@ -35,16 +37,16 @@ const OrderEmail = ({ order, cart }: OrderEmailProps) => {
                   fontSize: "24px",
                 }}
               >
-                Order Confirmation
+                {$t("Order Confirmation")}
               </td>
             </tr>
             <tr>
               <td style={{ padding: "20px" }}>
                 <p style={{ fontSize: "18px" }}>
-                  Hello, {cart.shippingAddress!.firstname}
+                  {$t("Hello, {1}", { ["1"]: cart.shippingAddress!.firstname })}
                 </p>
                 <p>
-                  Thank you for your purchase! Your order ID is{" "}
+                  {$t("Thank you for your purchase! Your order ID is")}{" "}
                   <strong>{order.token}</strong>.
                 </p>
               </td>
@@ -62,13 +64,13 @@ const OrderEmail = ({ order, cart }: OrderEmailProps) => {
                 >
                   <tr style={{ backgroundColor: "#f9f9f9" }}>
                     <th style={{ padding: "10px", border: "1px solid #ddd" }}>
-                      Item
+                      {$t("Item")}
                     </th>
                     <th style={{ padding: "10px", border: "1px solid #ddd" }}>
-                      Quantity
+                      {$t("Quantity")}
                     </th>
                     <th style={{ padding: "10px", border: "1px solid #ddd" }}>
-                      Price
+                      {$t("Price")}
                     </th>
                   </tr>
                   {cart.cartItems.map((item) => (
@@ -110,20 +112,10 @@ const OrderEmail = ({ order, cart }: OrderEmailProps) => {
                   borderTop: "1px solid #ddd",
                 }}
               >
-                <strong>Tax Amount: {formatPrice(order.taxAmount)}</strong>
-              </td>
-            </tr>
-            <tr>
-              <td
-                style={{
-                  padding: "20px",
-                  textAlign: "right",
-                  fontSize: "18px",
-                  borderTop: "1px solid #ddd",
-                }}
-              >
                 <strong>
-                  Shipping Amount: {formatPrice(order.shippingAmount)}
+                  {$t("Tax Amount: {1}", {
+                    ["1"]: formatPrice(order.taxAmount),
+                  })}
                 </strong>
               </td>
             </tr>
@@ -137,7 +129,25 @@ const OrderEmail = ({ order, cart }: OrderEmailProps) => {
                 }}
               >
                 <strong>
-                  Summary Amount: {formatPrice(order.summaryAmount)}
+                  {$t("Shipping Amount: {1}", {
+                    ["1"]: formatPrice(order.shippingAmount),
+                  })}
+                </strong>
+              </td>
+            </tr>
+            <tr>
+              <td
+                style={{
+                  padding: "20px",
+                  textAlign: "right",
+                  fontSize: "18px",
+                  borderTop: "1px solid #ddd",
+                }}
+              >
+                <strong>
+                  {$t("Summary Amount: {1}", {
+                    ["1"]: formatPrice(order.summaryAmount),
+                  })}
                 </strong>
               </td>
             </tr>
@@ -149,7 +159,7 @@ const OrderEmail = ({ order, cart }: OrderEmailProps) => {
                   fontSize: "14px",
                 }}
               >
-                Thank you for shopping with us!
+                {$t("Thank you for shopping with us!")}
               </td>
             </tr>
           </tfoot>

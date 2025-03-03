@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import CheckboxFilter from "@/components/shared/filters/CheckboxFilter";
 import { useEffect, useState } from "react";
 import CheckboxSkeleton from "@/components/shared/filters/CheckboxSkeleton";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type CheckboxGroupFilterProps = {
   title: string;
@@ -28,6 +29,7 @@ const CheckboxGroupFilter = ({
   name = "type",
   selectedIds,
 }: CheckboxGroupFilterProps) => {
+  const $t = useTranslation();
   const [types, setTypes] = useState<CheckboxFilterType[]>([]);
   const [showAll, setShowAll] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string | null>(null);
@@ -75,7 +77,7 @@ const CheckboxGroupFilter = ({
             onClick={() => setShowAll(!showAll)}
             className="text-primary mt-3 font-bold"
           >
-            {showAll ? "Hide" : "+ Show all"}
+            {showAll ? $t("Hide") : $t("+ Show all")}
           </button>
         </div>
       )}

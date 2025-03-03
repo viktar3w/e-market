@@ -7,6 +7,7 @@ import Title from "@/components/shared/common/Title";
 import { Button } from "@/components/ui/button";
 import { ProductItemType } from "@/lib/types/product";
 import { formatPrice } from "@/lib/utils";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type ProductCartProps = {
   className?: string;
@@ -21,6 +22,7 @@ const ProductCart = ({
   image,
   variants,
 }: ProductCartProps) => {
+  const $t = useTranslation();
   return (
     <div className={className}>
       <Link href={`/products/${id}`} className="group">
@@ -39,7 +41,7 @@ const ProductCart = ({
         {!!variants && (
           <div className="text-sm text-gray-600">
             {variants?.map((variant) => (
-              <div className="" key={variant.id}>
+              <div key={variant.id}>
                 {Object.keys(variant?.data || {})
                   .map(
                     // @ts-ignore
@@ -53,11 +55,11 @@ const ProductCart = ({
         <div className="flex justify-between items-center mt-4">
           <span className="mt-1 text-lg font-medium text-gray-900">
             {" "}
-            from <strong>{formatPrice(price)}</strong>
+            {$t("from")} <strong>{formatPrice(price)}</strong>
           </span>
           <Button variant="secondary" className="text-base font-bold">
             <Plus size={20} className="mr-1" />
-            Add
+            {$t("Add")}
           </Button>
         </div>
       </Link>

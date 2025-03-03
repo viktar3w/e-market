@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ShoppingCart } from "lucide-react";
 import CartDrawer from "@/components/shared/cart/CartDrawer";
@@ -8,11 +9,13 @@ import { CartItemState } from "@/lib/types/cart";
 import { useAppSelector } from "@/hooks/redux";
 import { selectCart } from "@/lib/redux/slices/cartSlicer";
 import { useGetCartQuery } from "@/lib/redux/api/cart.api";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type CartButtonProps = {
   className?: string;
 };
 const CartButton = ({ className }: CartButtonProps) => {
+  const $t = useTranslation();
   useGetCartQuery();
   const { cart } = useAppSelector(selectCart);
   const [items, setItems] = useState<CartItemState[]>([]);
@@ -29,7 +32,7 @@ const CartButton = ({ className }: CartButtonProps) => {
           className={cn("group relative px-2 py-1 md:px-4 md:py-2", {
             "w-[85px] md:w-[105px]": cart.loading,
           })}
-          title="Cart"
+          title={$t("Cart")}
         >
           {items.length > 0 ? (
             <>

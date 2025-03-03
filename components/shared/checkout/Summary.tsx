@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useCheckoutSummary } from "@/hooks/useCheckoutSummary";
 import { CartState } from "@/lib/types/cart";
 import { cn, formatPrice } from "@/lib/utils";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type SummaryProps = {
   className?: string;
@@ -17,10 +18,11 @@ type SummaryProps = {
 const Summary = ({ className, cart, disabled = true }: SummaryProps) => {
   const { fullTotal, taxes, loading, shipping, onSubmit } =
     useCheckoutSummary(cart);
+  const $t = useTranslation();
   return (
     <div className={cn("p-6 sticky top-4", className)}>
       <div className="flex flex-col gap-1">
-        <span className="text-xl">Total Amount:</span>
+        <span className="text-xl">{$t('Total Amount:')}</span>
         <span className="text-3xl font-extrabold">
           {formatPrice(fullTotal)}
         </span>
@@ -29,7 +31,7 @@ const Summary = ({ className, cart, disabled = true }: SummaryProps) => {
         title={
           <div className="flex items-center gap-2">
             <Package size="18" className="text-gray-300" />
-            Items Amount:
+            {$t("Items Amount:")}
           </div>
         }
         amount={cart.totalAmount}
@@ -38,7 +40,7 @@ const Summary = ({ className, cart, disabled = true }: SummaryProps) => {
         title={
           <div className="flex items-center gap-2">
             <Percent size="18" className="text-gray-300" />
-            Taxes Amount:
+            {$t("Taxes Amount:")}
           </div>
         }
         amount={taxes}
@@ -47,7 +49,7 @@ const Summary = ({ className, cart, disabled = true }: SummaryProps) => {
         title={
           <div className="flex items-center gap-2">
             <Truck size="18" className="text-gray-300" />
-            Shipping Amount:
+            {$t("Shipping Amount:")}
           </div>
         }
         amount={shipping}
@@ -58,7 +60,7 @@ const Summary = ({ className, cart, disabled = true }: SummaryProps) => {
         disabled={disabled || loading}
         onClick={() => onSubmit()}
       >
-        Order Pay
+        {$t("Order Pay")}
         <ArrowRight className="w-5 h-5 ml-2" />
       </Button>
     </div>

@@ -1,4 +1,5 @@
 "use client";
+
 import BoxWrapper from "@/components/shared/common/BoxWrapper";
 import { CustomerCreateForm } from "@/lib/types/user";
 import { useOnboarding } from "@/hooks/useOnboarding";
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const Onboarding = ({
   id,
@@ -20,12 +22,13 @@ const Onboarding = ({
   image,
   email,
 }: CustomerCreateForm) => {
+  const $t = useTranslation();
   const { form, onSubmit, loading } = useOnboarding({
     id,
     firstname,
     lastname,
     image,
-    email
+    email,
   });
   return (
     <BoxWrapper className="pt-10 text-center max-w-[500px]">
@@ -41,7 +44,7 @@ const Onboarding = ({
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col gap-3">
                   <FormLabel className="text-base-semibold text-light-2">
-                    Firstname
+                    {$t("Email")}
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -61,7 +64,7 @@ const Onboarding = ({
             render={({ field }) => (
               <FormItem className="flex w-full flex-col gap-3">
                 <FormLabel className="text-base-semibold text-light-2">
-                  Firstname
+                  {$t("Firstname")}
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -80,7 +83,7 @@ const Onboarding = ({
             render={({ field }) => (
               <FormItem className="flex w-full flex-col gap-3">
                 <FormLabel className="text-base-semibold text-light-2">
-                  Lastname
+                  {$t("Lastname")}
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -93,7 +96,9 @@ const Onboarding = ({
               </FormItem>
             )}
           />
-          <Button type="submit" disabled={loading}>Submit</Button>
+          <Button type="submit" disabled={loading}>
+            {$t("Submit")}
+          </Button>
         </form>
       </Form>
     </BoxWrapper>

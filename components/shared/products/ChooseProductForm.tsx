@@ -1,4 +1,5 @@
 "use client";
+
 import { CategoryProductParent } from "@/lib/types/product";
 import BoxWrapper from "@/components/shared/common/BoxWrapper";
 import ProductImage from "@/components/shared/products/ProductImage";
@@ -9,6 +10,7 @@ import { useProductVariants } from "@/hooks/useProductVariants";
 import ProductComponent from "@/components/shared/products/ProductComponent";
 import useProductComponents from "@/hooks/useProductComponents";
 import useCalculateProduct from "@/hooks/useCalculateProduct";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type ChoosePizzaFormProps = {
   className?: string;
@@ -20,6 +22,7 @@ const ChooseProductForm = ({
   product,
   onSubmit,
 }: ChoosePizzaFormProps) => {
+  const $t = useTranslation();
   const {
     mainImage,
     groupedVariants,
@@ -102,7 +105,7 @@ const ChooseProductForm = ({
             onClick={handleAddProduct}
             className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10"
           >
-            Add to cart {!!activeVariant?.price && formatPrice(price)}
+            {$t('Add to cart')} {!!activeVariant?.price && formatPrice(price)}
           </Button>
         </div>
       </div>
