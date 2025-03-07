@@ -42,5 +42,12 @@ query getCart {
     }
     status
     totalAmount
+    user {
+      id
+      firstname
+      lastname
+      email
+      phone
+    }
   }
 }

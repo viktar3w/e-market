@@ -5,11 +5,13 @@ import {
   Product,
   ProductItem,
   ShippingAddress,
+  User
 } from "@prisma/client";
 import { VariantItem } from "@/lib/types/product";
 export type CartState = Cart & {
   cartItems: CartItemState[];
   shippingAddress?: ShippingAddress | null;
+  user?: User
 };
 
 export type CartItemState = {

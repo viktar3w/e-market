@@ -77,10 +77,10 @@ const CheckoutWrapperBox = ({
                 isOpenByDefault={currentStep >= CheckoutStep.ONE}
               >
                 <PersonalDataForm
-                  firstname={data?.firstname}
-                  lastname={data?.lastname}
-                  email={data?.email}
-                  phone={data?.phone}
+                  firstname={data?.firstname || data?.user?.firstname}
+                  lastname={data?.lastname || data?.user?.lastname}
+                  email={data?.email || data?.user?.email}
+                  phone={data?.phone || data?.user?.phone}
                 />
               </Accordion>
               <Accordion
@@ -96,10 +96,10 @@ const CheckoutWrapperBox = ({
                   />
                 ) : (
                   <DeliveryForm
-                    email={data?.email}
-                    firstname={data?.firstname}
-                    lastname={data?.lastname}
-                    phone={data?.phone}
+                    email={data?.email || data?.user?.email}
+                    firstname={data?.firstname || data?.user?.firstname}
+                    lastname={data?.lastname || data?.user?.lastname}
+                    phone={data?.phone || data?.user?.phone}
                     disabled={isShippingDisabled}
                   />
                 )}
