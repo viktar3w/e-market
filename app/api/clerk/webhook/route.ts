@@ -29,12 +29,18 @@ export const POST = async (req: Request) => {
       "svix-timestamp": svixTimestamp,
       "svix-signature": svixSignature,
     }) as WebhookEvent;
-    evt.type === "user.created" && userCreateWebhook(evt.data);
-    evt.type === "user.deleted" && userDeleteWebhook(evt?.data?.id || "");
+    console.log('evt.type', evt.type)
+    if (evt.type === "user.created") {
+      await userCreateWebhook(evt.data);
+      console.log("customer was created:", evt?.data?.id);
+    }
+    if (evt.type === "user.deleted") {
+      await userDeleteWebhook(evt.data?.id || "");
+      console.log("customer was deleted:", evt.data.id);
+    }
   } catch (err: any) {
     console.error("Error verifying webhook:", err);
     return NextResponse.json({ error: "Something was wrong" }, { status: 400 });
   }
-  console.log("Cart was updated");
   return NextResponse.json({ error: "" });
 };

@@ -9,7 +9,7 @@ import { cartAction } from "@/actions/cartAction";
 import { UserState } from "@/lib/types/user";
 
 export const userCreateWebhook = async (userData: UserJSON) => {
-  return db.user.create({
+  return await db.user.create({
     data: {
       id: userData.id,
       firstname: userData.first_name || "User",
@@ -73,7 +73,7 @@ export const sessionCreateWebhook = async (
 };
 
 const fetchUserWithActiveCarts = async (userId: string) => {
-  return db.user.findUnique({
+  return await db.user.findUnique({
     where: { id: userId },
     include: {
       carts: {
