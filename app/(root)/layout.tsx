@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import Script from 'next/script'
 
 import DefaultHeader from "@/components/shared/header/DefaultHeader";
 import { Toaster } from "@/components/ui/toaster";
@@ -30,6 +31,7 @@ export default function RootLayout({
       <DefaultFooter />
       <Analytics />
       <Toaster />
+      <Script async src="https://r1.ddlnk.net/DM-2038754442-01/ddgtag.js" strategy="lazyOnload" />
     </>
   );
 }
